@@ -3,18 +3,12 @@ import React from "react";
 interface InputProps {
   id: string;
   type: string;
-  placeholder: string;
-  onChange: () => void;
+  onChange: (e: any) => void;
+  value: string;
   label: string;
 }
 
-const Input: React.FC<InputProps> = ({
-  id,
-  type,
-  placeholder,
-  onChange,
-  label,
-}) => {
+const Input: React.FC<InputProps> = ({ id, type, onChange, label }) => {
   return (
     <div>
       <label htmlFor={id}>{label}</label>
@@ -30,7 +24,6 @@ const Input: React.FC<InputProps> = ({
             "
         id={id}
         type={type}
-        placeholder={placeholder}
         onChange={onChange}
       />
     </div>
