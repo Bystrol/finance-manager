@@ -13,7 +13,7 @@ const Input: React.FC<InputProps> = ({ id, type, onChange, value, label }) => {
     <div className="relative">
       <input
         className="
-            w-full
+            w-64
             h-[4vh]
             border-2
             border-solid
