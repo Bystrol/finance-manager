@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { AiOutlineGithub } from "react-icons/ai";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -43,7 +44,11 @@ const Auth = () => {
           </button>
           <p className="text-xs">OR</p>
           <Button icon={FcGoogle} text="Continue with Google" />
-          <Button icon={AiOutlineGithub} text="Continue with GitHub" />
+          <Button
+            icon={AiOutlineGithub}
+            text="Continue with GitHub"
+            onClick={() => signIn("github", { callbackUrl: "/" })}
+          />
         </div>
         <div className="w-[50%] h-full bg-[url('/images/auth-image.jpg')] bg-no-repeat bg-center bg-cover rounded-lg shadow-md"></div>
       </div>
