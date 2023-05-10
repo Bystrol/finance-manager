@@ -1,6 +1,6 @@
 import { Session } from "next-auth";
 import { headers } from "next/headers";
-import AuthContext from "/AuthContext";
+import AuthContext from "./AuthContext";
 
 async function getSession(cookie: string): Promise<Session> {
   const response = await fetch(
