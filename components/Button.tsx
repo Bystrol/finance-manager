@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({ icon, text }) => {
     text-sm
     text-zinc-900
     font-bold
+    hover:shadow-md
     "
     >
       <Icon size={20} className="mr-2" />
