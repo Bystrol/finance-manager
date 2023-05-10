@@ -43,11 +43,15 @@ const Auth = () => {
             Log in
           </button>
           <p className="text-xs">OR</p>
-          <Button icon={FcGoogle} text="Continue with Google" />
+          <Button
+            icon={FcGoogle}
+            text="Continue with Google"
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+          />
           <Button
             icon={AiOutlineGithub}
             text="Continue with GitHub"
-            onClick={() => signIn("github")}
+            onClick={() => signIn("github", { callbackUrl: "/" })}
           />
         </div>
         <div className="w-[50%] h-full bg-[url('/images/auth-image.jpg')] bg-no-repeat bg-center bg-cover rounded-lg shadow-md"></div>
