@@ -3,13 +3,15 @@ import React from "react";
 interface ButtonProps {
   icon?: any;
   text: string;
+  onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon, text }) => {
+const Button: React.FC<ButtonProps> = ({ icon, text, onClick }) => {
   const Icon = icon;
 
   return (
     <button
+      onClick={onClick}
       className="
     flex
     justify-center
