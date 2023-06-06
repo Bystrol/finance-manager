@@ -1,11 +1,11 @@
 "use client";
 
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import Input from "../components/Input";
+import Button from "../components/Button";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineGithub } from "react-icons/ai";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 
@@ -21,31 +21,44 @@ const Auth = () => {
     );
   }, []);
 
-  const handleLogin = useCallback(async () => {
-    try {
-      await signIn("credentials", {
-        email,
-        password,
-        callbackUrl: "/",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [email, password]);
+  const handleLogin = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-  const handleRegister = useCallback(async () => {
-    try {
-      await axios.post("/api/register", { email, username, password });
-      handleLogin();
-    } catch (error) {
-      console.log(error);
-    }
-  }, [email, username, password, handleLogin]);
+      try {
+        await signIn("credentials", {
+          email,
+          password,
+          callbackUrl: "/",
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [email, password]
+  );
+
+  const handleRegister = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      try {
+        await axios.post("/api/register", { email, username, password });
+        handleLogin(e);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [email, username, password, handleLogin]
+  );
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex bg-white w-[50%] h-[70vh] rounded-xl p-4">
-        <form className="flex flex-col items-center justify-center w-[50%] h-full text-center gap-3 relative">
+        <form
+          onSubmit={variant === "login" ? handleLogin : handleRegister}
+          className="flex flex-col items-center justify-center w-[50%] h-full text-center gap-3 relative"
+        >
           <div className="font-bold text-2xl absolute top-0 left-0 italic drop-shadow-md flex">
             <RiMoneyDollarCircleFill className="mr-2" size={30} />
             <h1>FINEances</h1>
@@ -80,10 +93,7 @@ const Auth = () => {
             label="Enter your password"
           />
 
-          <button
-            formAction={variant === "login" ? handleLogin : handleRegister}
-            className="w-64 rounded-lg h-[4vh] text-sm text-white bg-zinc-900 hover:bg-zinc-700"
-          >
+          <button className="w-64 rounded-lg h-[4vh] text-sm text-white bg-zinc-900 hover:bg-zinc-700">
             {variant === "login" ? "Log in" : "Register"}
           </button>
           <p className="text-xs">OR</p>
