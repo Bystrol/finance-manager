@@ -1,10 +1,14 @@
-import prisma from "@/lib/prisma";
+import prisma from "../../lib/prisma";
 import { hash } from "bcrypt";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const { email, username, password } = await req.json();
+
+    if (!email || !username || !password) {
+      return new NextResponse("Missing fields", { status: 400 });
+    }
 
     const userExists = await prisma.user.findUnique({
       where: {
@@ -30,7 +34,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ user });
+    return NextResponse.json(user);
   } catch (error) {
     return new Response("Bad request", {
       status: 400,
