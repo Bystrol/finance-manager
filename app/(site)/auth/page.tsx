@@ -6,14 +6,18 @@ import { FcGoogle } from "react-icons/fc";
 import { AiOutlineGithub } from "react-icons/ai";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import React, { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const Auth = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [variant, setVariant] = useState("login");
+
+  const router = useRouter();
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -24,15 +28,19 @@ const Auth = () => {
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      try {
-        await signIn("credentials", {
-          email,
-          password,
-          callbackUrl: "/",
-        });
-      } catch (error) {
-        console.log(error);
-      }
+
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      }).then((callback) => {
+        if (callback?.error) {
+          toast.error(callback.error);
+        } else if (callback?.ok && !callback.error) {
+          toast.success("Logged in successfully!");
+          router.push("/");
+        }
+      });
     },
     [email, password]
   );
@@ -42,10 +50,12 @@ const Auth = () => {
       e.preventDefault();
 
       try {
-        await axios.post("/api/register", { email, username, password });
+        await axios
+          .post("/api/register", { email, username, password })
+          .then(() => toast.success("User has been registered!"));
         handleLogin(e);
       } catch (error) {
-        console.log(error);
+        toast.error("Something went wrong!");
       }
     },
     [email, username, password, handleLogin]
