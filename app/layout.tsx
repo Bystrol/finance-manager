@@ -1,7 +1,8 @@
 "use client";
 
 import "./globals.css";
-import Provider from "@/app/context/AuthContext";
+import Provider from "./context/AuthContext";
+import ToasterContext from "./context/ToasterContext";
 
 export const metadata = {
   title: "FINEances",
@@ -15,8 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Provider>{children}</Provider>
+      <body suppressHydrationWarning={true}>
+        <Provider>
+          <ToasterContext />
+          {children}
+        </Provider>
       </body>
     </html>
   );
