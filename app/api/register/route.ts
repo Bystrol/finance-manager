@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     });
 
     if (userExists) {
-      return new Response("Email already taken", {
+      return new NextResponse("Email already taken", {
         status: 422,
       });
     }
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(user);
   } catch (error) {
-    return new Response("Bad request", {
+    return new NextResponse("Bad request", {
       status: 400,
     });
   }
