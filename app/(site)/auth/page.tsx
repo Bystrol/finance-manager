@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { ColorRing } from "react-loader-spinner";
 
 const Auth = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [variant, setVariant] = useState("login");
   const [logoSize, setLogoSize] = useState(30);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -36,17 +38,19 @@ const Auth = () => {
 
   useEffect(() => {
     checkLogoSize();
-  }, []);
+  }, [checkLogoSize]);
 
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
+      setIsLoading(true);
       await signIn("credentials", {
         email,
         password,
         redirect: false,
       }).then((callback) => {
+        setIsLoading(false);
         if (callback?.error) {
           toast.error(callback.error);
         } else if (callback?.ok && !callback.error) {
@@ -55,19 +59,24 @@ const Auth = () => {
         }
       });
     },
-    [email, password]
+    [email, password, router]
   );
 
   const handleRegister = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
+      setIsLoading(true);
       try {
         await axios
           .post("/api/register", { email, username, password })
-          .then(() => toast.success("User has been registered!"));
-        handleLogin(e);
+          .then(() => {
+            setIsLoading(false);
+            toast.success("User has been registered!");
+            handleLogin(e);
+          });
       } catch (error) {
+        setIsLoading(false);
         toast.error(Object(error).response.data);
       }
     },
@@ -116,8 +125,18 @@ const Auth = () => {
               label="Enter your password"
             />
 
-            <button className="w-full lg:w-8/12 py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">
+            <button className="flex justify-center items-center w-full lg:w-8/12 py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">
               {variant === "login" ? "Log in" : "Register"}
+              {isLoading ? (
+                <ColorRing
+                  width={50}
+                  height={50}
+                  wrapperClass="absolute"
+                  colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                />
+              ) : (
+                ""
+              )}
             </button>
             <div className="flex justify-center relative w-full">
               <hr className="absolute top-[50%] w-9/12 lg:w-1/2 bg-zinc-400" />
