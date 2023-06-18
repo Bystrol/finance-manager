@@ -105,7 +105,9 @@ const Auth = () => {
               <Input
                 id="username"
                 type="text"
-                onChange={(e: any) => setUsername(e.target.value)}
+                onChange={(e: any) =>
+                  setUsername(e.target.value.replace(/\s+/g, ""))
+                }
                 value={username}
                 label="Enter your username"
               />
