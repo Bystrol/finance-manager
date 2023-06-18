@@ -104,7 +104,7 @@ const Auth = () => {
             {variant === "register" && (
               <Input
                 id="username"
-                type="username"
+                type="text"
                 onChange={(e: any) => setUsername(e.target.value)}
                 value={username}
                 label="Enter your username"
