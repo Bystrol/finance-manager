@@ -12,15 +12,15 @@ const Home = () => {
 
   if (session && status === "authenticated") {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-between">
+      <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
         <p>Hello, {session?.user?.name}!</p>
       </main>
     );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <p>Loading user...</p>
+    <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
+      <p>Authenticating user...</p>
     </main>
   );
 };
