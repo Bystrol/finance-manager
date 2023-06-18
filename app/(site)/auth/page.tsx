@@ -83,6 +83,17 @@ const Auth = () => {
     [email, username, password, handleLogin]
   );
 
+  const setDataAttribute = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value) {
+        e.target.setAttribute("data-input-active", "");
+      } else {
+        e.target.removeAttribute("data-input-active");
+      }
+    },
+    []
+  );
+
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex flex-col items-center bg-white w-full lg:w-3/5 h-full lg:h-4/5 p-4 lg:rounded-xl">
@@ -105,9 +116,10 @@ const Auth = () => {
               <Input
                 id="username"
                 type="text"
-                onChange={(e: any) =>
-                  setUsername(e.target.value.replace(/\s+/g, ""))
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUsername(e.target.value.replace(/\s+/g, ""));
+                  setDataAttribute(e);
+                }}
                 value={username}
                 label="Enter your username"
               />
@@ -115,14 +127,20 @@ const Auth = () => {
             <Input
               id="email"
               type="email"
-              onChange={(e: any) => setEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+                setDataAttribute(e);
+              }}
               value={email}
               label="Enter your email"
             />
             <Input
               id="password"
               type="password"
-              onChange={(e: any) => setPassword(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setPassword(e.target.value);
+                setDataAttribute(e);
+              }}
               value={password}
               label="Enter your password"
             />
