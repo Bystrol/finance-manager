@@ -3,6 +3,7 @@
 import "./globals.css";
 import Provider from "./context/AuthContext";
 import ToasterContext from "./context/ToasterContext";
+import Header from "./components/Header";
 
 export const metadata = {
   title: "FINEances",
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <Provider>
           <ToasterContext />
+          <Header />
           {children}
         </Provider>
       </body>
