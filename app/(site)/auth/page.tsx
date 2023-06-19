@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
+import { useSession } from "next-auth/react";
 
 const Auth = () => {
   const [username, setUsername] = useState("");
@@ -21,6 +22,12 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  if (status === "authenticated") {
+    router.push("/");
+  }
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
