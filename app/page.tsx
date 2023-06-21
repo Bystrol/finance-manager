@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { Triangle } from "react-loader-spinner";
 
 const Home = () => {
   const { data: session, status } = useSession();
@@ -10,17 +11,15 @@ const Home = () => {
     redirect("/auth");
   }
 
-  if (session && status === "authenticated") {
+  if (status === "authenticated") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
-        <p>Hello, {session?.user?.name}!</p>
-      </main>
+      <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold"></main>
     );
   }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
-      <p>Authenticating user...</p>
+      <Triangle width={100} height={100} wrapperClass="absolute" color="#fff" />
     </main>
   );
 };
