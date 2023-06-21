@@ -32,7 +32,6 @@ const Input: React.FC<InputProps> = ({ id, type, onChange, value, label }) => {
         className={`
         absolute
         top-[50%]
-        trasform 
         -translate-y-2/4
         left-4
         text-sm
