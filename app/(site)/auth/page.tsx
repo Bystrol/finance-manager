@@ -98,101 +98,105 @@ const Auth = () => {
     []
   );
 
-  return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <div className="flex flex-col items-center bg-white w-full lg:w-3/5 h-full lg:h-4/5 p-4 lg:rounded-xl">
-        <div className="font-bold text-2xl md:text-4xl lg:text-xl italic drop-shadow-md flex self-start">
-          <RiMoneyDollarCircleFill className="mr-2" size={logoSize} />
-          <h1>FINEances</h1>
-        </div>
-        <div className="flex w-full h-full justify-center">
-          <form
-            onSubmit={variant === "login" ? handleLogin : handleRegister}
-            className="flex flex-col items-center justify-center w-8/12 md:w-1/2 h-full text-center gap-3 relative"
-          >
-            <h1 className="font-bold text-2xl md:text-4xl lg:text-xl">
-              {variant === "login" ? "Welcome back!" : "First time here?"}
-            </h1>
-            <h2 className=" text-md md:text-xl lg:text-sm text-zinc-600 mb-5">
-              Please enter your details.
-            </h2>
-            {variant === "register" && (
+  if (status === "unauthenticated") {
+    return (
+      <div className="flex justify-center items-center w-full h-screen">
+        <div className="flex flex-col items-center bg-white w-full lg:w-3/5 h-full lg:h-4/5 p-4 lg:rounded-xl">
+          <div className="font-bold text-2xl md:text-4xl lg:text-xl italic drop-shadow-md flex self-start">
+            <RiMoneyDollarCircleFill className="mr-2" size={logoSize} />
+            <h1>FINEances</h1>
+          </div>
+          <div className="flex w-full h-full justify-center">
+            <form
+              onSubmit={variant === "login" ? handleLogin : handleRegister}
+              className="flex flex-col items-center justify-center w-8/12 md:w-1/2 h-full text-center gap-3 relative"
+            >
+              <h1 className="font-bold text-2xl md:text-4xl lg:text-xl">
+                {variant === "login" ? "Welcome back!" : "First time here?"}
+              </h1>
+              <h2 className=" text-md md:text-xl lg:text-sm text-zinc-600 mb-5">
+                Please enter your details.
+              </h2>
+              {variant === "register" && (
+                <Input
+                  id="username"
+                  type="text"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setUsername(e.target.value.replace(/\s+/g, ""));
+                    setDataAttribute(e);
+                  }}
+                  value={username}
+                  label="Enter your username"
+                />
+              )}
               <Input
-                id="username"
-                type="text"
+                id="email"
+                type="email"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUsername(e.target.value.replace(/\s+/g, ""));
+                  setEmail(e.target.value);
                   setDataAttribute(e);
                 }}
-                value={username}
-                label="Enter your username"
+                value={email}
+                label="Enter your email"
               />
-            )}
-            <Input
-              id="email"
-              type="email"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-                setDataAttribute(e);
-              }}
-              value={email}
-              label="Enter your email"
-            />
-            <Input
-              id="password"
-              type="password"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(e.target.value);
-                setDataAttribute(e);
-              }}
-              value={password}
-              label="Enter your password"
-            />
+              <Input
+                id="password"
+                type="password"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPassword(e.target.value);
+                  setDataAttribute(e);
+                }}
+                value={password}
+                label="Enter your password"
+              />
 
-            <button className="flex justify-center items-center w-full lg:w-8/12 py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">
-              {variant === "login" ? "Log in" : "Register"}
-              {isLoading ? (
-                <ColorRing
-                  width={50}
-                  height={50}
-                  wrapperClass="absolute"
-                  colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-                />
-              ) : (
-                ""
-              )}
-            </button>
-            <div className="flex justify-center relative w-full">
-              <hr className="absolute top-[50%] w-9/12 lg:w-1/2 bg-zinc-400" />
-              <p className="text-xs md:text-lg lg:text-xs w-8 z-20 bg-white">
-                OR
+              <button className="flex justify-center items-center w-full lg:w-8/12 py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">
+                {!isLoading && (variant === "login" ? "Log in" : "Register")}
+                {isLoading ? (
+                  <ColorRing
+                    width={50}
+                    height={50}
+                    wrapperClass="absolute"
+                    colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                  />
+                ) : (
+                  ""
+                )}
+              </button>
+              <div className="flex justify-center relative w-full">
+                <hr className="absolute top-[50%] w-9/12 lg:w-1/2 bg-zinc-400" />
+                <p className="text-xs md:text-lg lg:text-xs w-8 z-20 bg-white">
+                  OR
+                </p>
+              </div>
+              <Button
+                icon={FcGoogle}
+                text="Continue with Google"
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+              />
+              <Button
+                icon={AiOutlineGithub}
+                text="Continue with GitHub"
+                onClick={() => signIn("github", { callbackUrl: "/" })}
+              />
+              <p className="text-md md:text-xl lg:text-sm mt-4">
+                {variant === "login" ? "Don't" : "Already"} have an account?
+                <span
+                  onClick={toggleVariant}
+                  className="hover:underline cursor-pointer font-bold ml-1"
+                >
+                  {variant === "login" ? "Register" : "Log in"}
+                </span>
               </p>
-            </div>
-            <Button
-              icon={FcGoogle}
-              text="Continue with Google"
-              onClick={() => signIn("google", { callbackUrl: "/" })}
-            />
-            <Button
-              icon={AiOutlineGithub}
-              text="Continue with GitHub"
-              onClick={() => signIn("github", { callbackUrl: "/" })}
-            />
-            <p className="text-md md:text-xl lg:text-sm mt-4">
-              {variant === "login" ? "Don't" : "Already"} have an account?
-              <span
-                onClick={toggleVariant}
-                className="hover:underline cursor-pointer font-bold ml-1"
-              >
-                {variant === "login" ? "Register" : "Log in"}
-              </span>
-            </p>
-          </form>
-          <div className="hidden lg:block w-[50%] h-full bg-[url('/images/auth-image.jpg')] bg-no-repeat bg-center bg-cover rounded-lg shadow-md"></div>
+            </form>
+            <div className="hidden lg:block w-[50%] h-full bg-[url('/images/auth-image.jpg')] bg-no-repeat bg-center bg-cover rounded-lg shadow-md"></div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <div></div>;
 };
 
 export default Auth;
