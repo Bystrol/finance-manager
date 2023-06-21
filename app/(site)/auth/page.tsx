@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { AiOutlineGithub } from "react-icons/ai";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import React, { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -21,12 +21,10 @@ const Auth = () => {
   const [logoSize, setLogoSize] = useState(30);
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
-
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   if (status === "authenticated") {
-    router.push("/");
+    redirect("/");
   }
 
   const toggleVariant = useCallback(() => {
@@ -62,11 +60,10 @@ const Auth = () => {
           toast.error(callback.error);
         } else if (callback?.ok && !callback.error) {
           toast.success("Logged in successfully!");
-          router.push("/");
         }
       });
     },
-    [email, password, router]
+    [email, password]
   );
 
   const handleRegister = useCallback(
