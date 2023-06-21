@@ -32,13 +32,18 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
               href="profile"
               icon={CgProfile}
               text="Your profile"
-              onClick={() => {}}
+              onClick={() => {
+                onClose;
+              }}
             />
             <ProfileMenuItem
               href="/"
               icon={GoSignOut}
               text="Sign out"
-              onClick={() => signOut()}
+              onClick={() => {
+                signOut();
+                onClose();
+              }}
             />
           </ul>
         </nav>
