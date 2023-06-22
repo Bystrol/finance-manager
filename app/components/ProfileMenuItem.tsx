@@ -20,7 +20,7 @@ const ProfileMenuItem: React.FC<ItemProps> = ({
   return (
     <Link href={href} replace>
       <li
-        className="flex items-center gap-x-2 cursor-pointer"
+        className="flex items-center gap-x-2 p-2 rounded-md cursor-pointer hover:bg-black/5"
         onClick={onClick}
       >
         <Icon size={20} />
