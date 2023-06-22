@@ -131,7 +131,7 @@ const Auth = () => {
               )}
               <Input
                 id="email"
-                type="email"
+                type="text"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setEmail(e.target.value);
                   setDataAttribute(e);
