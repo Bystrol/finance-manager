@@ -2,7 +2,7 @@ import Image from "next/image";
 import image from "../../public/images/blank-profile-picture.png";
 import { useSession } from "next-auth/react";
 
-const ProfileImage: React.FC = () => {
+const ProfileImage: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   const { data: session } = useSession();
 
   const imageStyles = {
@@ -12,7 +12,10 @@ const ProfileImage: React.FC = () => {
   };
 
   return (
-    <div className="relative h-8 w-8 top-0 right-3 cursor-pointer">
+    <div
+      className="relative h-8 w-8 top-0 right-0 cursor-pointer"
+      onClick={onClick}
+    >
       <Image
         src={session?.user?.image ? session.user.image : image}
         alt="profile_picture"
