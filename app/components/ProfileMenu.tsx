@@ -1,6 +1,6 @@
 import React from "react";
 import ProfileImage from "./ProfileImage";
-import ProfileMenuItem from "./ProfileMenuItem";
+import MenuItem from "./MenuItem";
 import { signOut, useSession } from "next-auth/react";
 import { CgProfile } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
@@ -32,7 +32,7 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
         </div>
         <nav>
           <ul className="flex flex-col">
-            <ProfileMenuItem
+            <MenuItem
               href="profile"
               icon={CgProfile}
               text="Your profile"
@@ -40,7 +40,7 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
                 onClose;
               }}
             />
-            <ProfileMenuItem
+            <MenuItem
               href="/"
               icon={GoSignOut}
               text="Sign out"
