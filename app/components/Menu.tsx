@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { CgProfile } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
 import { SlClose } from "react-icons/sl";
+import { IoHomeOutline } from "react-icons/io5";
 
 const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
   isVisible,
@@ -36,10 +37,16 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
               href="profile"
               icon={CgProfile}
               text="Your profile"
-              onClick={() => {
-                onClose;
-              }}
+              onClick={onClose}
             />
+            <hr />
+            <MenuItem
+              href="/"
+              icon={IoHomeOutline}
+              text="Home"
+              onClick={onClose}
+            />
+            <hr />
             <MenuItem
               href="/"
               icon={GoSignOut}
