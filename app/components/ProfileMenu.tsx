@@ -24,10 +24,14 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
             <ProfileImage />
             <p className="font-bold">Hello, {session?.user?.name}</p>
           </div>
-          <SlClose size={30} className="cursor-pointer" onClick={onClose} />
+          <SlClose
+            size={30}
+            className="cursor-pointer hover:scale-110 transition-all"
+            onClick={onClose}
+          />
         </div>
         <nav>
-          <ul className="flex flex-col gap-y-2">
+          <ul className="flex flex-col">
             <ProfileMenuItem
               href="profile"
               icon={CgProfile}
