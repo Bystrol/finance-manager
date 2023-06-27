@@ -18,7 +18,7 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
       <div
         className={`${
           !isVisible ? "translate-x-full" : ""
-        } fixed top-0 right-0 w-4/5 lg:w-80 h-full bg-white p-5 rounded-l-lg transition-all duration-300`}
+        } fixed top-0 right-0 w-4/5 lg:w-80 h-full bg-white p-5 rounded-l-lg transition-all duration-300 z-10`}
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
