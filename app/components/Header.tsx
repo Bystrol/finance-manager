@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   if (session && status === "authenticated") {
     return (
       <>
-        <header className="fixed flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30">
+        <header className="fixed top-0 left-0 flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30">
           <div className="flex justify-start items-center h-full w-1/2">
             <Link href="/" className="flex items-center gap-x-2">
               <RiMoneyDollarCircleFill size={35} />
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         </header>
         {showProfileMenu && (
           <div
-            className="fixed w-full h-[200vh] bg-black/10"
+            className="fixed top-0 left-0 w-full h-[200vh] bg-black/10 z-10"
             onClick={toggleProfileMenu}
           ></div>
         )}
