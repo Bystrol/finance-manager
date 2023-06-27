@@ -19,7 +19,7 @@ const ProfileImage: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
       <Image
         src={session?.user?.image ? session.user.image : image}
         alt="profile_picture"
-        fill={true}
+        fill
         style={imageStyles}
       />
     </div>
