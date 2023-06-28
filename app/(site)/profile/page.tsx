@@ -73,10 +73,10 @@ const Profile = () => {
         <h1 className="text-xl font-medium">
           {session?.user?.name}&apos;s profile
         </h1>
-        <hr />
+        <hr className="bg-black/50" />
         <h2 className="text-sm font-medium">Profile picture</h2>
         <div
-          className="relative h-40 w-40 cursor-pointer rounded-[50%]"
+          className="relative h-40 w-40 cursor-pointer rounded-[50%] mb-8"
           ref={dropdownRef}
         >
           <Image
@@ -111,6 +111,18 @@ const Profile = () => {
               </div>
             </div>
           )}
+        </div>
+        <h2 className="text-sm font-medium">Email</h2>
+        <p className="text-xs">Current email: {session?.user?.email}</p>
+        <div className="flex gap-x-2">
+          <input
+            type="text"
+            placeholder="Enter new email adress"
+            className="w-2/3 bg-white border-2 border-solid border-zinc-300 rounded-md text-sm px-2 py-1"
+          />
+          <button className="w-1/5 bg-white border-2 border-solid border-zinc-300 rounded-md text-sm font-bold px-2 py-1">
+            Change
+          </button>
         </div>
       </div>
     );
