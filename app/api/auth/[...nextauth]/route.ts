@@ -67,6 +67,14 @@ export const authOptions: AuthOptions = {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    jwt({ token, trigger, session }) {
+      if (trigger === "update") {
+        token.picture = session.image;
+      }
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
