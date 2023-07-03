@@ -8,7 +8,7 @@ import { RiMoneyDollarCircleFill } from "react-icons/ri";
 const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
 
   const toggleProfileMenu = useCallback(() => {
     setShowProfileMenu((state) => !state);
