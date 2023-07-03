@@ -70,7 +70,12 @@ export const authOptions: AuthOptions = {
   callbacks: {
     jwt({ token, trigger, session }) {
       if (trigger === "update") {
-        token.picture = session.image;
+        if (session.image || session.image === "") {
+          token.picture = session.image;
+        }
+        if (session.email) {
+          token.email = session.email;
+        }
       }
       return token;
     },

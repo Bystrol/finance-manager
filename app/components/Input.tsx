@@ -3,56 +3,73 @@ import React from "react";
 interface InputProps {
   id: string;
   type: string;
-  onChange: (e: any) => void;
-  value: string;
   label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
+  isError: boolean;
+  errorMessage: string;
 }
 
-const Input: React.FC<InputProps> = ({ id, type, onChange, value, label }) => {
+const Input: React.FC<InputProps> = ({
+  id,
+  type,
+  label,
+  value,
+  onChange,
+  onBlur,
+  onFocus,
+  isError,
+  errorMessage,
+}) => {
   return (
-    <div className="relative w-full lg:w-8/12 h-10 md:h-14 lg:h-11">
+    <div className="relative w-full lg:w-8/12">
       <input
-        className="
+        className={`
             w-full
             h-full
-            py-2
+            py-3
+            lg:py-2
             px-4
             border-2
             border-solid
-            border-zinc-300
+            ${isError ? "border-red-600" : "border-zinc-300"}
             rounded-lg
             peer
-            "
+            `}
         id={id}
         type={type}
-        onChange={onChange}
         value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
       />
       <label
         className={`
         absolute
         top-[50%]
-        -translate-y-2/4
+        -translate-y-1/2
         left-4
         text-sm
         md:text-lg 
         lg:text-sm
-        bg-white
         px-1
         origin-[0_0]
         text-zinc-400 
         peer-focus:scale-75
         peer-focus:top-0
-        peer-focus:-translate-y-[0.4rem]
+        peer-focus:-translate-y-0
         peer-data-[input-active]:scale-75
         peer-data-[input-active]:top-0
-        peer-data-[input-active]:-translate-y-[0.4rem]
+        peer-data-[input-active]:-translate-y-0
         transition-all
         `}
         htmlFor={id}
       >
         {label}
       </label>
+      {isError && <p className="text-xs mt-2 text-red-600">{errorMessage}</p>}
     </div>
   );
 };

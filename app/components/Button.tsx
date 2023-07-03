@@ -1,14 +1,13 @@
 import React from "react";
+import { IconType } from "react-icons";
 
 interface ButtonProps {
-  icon?: any;
+  icon: IconType;
   text: string;
   onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon, text, onClick }) => {
-  const Icon = icon;
-
+const Button: React.FC<ButtonProps> = ({ icon: Icon, text, onClick }) => {
   return (
     <button
       onClick={onClick}

@@ -14,12 +14,12 @@ import { ColorRing } from "react-loader-spinner";
 import { useSession } from "next-auth/react";
 
 const Auth = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [variant, setVariant] = useState("login");
-  const [logoSize, setLogoSize] = useState(30);
-  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [variant, setVariant] = useState<string>("login");
+  const [logoSize, setLogoSize] = useState<number>(30);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { status } = useSession();
 
@@ -121,33 +121,47 @@ const Auth = () => {
                 <Input
                   id="username"
                   type="text"
+                  label="Enter your username"
+                  value={username}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUsername(e.target.value.replace(/\s+/g, ""));
                     setDataAttribute(e);
                   }}
-                  value={username}
-                  label="Enter your username"
+                  onBlur={() => {}}
+                  onFocus={() => {}}
+                  isError={false}
+                  errorMessage={"Username must consist of minimum 3 characters"}
                 />
               )}
               <Input
                 id="email"
                 type="text"
+                label="Enter your email"
+                value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setEmail(e.target.value);
                   setDataAttribute(e);
                 }}
-                value={email}
-                label="Enter your email"
+                onBlur={() => {}}
+                onFocus={() => {}}
+                isError={false}
+                errorMessage={"Invalid email format"}
               />
               <Input
                 id="password"
                 type="password"
+                label="Enter your password"
+                value={password}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setPassword(e.target.value);
                   setDataAttribute(e);
                 }}
-                value={password}
-                label="Enter your password"
+                onBlur={() => {}}
+                onFocus={() => {}}
+                isError={false}
+                errorMessage={
+                  "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                }
               />
 
               <button className="flex justify-center items-center w-full lg:w-8/12 py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">

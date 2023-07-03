@@ -40,6 +40,10 @@ html {
   color: transparent;
   height: 37px;
 }
+.file-input:hover::before {
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 244 245 / var(--tw-bg-opacity));
+}
 .file-input::-webkit-file-upload-button {
   visibility: hidden;
 }
@@ -64,18 +68,6 @@ html {
 }
 .file-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
-}
-
-.dropdown-menu::after {
-  position: absolute;
-  top: -11px;
-  left: 10px;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid red;
-  content: "";
 }
 
 .dropdown-menu::after {
