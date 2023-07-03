@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { Triangle } from "react-loader-spinner";
 
 const Home = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   if (status === "unauthenticated") {
     redirect("/auth");
