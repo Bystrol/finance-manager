@@ -1,19 +1,21 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 import { Triangle } from "react-loader-spinner";
 import { FaRegEdit } from "react-icons/fa";
-import { toast } from "react-hot-toast";
 import Input from "@/app/components/Input";
-
 import blankImage from "../../../public/images/blank-profile-picture.png";
+import { isValidEmail } from "@/app/utils/isValidEmail";
+import { isValidPassword } from "@/app/utils/isValidPassword";
+import { setDataAttribute } from "@/app/utils/setDataAttribute";
+import { updateUserCredentials } from "@/app/utils/updateUserCredentials";
+import { updateUserPicture } from "@/app/utils/updateUserPicture";
 
-import axios from "axios";
-
-const Profile = () => {
+const Profile: React.FC = () => {
   const {
     data: session,
     status,
@@ -27,50 +29,117 @@ const Profile = () => {
 
   const email = session?.user?.email;
 
-  const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
-  const [newEmail, setNewEmail] = useState<string>("");
-  const [isEmailError, setIsEmailError] = useState<boolean>(false);
-  const [emailInputTouched, setEmailInputTouched] = useState<boolean>(false);
+  interface FormData {
+    newUsername: string;
+    newEmail: string;
+    oldPassword: string;
+    newPassword: string;
+    isError: {
+      username: boolean;
+      email: boolean;
+      password: boolean;
+    };
+    inputTouched: {
+      [key: string]: boolean;
+      newUsername: boolean;
+      newEmail: boolean;
+      newPassword: boolean;
+    };
+    isFormNotEmpty: boolean;
+    [key: string]: string | boolean | { [key: string]: boolean };
+  }
 
-  const dropdownRef: React.LegacyRef<HTMLDivElement> = useRef(null);
-
-  const validateEmailHandler = useCallback((email: string) => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-  }, []);
-
-  const emailErrorHandler = useCallback(
-    (newEmail: string) => {
-      if (!validateEmailHandler(newEmail)) {
-        setIsEmailError(true);
-      } else {
-        setIsEmailError(false);
-      }
+  const formInitialState = {
+    newUsername: "",
+    newEmail: "",
+    oldPassword: "",
+    newPassword: "",
+    isError: {
+      username: false,
+      email: false,
+      password: false,
     },
-    [validateEmailHandler]
-  );
-
-  const emailFocusHandler = () => {
-    setIsEmailError(false);
+    inputTouched: {
+      newUsername: false,
+      newEmail: false,
+      newPassword: false,
+    },
+    isFormNotEmpty: false,
   };
 
-  const toggleDropdownHandler = useCallback(() => {
+  const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>(formInitialState);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleInputEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    setFormData((prevFormData) => {
+      const updatedError = {
+        username: prevFormData.isError.username,
+        email: prevFormData.isError.email,
+        password: prevFormData.isError.password,
+      };
+
+      let updatedFormNotEmpty = prevFormData.isFormNotEmpty;
+
+      if (id === "newUsername") {
+        updatedError.username =
+          event.type === "change"
+            ? value.length < 3 && prevFormData.inputTouched.newUsername
+            : value.length < 3;
+        updatedFormNotEmpty = value.length >= 3;
+      } else if (id === "newEmail") {
+        updatedError.email =
+          event.type === "change"
+            ? !isValidEmail(value) && prevFormData.inputTouched.newEmail
+            : !isValidEmail(value);
+        updatedFormNotEmpty = isValidEmail(value);
+      } else if (id === "newPassword") {
+        updatedError.password =
+          event.type === "change"
+            ? !isValidPassword(value) && prevFormData.inputTouched.newPassword
+            : !isValidPassword(value);
+        updatedFormNotEmpty =
+          isValidPassword(value) && isValidPassword(formData.oldPassword);
+      } else if (id === "oldPassword") {
+        updatedFormNotEmpty =
+          isValidPassword(value) && isValidPassword(formData.newPassword);
+      }
+
+      setDataAttribute(event);
+      console.log(updatedFormNotEmpty);
+
+      return {
+        ...prevFormData,
+        [id]: value,
+        inputTouched: {
+          ...prevFormData.inputTouched,
+          [id]: event.type === "blur" ? true : prevFormData.inputTouched[id],
+        },
+        isError: updatedError,
+        isFormNotEmpty: updatedFormNotEmpty,
+      };
+    });
+  };
+
+  const toggleDropdown = useCallback(() => {
     setShowDropdownMenu((state) => !state);
   }, []);
 
-  const updateUserHandler = useCallback(
-    async (email: string, image?: string, newEmail?: string) => {
-      try {
-        await axios.post("/api/update", { email, image, newEmail }).then(() => {
-          update({ image: image, email: newEmail });
-          toast.success("Profile updated successfully!");
-          setNewEmail("");
-        });
-      } catch (error) {
-        toast.error(Object(error).response.data);
-      }
-    },
-    [update]
-  );
+  const resetInputs = () => {
+    setFormData(formInitialState);
+    document
+      .getElementById("newUsername")!
+      .removeAttribute("data-input-active");
+    document.getElementById("newEmail")!.removeAttribute("data-input-active");
+    document
+      .getElementById("oldPassword")!
+      .removeAttribute("data-input-active");
+    document
+      .getElementById("newPassword")!
+      .removeAttribute("data-input-active");
+  };
 
   const convertToBase64 = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,34 +147,30 @@ const Profile = () => {
       reader.readAsDataURL(e.target.files![0]);
       reader.onload = async () => {
         const image = String(reader.result);
-        await updateUserHandler(email!, image);
+        await updateUserPicture(email!, image, () => {
+          update({
+            image,
+          });
+        });
       };
       reader.onerror = (error) => {
         console.log(error);
       };
-      toggleDropdownHandler();
+      toggleDropdown();
     },
-    [email, toggleDropdownHandler, updateUserHandler]
+    [toggleDropdown, email, update]
   );
 
-  const clickOutsideHandler = useCallback((e: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+  const clickOutside = useCallback((e: MouseEvent) => {
+    const targetNode = e.target as Node;
+    if (dropdownRef.current && !dropdownRef.current.contains(targetNode)) {
       setShowDropdownMenu(false);
     }
   }, []);
 
-  const setDataAttribute = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value) {
-        e.target.setAttribute("data-input-active", "");
-      } else {
-        e.target.removeAttribute("data-input-active");
-      }
-    },
-    []
-  );
-
-  document.addEventListener("click", clickOutsideHandler);
+  useEffect(() => {
+    document.addEventListener("click", clickOutside);
+  }, [clickOutside]);
 
   const imageStyles = {
     borderRadius: "50%",
@@ -132,11 +197,11 @@ const Profile = () => {
           {session?.user?.name}&apos;s profile
         </h1>
         <hr className="bg-black/50" />
-        <div className="flex flex-col gap-x-10 lg:flex-row lg:justify-between w-full">
+        <div className="flex flex-col lg:flex-row gap-y-7 lg:gap-x-10 w-full">
           <section className="flex flex-col gap-2">
             <h2 className="text-sm font-medium">Profile picture</h2>
             <div
-              className="relative h-40 w-40 cursor-pointer rounded-[50%] mb-8"
+              className="relative h-40 w-40 cursor-pointer rounded-[50%]"
               ref={dropdownRef}
             >
               <Image
@@ -144,12 +209,12 @@ const Profile = () => {
                 alt="profile_picture"
                 fill
                 style={imageStyles}
-                onClick={toggleDropdownHandler}
+                onClick={toggleDropdown}
                 className="peer"
               />
               <button
                 className="absolute bottom-0 right-0 p-1 m-2 flex items-center gap-x-1 bg-white hover:bg-zinc-100 rounded-md text-sm peer-hover:bg-zinc-100"
-                onClick={toggleDropdownHandler}
+                onClick={toggleDropdown}
               >
                 <FaRegEdit />
                 <p className="pointer-events-none">Edit</p>
@@ -163,9 +228,13 @@ const Profile = () => {
                     onChange={convertToBase64}
                   />
                   <div
-                    onClick={() => {
-                      updateUserHandler(session?.user?.email!, "");
-                      toggleDropdownHandler();
+                    onClick={async () => {
+                      await updateUserPicture(email!, "", () => {
+                        update({
+                          image: "",
+                        });
+                      });
+                      toggleDropdown();
                     }}
                     className="rounded-b-md hover:bg-zinc-100"
                   >
@@ -175,45 +244,92 @@ const Profile = () => {
               )}
             </div>
           </section>
-          <section className="flex flex-col gap-2 lg:w-full h-full">
-            <h2 className="text-sm font-medium">Email</h2>
-            <p className="text-xs">Current email: {session?.user?.email}</p>
-            <form
-              className="flex gap-x-2 h-10 lg:w-1/2"
-              onSubmit={(e: React.FormEvent) => {
-                e.preventDefault();
-                if (validateEmailHandler(newEmail)) {
-                  updateUserHandler(email!, undefined, newEmail);
-                } else {
-                  setIsEmailError(true);
-                }
-              }}
-            >
+          <form
+            className="flex flex-col gap-y-6 lg:w-1/3"
+            onSubmit={async (e: React.FormEvent) => {
+              e.preventDefault();
+              if (formData.isFormNotEmpty) {
+                await updateUserCredentials(
+                  email!,
+                  formData.newUsername,
+                  formData.newEmail,
+                  formData.oldPassword,
+                  formData.newPassword,
+                  () => {
+                    update({
+                      name: formData.newUsername,
+                      email: formData.newEmail,
+                    });
+                  }
+                ).then(resetInputs);
+              } else {
+                toast.error("Form is incorrect");
+              }
+            }}
+          >
+            <section className="flex flex-col gap-2 lg:w-full h-full">
+              <h2 className="text-sm font-medium">Username</h2>
+              <p className="text-xs">Current username: {session?.user?.name}</p>
+              <Input
+                id="newUsername"
+                type="text"
+                label="Enter new username"
+                value={formData.newUsername}
+                onChange={handleInputEvent}
+                onBlur={handleInputEvent}
+                isError={formData.isError.username}
+                errorMessage={"Username must consist of minimum 3 characters"}
+              />
+            </section>
+            <section className="flex flex-col gap-2 lg:w-full h-full">
+              <h2 className="text-sm font-medium">Email</h2>
+              <p className="text-xs">Current email: {session?.user?.email}</p>
               <Input
                 id="newEmail"
                 type="text"
                 label="Enter new email"
-                value={newEmail}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setNewEmail(e.target.value);
-                  setDataAttribute(e);
-                  if (emailInputTouched) {
-                    emailErrorHandler(e.target.value);
-                  }
-                }}
-                onBlur={() => {
-                  emailErrorHandler(newEmail);
-                  setEmailInputTouched(true);
-                }}
-                onFocus={emailFocusHandler}
-                isError={isEmailError}
+                value={formData.newEmail}
+                onChange={handleInputEvent}
+                onBlur={handleInputEvent}
+                isError={formData.isError.email}
                 errorMessage={"Invalid email format"}
               />
-              <button className="w-1/5 bg-white hover:bg-zinc-100 border-2 border-solid border-zinc-300 rounded-md text-sm font-bold px-2 py-1">
-                Change
+            </section>
+            <section className="flex flex-col gap-2 lg:w-full h-full">
+              <h2 className="text-sm font-medium">Password</h2>
+              <Input
+                id="oldPassword"
+                type="password"
+                label="Enter old password"
+                value={formData.oldPassword}
+                onChange={handleInputEvent}
+              />
+              <Input
+                id="newPassword"
+                type="password"
+                label="Enter new password"
+                value={formData.newPassword}
+                onChange={handleInputEvent}
+                onBlur={handleInputEvent}
+                isError={formData.isError.password}
+                errorMessage={
+                  "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                }
+              />
+            </section>
+            <div className="flex justify-between my-10">
+              <button className="w-28 bg-black hover:bg-zinc-800 rounded-md text-sm font-bold text-white p-2">
+                Update
               </button>
-            </form>
-          </section>
+              <button
+                className="w-28 bg-red-700 hover:bg-red-600 rounded-md text-sm font-bold text-white p-2"
+                type="button"
+                onClick={resetInputs}
+              >
+                Reset
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

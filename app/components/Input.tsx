@@ -6,10 +6,9 @@ interface InputProps {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
-  isError: boolean;
-  errorMessage: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  isError?: boolean;
+  errorMessage?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,12 +18,11 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   onBlur,
-  onFocus,
   isError,
   errorMessage,
 }) => {
   return (
-    <div className="relative w-full lg:w-8/12">
+    <div className="relative w-full h-10">
       <input
         className={`
             w-full
@@ -34,7 +32,9 @@ const Input: React.FC<InputProps> = ({
             px-4
             border-2
             border-solid
-            ${isError ? "border-red-600" : "border-zinc-300"}
+            ${
+              isError ? "border-red-600 bg-red-100" : "border-zinc-300 bg-white"
+            }
             rounded-lg
             peer
             `}
@@ -43,7 +43,6 @@ const Input: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        onFocus={onFocus}
       />
       <label
         className={`
@@ -56,7 +55,7 @@ const Input: React.FC<InputProps> = ({
         lg:text-sm
         px-1
         origin-[0_0]
-        text-zinc-400 
+        ${isError ? "text-red-600" : "text-zinc-400"}
         peer-focus:scale-75
         peer-focus:top-0
         peer-focus:-translate-y-0
