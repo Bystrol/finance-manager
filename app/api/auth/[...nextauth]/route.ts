@@ -76,6 +76,9 @@ export const authOptions: AuthOptions = {
         if (session.email) {
           token.email = session.email;
         }
+        if (session.name) {
+          token.name = session.name;
+        }
       }
       return token;
     },
