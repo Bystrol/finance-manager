@@ -19,7 +19,6 @@ const Button: React.FC<ButtonProps> = ({ icon: Icon, text, onClick }) => {
     border-zinc-300 
     border-2
     w-full
-    lg:w-8/12
     h-10
     md:h-14
     lg:h-11
@@ -34,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({ icon: Icon, text, onClick }) => {
     "
     >
       <Icon size={25} className="mr-2" />
-      <p>{text}</p>
+      <p className="pointer-events-none">{text}</p>
     </button>
   );
 };
