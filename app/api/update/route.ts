@@ -1,4 +1,5 @@
 import prisma from "../../lib/prisma";
+import { compare, hash } from "bcrypt";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -6,13 +7,30 @@ export async function POST(req: Request) {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
   };
 
+  const validatePassword = (password: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
+  };
+
   try {
-    const { email, image, newEmail } = await req.json();
+    const {
+      currentEmail,
+      image,
+      newUsername,
+      newEmail,
+      oldPassword,
+      newPassword,
+    } = await req.json();
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: currentEmail,
+      },
+    });
 
     if (image || image === "") {
       await prisma.user.update({
         where: {
-          email,
+          email: currentEmail,
         },
         data: {
           image,
@@ -20,8 +38,29 @@ export async function POST(req: Request) {
       });
     }
 
-    if (newEmail === "") {
-      return new NextResponse("Invalid email", { status: 422 });
+    if (newUsername) {
+      if (newUsername.length > 3) {
+        if (newUsername !== user!.name) {
+          await prisma.user.update({
+            where: {
+              email: currentEmail,
+            },
+            data: {
+              name: newUsername,
+            },
+          });
+        } else {
+          return new NextResponse(
+            "New username must be different from the current one",
+            { status: 422 }
+          );
+        }
+      } else {
+        return new NextResponse(
+          "Username must consist of minimum 3 characters",
+          { status: 422 }
+        );
+      }
     }
 
     if (newEmail) {
@@ -29,16 +68,10 @@ export async function POST(req: Request) {
         return new NextResponse("Invalid email", { status: 422 });
       }
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
-
       if (user && newEmail !== user.email) {
         await prisma.user.update({
           where: {
-            email,
+            email: currentEmail,
           },
           data: {
             email: newEmail,
@@ -49,6 +82,43 @@ export async function POST(req: Request) {
           "New email must be different from the current one",
           { status: 422 }
         );
+      }
+    }
+
+    if (oldPassword && newPassword) {
+      const isPasswordCorrect = await compare(
+        oldPassword,
+        user!.hashedPassword!
+      );
+      const isPasswordSame = await compare(newPassword, user!.hashedPassword!);
+
+      if (isPasswordCorrect) {
+        if (!validatePassword(newPassword)) {
+          return new NextResponse(
+            "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number",
+            { status: 422 }
+          );
+        }
+
+        if (isPasswordSame) {
+          return new NextResponse(
+            "New password must be different from the current one",
+            { status: 422 }
+          );
+        }
+
+        const newHashedPassword = await hash(newPassword, 12);
+
+        await prisma.user.update({
+          where: {
+            email: currentEmail,
+          },
+          data: {
+            hashedPassword: newHashedPassword,
+          },
+        });
+      } else {
+        return new NextResponse("Old password is incorrect", { status: 422 });
       }
     }
 
