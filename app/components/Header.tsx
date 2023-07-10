@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   if (session && status === "authenticated") {
     return (
       <>
-        <header className="fixed top-0 left-0 flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30">
+        <header className="fixed top-0 left-0 flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30 z-10">
           <div className="flex justify-start items-center h-full w-1/2">
             <Link href="/" className="flex items-center gap-x-2">
               <RiMoneyDollarCircleFill size={35} />
