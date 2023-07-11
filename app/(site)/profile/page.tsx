@@ -2,10 +2,8 @@
 
 import { useSession } from "next-auth/react";
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
-import { Triangle } from "react-loader-spinner";
 import { FaRegEdit } from "react-icons/fa";
 import Input from "@/app/components/Input";
 import blankImage from "../../../public/images/blank-profile-picture.png";
@@ -16,16 +14,7 @@ import { updateUserCredentials } from "@/app/utils/updateUserCredentials";
 import { updateUserPicture } from "@/app/utils/updateUserPicture";
 
 const Profile: React.FC = () => {
-  const {
-    data: session,
-    status,
-    update,
-  } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/auth");
-    },
-  });
+  const { data: session, update } = useSession();
 
   const email = session?.user?.email;
 
@@ -176,19 +165,6 @@ const Profile: React.FC = () => {
     borderRadius: "50%",
     border: "1px solid #c4c6c9",
   };
-
-  if (status === "loading") {
-    return (
-      <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
-        <Triangle
-          width={100}
-          height={100}
-          wrapperClass="absolute"
-          color="#fff"
-        />
-      </main>
-    );
-  }
 
   return (
     <div className="flex flex-col w-full items-center mt-16 px-3">

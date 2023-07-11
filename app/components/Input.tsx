@@ -51,7 +51,6 @@ const Input: React.FC<InputProps> = ({
         -translate-y-1/2
         left-4
         text-sm
-        md:text-lg 
         lg:text-sm
         px-1
         origin-[0_0]
