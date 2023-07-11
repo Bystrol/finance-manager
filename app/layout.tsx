@@ -1,8 +1,9 @@
 "use client";
 
 import "./globals.css";
-import Provider from "./context/AuthContext";
-import ToasterContext from "./context/ToasterContext";
+import SessionContext from "./contexts/SessionContext";
+import ToasterContext from "./contexts/ToasterContext";
+import { AuthContext } from "./contexts/AuthContext";
 import Header from "./components/Header";
 
 export const metadata = {
@@ -18,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <Provider>
-          <ToasterContext />
-          <Header />
-          {children}
-        </Provider>
+        <SessionContext>
+          <AuthContext>
+            <ToasterContext />
+            <Header />
+            {children}
+          </AuthContext>
+        </SessionContext>
       </body>
     </html>
   );
