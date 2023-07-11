@@ -12,13 +12,13 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
 import { useSession } from "next-auth/react";
+import { setDataAttribute } from "@/app/utils/setDataAttribute";
 
-const Auth = () => {
+const Auth: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [variant, setVariant] = useState<string>("login");
-  const [logoSize, setLogoSize] = useState<number>(30);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { status } = useSession();
@@ -32,18 +32,6 @@ const Auth = () => {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
-
-  const checkLogoSize = useCallback(() => {
-    if (window.innerWidth >= 768 && window.innerWidth < 1024) {
-      setLogoSize(45);
-    } else {
-      setLogoSize(30);
-    }
-  }, []);
-
-  useEffect(() => {
-    checkLogoSize();
-  }, [checkLogoSize]);
 
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,27 +75,16 @@ const Auth = () => {
     [email, username, password, handleLogin]
   );
 
-  const setDataAttribute = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value) {
-        e.target.setAttribute("data-input-active", "");
-      } else {
-        e.target.removeAttribute("data-input-active");
-      }
-    },
-    []
-  );
-
   if (status === "unauthenticated") {
     return (
       <div className="flex justify-center items-center w-full h-screen">
         <div className="flex flex-col items-center bg-white w-full lg:w-3/5 h-full lg:h-4/5 p-4 lg:rounded-xl">
-          <div className="font-bold text-2xl md:text-4xl lg:text-xl italic drop-shadow-md flex self-start">
-            <RiMoneyDollarCircleFill className="mr-2" size={logoSize} />
+          <div className="font-bold text-2xl lg:text-xl italic drop-shadow-md flex self-start">
+            <RiMoneyDollarCircleFill className="mr-2" size={30} />
             <h1>FINEances</h1>
           </div>
           <div className="flex w-full h-full justify-center">
-            <section className="flex justify-center lg:w-1/2">
+            <section className="flex justify-center w-8/12 lg:w-1/2">
               <form
                 onSubmit={variant === "login" ? handleLogin : handleRegister}
                 className="flex flex-col items-center justify-center w-full lg:w-8/12 h-full text-center gap-3 relative"
