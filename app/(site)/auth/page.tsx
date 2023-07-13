@@ -12,36 +12,12 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
 import { useSession } from "next-auth/react";
-import { setDataAttribute } from "@/app/utils/setDataAttribute";
 import { isValidEmail } from "@/app/utils/isValidEmail";
 import { isValidPassword } from "@/app/utils/isValidPassword";
+import { handleInputEvent } from "@/app/utils/handleInputEvent";
+import { FormData, UpdatedError } from "@/app/interfaces/form_interfaces";
 
 const Auth: React.FC = () => {
-  interface FormData {
-    username: string;
-    email: string;
-    password: string;
-    variant: string;
-    isError: {
-      username: boolean;
-      email: boolean;
-      password: boolean;
-    };
-    inputTouched: {
-      [key: string]: boolean;
-      username: boolean;
-      email: boolean;
-      password: boolean;
-    };
-  }
-
-  interface UpdatedError {
-    [key: string]: boolean;
-    username: boolean;
-    email: boolean;
-    password: boolean;
-  }
-
   const initialFormData = useMemo(
     () => ({
       username: "",
@@ -183,56 +159,6 @@ const Auth: React.FC = () => {
     ]
   );
 
-  const handleInputEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    setFormData((prevFormData) => {
-      const updatedError: UpdatedError = {
-        username: prevFormData.isError.username,
-        email: prevFormData.isError.email,
-        password: prevFormData.isError.password,
-      };
-
-      if (id === `${id}`) {
-        switch (event.type) {
-          case "focus":
-            updatedError[id] = false;
-            break;
-          case "change":
-            updatedError[id] =
-              value.length === 0 && prevFormData.inputTouched[id];
-            break;
-          case "blur":
-            updatedError[id] = !validateInput(id, value);
-            break;
-          default:
-            updatedError[id] = false;
-        }
-      }
-
-      setDataAttribute(event);
-
-      return {
-        ...prevFormData,
-        [id]: value,
-        inputTouched: {
-          ...prevFormData.inputTouched,
-          [id]: event.type === "blur" ? true : prevFormData.inputTouched[id],
-        },
-        isError: updatedError,
-      };
-    });
-  };
-
-  const validateInput = useCallback((id: string, value: string) => {
-    if (id === "username") {
-      return value.length >= 3;
-    } else if (id === "email") {
-      return isValidEmail(value);
-    } else if ((id = "password")) {
-      return isValidPassword(value);
-    }
-  }, []);
-
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex flex-col items-center bg-white w-full lg:w-3/5 h-full lg:h-4/5 p-4 lg:rounded-xl">
@@ -262,9 +188,9 @@ const Auth: React.FC = () => {
                   type="text"
                   label="Enter your username"
                   value={formData.username}
-                  onChange={handleInputEvent}
-                  onBlur={handleInputEvent}
-                  onFocus={handleInputEvent}
+                  onChange={(event) => handleInputEvent(event, setFormData)}
+                  onBlur={(event) => handleInputEvent(event, setFormData)}
+                  onFocus={(event) => handleInputEvent(event, setFormData)}
                   isError={formData.isError.username}
                   errorMessage={"Username must consist of minimum 3 characters"}
                 />
@@ -274,9 +200,9 @@ const Auth: React.FC = () => {
                 type="text"
                 label="Enter your email"
                 value={formData.email}
-                onChange={handleInputEvent}
-                onBlur={handleInputEvent}
-                onFocus={handleInputEvent}
+                onChange={(event) => handleInputEvent(event, setFormData)}
+                onBlur={(event) => handleInputEvent(event, setFormData)}
+                onFocus={(event) => handleInputEvent(event, setFormData)}
                 isError={formData.isError.email}
                 errorMessage={"Invalid email format (e.g. email@example.com)"}
               />
@@ -285,9 +211,9 @@ const Auth: React.FC = () => {
                 type="password"
                 label="Enter your password"
                 value={formData.password}
-                onChange={handleInputEvent}
-                onBlur={handleInputEvent}
-                onFocus={handleInputEvent}
+                onChange={(event) => handleInputEvent(event, setFormData)}
+                onBlur={(event) => handleInputEvent(event, setFormData)}
+                onFocus={(event) => handleInputEvent(event, setFormData)}
                 isError={formData.isError.password}
                 errorMessage={
                   "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
