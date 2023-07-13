@@ -7,6 +7,7 @@ interface InputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   isError?: boolean;
   errorMessage?: string;
 }
@@ -18,15 +19,16 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   onBlur,
+  onFocus,
   isError,
   errorMessage,
 }) => {
   return (
-    <div className="relative w-full h-10">
+    <div className="relative w-full">
       <input
         className={`
             w-full
-            h-full
+            h-10
             py-3
             lg:py-2
             px-4
@@ -43,12 +45,12 @@ const Input: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
       />
       <label
         className={`
         absolute
-        top-[50%]
-        -translate-y-1/2
+        top-2.5
         left-4
         text-sm
         lg:text-sm
@@ -60,14 +62,15 @@ const Input: React.FC<InputProps> = ({
         peer-focus:-translate-y-0
         peer-data-[input-active]:scale-75
         peer-data-[input-active]:top-0
-        peer-data-[input-active]:-translate-y-0
         transition-all
         `}
         htmlFor={id}
       >
         {label}
       </label>
-      {isError && <p className="text-xs mt-2 text-red-600">{errorMessage}</p>}
+      {isError && (
+        <p className="text-xs text-left text-red-600">{errorMessage}</p>
+      )}
     </div>
   );
 };
