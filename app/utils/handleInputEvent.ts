@@ -14,21 +14,11 @@ export const handleInputEvent = (
       password: prevFormData.isError.password,
     };
 
-    if (id === `${id}`) {
-      switch (event.type) {
-        case "focus":
-          updatedError[id] = false;
-          break;
-        case "change":
-          updatedError[id] =
-            value.length === 0 && prevFormData.inputTouched[id];
-          break;
-        case "blur":
-          updatedError[id] = !validateInput(id, value);
-          break;
-        default:
-          updatedError[id] = false;
-      }
+    if (event.type === "change") {
+      updatedError[id] =
+        !validateInput(id, value) && prevFormData.inputTouched[id];
+    } else if (event.type === "blur") {
+      updatedError[id] = !validateInput(id, value);
     }
 
     setDataAttribute(event);
