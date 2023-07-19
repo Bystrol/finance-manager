@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import ProfileImage from "./ProfileImage";
-import Menu from "./Menu";
+import Menu from "./Menu/Menu";
 import { useSession } from "next-auth/react";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 
