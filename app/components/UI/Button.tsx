@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({ icon: Icon, text, onClick }) => {
     justify-center
     items-center
     border-zinc-300 
-    border-2
+    border
     w-full
     h-10
     md:h-14

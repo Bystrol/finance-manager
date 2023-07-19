@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileImage from "./ProfileImage";
+import ProfileImage from "../ProfileImage";
 import MenuItem from "./MenuItem";
 import { signOut, useSession } from "next-auth/react";
 import { CgProfile } from "react-icons/cg";
@@ -7,7 +7,7 @@ import { GoSignOut } from "react-icons/go";
 import { SlClose } from "react-icons/sl";
 import { IoHomeOutline } from "react-icons/io5";
 
-const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
+const Menu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
   isVisible,
   onClose,
 }) => {
@@ -34,16 +34,16 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
         <nav>
           <ul className="flex flex-col">
             <MenuItem
-              href="profile"
-              icon={CgProfile}
-              text="Your profile"
+              href="/"
+              icon={IoHomeOutline}
+              text="Home"
               onClick={onClose}
             />
             <hr />
             <MenuItem
-              href="/"
-              icon={IoHomeOutline}
-              text="Home"
+              href="profile"
+              icon={CgProfile}
+              text="Your profile"
               onClick={onClose}
             />
             <hr />
@@ -65,4 +65,4 @@ const ProfileMenu: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
   return <div></div>;
 };
 
-export default ProfileMenu;
+export default Menu;

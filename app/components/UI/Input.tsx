@@ -1,5 +1,3 @@
-import React from "react";
-
 interface InputProps {
   id: string;
   type: string;
@@ -32,11 +30,14 @@ const Input: React.FC<InputProps> = ({
             py-3
             lg:py-2
             px-4
-            border-2
-            border-solid
+            border
+            bg-white
             ${
-              isError ? "border-red-600 bg-red-100" : "border-zinc-300 bg-white"
+              isError
+                ? "border-red-700 focus:border-red-700"
+                : "border-zinc-300 focus:border-zinc-300"
             }
+            focus:outline-none
             rounded-lg
             peer
             `}
@@ -56,20 +57,21 @@ const Input: React.FC<InputProps> = ({
         lg:text-sm
         px-1
         origin-[0_0]
-        ${isError ? "text-red-600" : "text-zinc-400"}
+        ${isError ? "text-red-700" : "text-zinc-400"}
         peer-focus:scale-75
         peer-focus:top-0
         peer-focus:-translate-y-0
         peer-data-[input-active]:scale-75
         peer-data-[input-active]:top-0
         transition-all
+        duration-200
         `}
         htmlFor={id}
       >
         {label}
       </label>
       {isError && (
-        <p className="text-xs text-left text-red-600">{errorMessage}</p>
+        <p className="text-xs text-left text-red-700">{errorMessage}</p>
       )}
     </div>
   );
