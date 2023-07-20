@@ -1,10 +1,10 @@
-import { validateInput } from "./validateInput";
-import { setDataAttribute } from "@/lib/form/setDataAttribute";
-import { FormData, UpdatedError } from "@/interfaces/form_interfaces";
+import { validateInput } from './validateInput';
+import { setDataAttribute } from '@/lib/form/setDataAttribute';
+import { FormData, UpdatedError } from '@/interfaces/form_interfaces';
 
 export const handleInputEvent = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>,
 ) => {
   const { id, value } = event.target;
   setFormData((prevFormData) => {
@@ -14,10 +14,10 @@ export const handleInputEvent = (
       password: prevFormData.isError.password,
     };
 
-    if (event.type === "change") {
+    if (event.type === 'change') {
       updatedError[id] =
         !validateInput(id, value) && prevFormData.inputTouched[id];
-    } else if (event.type === "blur") {
+    } else if (event.type === 'blur') {
       updatedError[id] = !validateInput(id, value);
     }
 
@@ -28,7 +28,7 @@ export const handleInputEvent = (
       [id]: value,
       inputTouched: {
         ...prevFormData.inputTouched,
-        [id]: event.type === "blur" ? true : prevFormData.inputTouched[id],
+        [id]: event.type === 'blur' ? true : prevFormData.inputTouched[id],
       },
       isError: updatedError,
     };

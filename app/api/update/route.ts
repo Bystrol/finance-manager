@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import { compare, hash } from "bcrypt";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { compare, hash } from 'bcrypt';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   const validateEmail = (email: string) => {
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       },
     });
 
-    if (image || image === "") {
+    if (image || image === '') {
       await prisma.user.update({
         where: {
           email: currentEmail,
@@ -51,21 +51,21 @@ export async function POST(req: Request) {
           });
         } else {
           return new NextResponse(
-            "New username must be different from the current one",
-            { status: 422 }
+            'New username must be different from the current one',
+            { status: 422 },
           );
         }
       } else {
         return new NextResponse(
-          "Username must consist of minimum 3 characters",
-          { status: 422 }
+          'Username must consist of minimum 3 characters',
+          { status: 422 },
         );
       }
     }
 
     if (newEmail) {
       if (!validateEmail(newEmail)) {
-        return new NextResponse("Invalid email", { status: 422 });
+        return new NextResponse('Invalid email', { status: 422 });
       }
 
       if (user && newEmail !== user.email) {
@@ -79,8 +79,8 @@ export async function POST(req: Request) {
         });
       } else {
         return new NextResponse(
-          "New email must be different from the current one",
-          { status: 422 }
+          'New email must be different from the current one',
+          { status: 422 },
         );
       }
     }
@@ -88,22 +88,22 @@ export async function POST(req: Request) {
     if (oldPassword && newPassword) {
       const isPasswordCorrect = await compare(
         oldPassword,
-        user!.hashedPassword!
+        user!.hashedPassword!,
       );
       const isPasswordSame = await compare(newPassword, user!.hashedPassword!);
 
       if (isPasswordCorrect) {
         if (!validatePassword(newPassword)) {
           return new NextResponse(
-            "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number",
-            { status: 422 }
+            'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number',
+            { status: 422 },
           );
         }
 
         if (isPasswordSame) {
           return new NextResponse(
-            "New password must be different from the current one",
-            { status: 422 }
+            'New password must be different from the current one',
+            { status: 422 },
           );
         }
 
@@ -118,12 +118,12 @@ export async function POST(req: Request) {
           },
         });
       } else {
-        return new NextResponse("Old password is incorrect", { status: 422 });
+        return new NextResponse('Old password is incorrect', { status: 422 });
       }
     }
 
-    return new NextResponse("Profile updated", { status: 200 });
+    return new NextResponse('Profile updated', { status: 200 });
   } catch {
-    return new NextResponse("Bad request", { status: 400 });
+    return new NextResponse('Bad request', { status: 400 });
   }
 }

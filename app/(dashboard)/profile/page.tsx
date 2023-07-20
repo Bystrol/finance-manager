@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import Image from "next/image";
-import { toast } from "react-hot-toast";
-import { FaRegEdit } from "react-icons/fa";
-import Input from "@/components/UI/Input";
-import blankImage from "../../../public/images/blank-profile-picture.png";
-import { isValidEmail } from "@/lib/form/isValidEmail";
-import { isValidPassword } from "@/lib/form/isValidPassword";
-import { setDataAttribute } from "@/lib/form/setDataAttribute";
-import { updateUserCredentials } from "@/lib/update/updateUserCredentials";
-import { updateUserPicture } from "@/lib/update/updateUserPicture";
+import { useSession } from 'next-auth/react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { toast } from 'react-hot-toast';
+import { FaRegEdit } from 'react-icons/fa';
+import Input from '@/components/UI/Input';
+import blankPicture from '@/public/images/blank-profile-picture.png';
+import { isValidEmail } from '@/lib/form/isValidEmail';
+import { isValidPassword } from '@/lib/form/isValidPassword';
+import { setDataAttribute } from '@/lib/form/setDataAttribute';
+import { updateUserCredentials } from '@/lib/update/updateUserCredentials';
+import { updateUserPicture } from '@/lib/update/updateUserPicture';
+import styles from '@/styles/fileInput.module.css';
 
 const Profile: React.FC = () => {
   const { data: session, update } = useSession();
@@ -39,10 +40,10 @@ const Profile: React.FC = () => {
   }
 
   const formInitialState = {
-    newUsername: "",
-    newEmail: "",
-    oldPassword: "",
-    newPassword: "",
+    newUsername: '',
+    newEmail: '',
+    oldPassword: '',
+    newPassword: '',
     isError: {
       username: false,
       email: false,
@@ -72,26 +73,26 @@ const Profile: React.FC = () => {
 
       let updatedFormNotEmpty = prevFormData.isFormNotEmpty;
 
-      if (id === "newUsername") {
+      if (id === 'newUsername') {
         updatedError.username =
-          event.type === "change"
+          event.type === 'change'
             ? value.length < 3 && prevFormData.inputTouched.newUsername
             : value.length < 3;
         updatedFormNotEmpty = value.length >= 3;
-      } else if (id === "newEmail") {
+      } else if (id === 'newEmail') {
         updatedError.email =
-          event.type === "change"
+          event.type === 'change'
             ? !isValidEmail(value) && prevFormData.inputTouched.newEmail
             : !isValidEmail(value);
         updatedFormNotEmpty = isValidEmail(value);
-      } else if (id === "newPassword") {
+      } else if (id === 'newPassword') {
         updatedError.password =
-          event.type === "change"
+          event.type === 'change'
             ? !isValidPassword(value) && prevFormData.inputTouched.newPassword
             : !isValidPassword(value);
         updatedFormNotEmpty =
           isValidPassword(value) && isValidPassword(formData.oldPassword);
-      } else if (id === "oldPassword") {
+      } else if (id === 'oldPassword') {
         updatedFormNotEmpty =
           isValidPassword(value) && isValidPassword(formData.newPassword);
       }
@@ -104,7 +105,7 @@ const Profile: React.FC = () => {
         [id]: value,
         inputTouched: {
           ...prevFormData.inputTouched,
-          [id]: event.type === "blur" ? true : prevFormData.inputTouched[id],
+          [id]: event.type === 'blur' ? true : prevFormData.inputTouched[id],
         },
         isError: updatedError,
         isFormNotEmpty: updatedFormNotEmpty,
@@ -119,15 +120,15 @@ const Profile: React.FC = () => {
   const resetInputs = () => {
     setFormData(formInitialState);
     document
-      .getElementById("newUsername")!
-      .removeAttribute("data-input-active");
-    document.getElementById("newEmail")!.removeAttribute("data-input-active");
+      .getElementById('newUsername')!
+      .removeAttribute('data-input-active');
+    document.getElementById('newEmail')!.removeAttribute('data-input-active');
     document
-      .getElementById("oldPassword")!
-      .removeAttribute("data-input-active");
+      .getElementById('oldPassword')!
+      .removeAttribute('data-input-active');
     document
-      .getElementById("newPassword")!
-      .removeAttribute("data-input-active");
+      .getElementById('newPassword')!
+      .removeAttribute('data-input-active');
   };
 
   const convertToBase64 = useCallback(
@@ -147,7 +148,7 @@ const Profile: React.FC = () => {
       };
       toggleDropdown();
     },
-    [toggleDropdown, email, update]
+    [toggleDropdown, email, update],
   );
 
   const clickOutside = useCallback((e: MouseEvent) => {
@@ -158,16 +159,11 @@ const Profile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener("click", clickOutside);
+    document.addEventListener('click', clickOutside);
   }, [clickOutside]);
 
-  const imageStyles = {
-    borderRadius: "50%",
-    border: "1px solid #c4c6c9",
-  };
-
   return (
-    <div className="flex flex-col w-full items-center mt-16 px-3">
+    <div className="flex flex-col w-full items-center px-3">
       <div className="flex flex-col w-full max-w-7xl gap-2">
         <h1 className="text-xl font-medium">
           {session?.user?.name}&apos;s profile
@@ -181,12 +177,11 @@ const Profile: React.FC = () => {
               ref={dropdownRef}
             >
               <Image
-                src={session?.user?.image ? session.user.image : blankImage}
+                src={session?.user?.image || blankPicture}
                 alt="profile_picture"
                 fill
-                style={imageStyles}
                 onClick={toggleDropdown}
-                className="peer"
+                className="rounded-[50%] border border-zinc-300 peer"
               />
               <button
                 className="absolute bottom-0 right-0 p-1 m-2 flex items-center gap-x-1 bg-white hover:bg-zinc-100 rounded-md text-sm peer-hover:bg-zinc-100"
@@ -200,14 +195,14 @@ const Profile: React.FC = () => {
                   <input
                     accept="image/*"
                     type="file"
-                    className="file-input"
+                    className={styles['file-input']}
                     onChange={convertToBase64}
                   />
                   <div
                     onClick={async () => {
-                      await updateUserPicture(email!, "", () => {
+                      await updateUserPicture(email!, '', () => {
                         update({
-                          image: "",
+                          image: '',
                         });
                       });
                       toggleDropdown();
@@ -236,10 +231,10 @@ const Profile: React.FC = () => {
                       name: formData.newUsername,
                       email: formData.newEmail,
                     });
-                  }
+                  },
                 ).then(resetInputs);
               } else {
-                toast.error("Form is incorrect");
+                toast.error('Form is incorrect');
               }
             }}
           >
@@ -254,7 +249,7 @@ const Profile: React.FC = () => {
                 onChange={handleInputEvent}
                 onBlur={handleInputEvent}
                 isError={formData.isError.username}
-                errorMessage={"Username must consist of minimum 3 characters"}
+                errorMessage={'Username must consist of minimum 3 characters'}
               />
             </section>
             <section className="flex flex-col gap-2 lg:w-full h-full">
@@ -268,7 +263,7 @@ const Profile: React.FC = () => {
                 onChange={handleInputEvent}
                 onBlur={handleInputEvent}
                 isError={formData.isError.email}
-                errorMessage={"Invalid email format"}
+                errorMessage={'Invalid email format'}
               />
             </section>
             <section className="flex flex-col gap-2 lg:w-full h-full">
@@ -289,7 +284,7 @@ const Profile: React.FC = () => {
                 onBlur={handleInputEvent}
                 isError={formData.isError.password}
                 errorMessage={
-                  "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                  'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
                 }
               />
             </section>

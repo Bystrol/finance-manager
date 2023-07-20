@@ -1,14 +1,14 @@
-import { SetStateAction, useCallback } from "react";
-import { toast } from "react-hot-toast";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
-import { FormData } from "../../interfaces/form_interfaces";
-import { handleInputEvent } from "@/lib/form/handleInputEvent";
-import { ColorRing } from "react-loader-spinner";
-import { FcGoogle } from "react-icons/fc";
-import { AiOutlineGithub } from "react-icons/ai";
-import { signIn } from "next-auth/react";
-import axios from "axios";
+import { SetStateAction, useCallback } from 'react';
+import { toast } from 'react-hot-toast';
+import Input from '../UI/Input';
+import Button from '../UI/Button';
+import { FormData } from '../../interfaces/form_interfaces';
+import { handleInputEvent } from '@/lib/form/handleInputEvent';
+import { ColorRing } from 'react-loader-spinner';
+import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineGithub } from 'react-icons/ai';
+import { signIn } from 'next-auth/react';
+import axios from 'axios';
 
 interface RegisterProps {
   validateForm: () => Promise<boolean>;
@@ -37,14 +37,14 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         setIsLoading(true);
         try {
           await axios
-            .post("/api/register", {
+            .post('/api/register', {
               email: formData.email,
               username: formData.username,
               password: formData.password,
             })
             .then(() => {
               setIsLoading(false);
-              toast.success("User has been registered!");
+              toast.success('User has been registered!');
               resetInputs();
             });
         } catch (error) {
@@ -60,7 +60,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
       validateForm,
       resetInputs,
       setIsLoading,
-    ]
+    ],
   );
 
   return (
@@ -85,8 +85,8 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         isError={formData.isError.username}
         errorMessage={
           formData.username.length !== 0
-            ? "Username must consist of minimum 3 characters"
-            : "Please enter your username"
+            ? 'Username must consist of minimum 3 characters'
+            : 'Please enter your username'
         }
       />
       <Input
@@ -100,8 +100,8 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         isError={formData.isError.email}
         errorMessage={
           formData.email.length !== 0
-            ? "Invalid email format (e.g. email@example.com)"
-            : "Please enter your email"
+            ? 'Invalid email format (e.g. email@example.com)'
+            : 'Please enter your email'
         }
       />
       <Input
@@ -115,8 +115,8 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         isError={formData.isError.password}
         errorMessage={
           formData.password.length !== 0
-            ? "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
-            : "Please enter your password"
+            ? 'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
+            : 'Please enter your password'
         }
       />
 
@@ -126,10 +126,10 @@ export const RegisterPage: React.FC<RegisterProps> = ({
             width={50}
             height={50}
             wrapperClass="absolute"
-            colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+            colors={['#fff', '#fff', '#fff', '#fff', '#fff']}
           />
         ) : (
-          "Register"
+          'Register'
         )}
       </button>
       <div className="flex justify-center relative w-full">
@@ -139,12 +139,12 @@ export const RegisterPage: React.FC<RegisterProps> = ({
       <Button
         icon={FcGoogle}
         text="Continue with Google"
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn('google', { callbackUrl: '/' })}
       />
       <Button
         icon={AiOutlineGithub}
         text="Continue with GitHub"
-        onClick={() => signIn("github", { callbackUrl: "/" })}
+        onClick={() => signIn('github', { callbackUrl: '/' })}
       />
       <p className="text-md md:text-xl lg:text-sm mt-4">
         Already have an account?

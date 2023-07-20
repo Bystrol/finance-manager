@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import ProfileImage from "./ProfileImage";
-import Menu from "./Menu/Menu";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import blankPicture from '../public/images/blank-profile-picture.png';
+import ProfileImage from './ProfileImage';
+import Menu from './Menu/Menu';
+import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 
 const Header: React.FC = () => {
   const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
+
+  const { data: session } = useSession();
 
   const toggleProfileMenu = () => {
     setShowProfileMenu((state) => !state);
@@ -22,7 +26,10 @@ const Header: React.FC = () => {
             <h1 className="text-xl font-bold">FINEances</h1>
           </Link>
         </div>
-        <ProfileImage onClick={toggleProfileMenu} />
+        <ProfileImage
+          onClick={toggleProfileMenu}
+          src={session?.user?.image || blankPicture}
+        />
       </div>
       {showProfileMenu && (
         <div

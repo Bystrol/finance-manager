@@ -34,8 +34,8 @@ const Input: React.FC<InputProps> = ({
             bg-white
             ${
               isError
-                ? "border-red-700 focus:border-red-700"
-                : "border-zinc-300 focus:border-zinc-300"
+                ? 'border-red-700 focus:border-red-700'
+                : 'border-zinc-300 focus:border-zinc-300'
             }
             focus:outline-none
             rounded-lg
@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = ({
         lg:text-sm
         px-1
         origin-[0_0]
-        ${isError ? "text-red-700" : "text-zinc-400"}
+        ${isError ? 'text-red-700' : 'text-zinc-400'}
         peer-focus:scale-75
         peer-focus:top-0
         peer-focus:-translate-y-0

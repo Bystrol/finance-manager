@@ -1,11 +1,11 @@
-import React from "react";
-import ProfileImage from "../ProfileImage";
-import MenuItem from "./MenuItem";
-import { signOut, useSession } from "next-auth/react";
-import { CgProfile } from "react-icons/cg";
-import { GoSignOut } from "react-icons/go";
-import { SlClose } from "react-icons/sl";
-import { IoHomeOutline } from "react-icons/io5";
+import ProfileImage from '../ProfileImage';
+import blankPicture from '../../public/images/blank-profile-picture.png';
+import MenuItem from './MenuItem';
+import { signOut, useSession } from 'next-auth/react';
+import { CgProfile } from 'react-icons/cg';
+import { GoSignOut } from 'react-icons/go';
+import { SlClose } from 'react-icons/sl';
+import { IoHomeOutline } from 'react-icons/io5';
 
 const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
   isVisible,
@@ -16,12 +16,12 @@ const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
   return (
     <div
       className={`${
-        !isVisible ? "translate-x-full" : ""
+        !isVisible ? 'translate-x-full' : ''
       } fixed top-0 right-0 w-4/5 lg:w-80 h-full bg-white p-5 rounded-l-lg transition-all duration-300 z-10`}
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <ProfileImage />
+          <ProfileImage src={session?.user?.image || blankPicture} />
           <p className="font-bold ml-2">{session?.user?.name}</p>
         </div>
         <SlClose
