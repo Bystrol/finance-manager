@@ -1,13 +1,13 @@
-import { SetStateAction, useCallback } from "react";
-import { toast } from "react-hot-toast";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
-import { FormData } from "../../interfaces/form_interfaces";
-import { handleInputEvent } from "@/lib/form/handleInputEvent";
-import { ColorRing } from "react-loader-spinner";
-import { FcGoogle } from "react-icons/fc";
-import { AiOutlineGithub } from "react-icons/ai";
-import { signIn } from "next-auth/react";
+import { SetStateAction, useCallback } from 'react';
+import { toast } from 'react-hot-toast';
+import Input from '../UI/Input';
+import Button from '../UI/Button';
+import { FormData } from '../../interfaces/form_interfaces';
+import { handleInputEvent } from '@/lib/form/handleInputEvent';
+import { ColorRing } from 'react-loader-spinner';
+import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineGithub } from 'react-icons/ai';
+import { signIn } from 'next-auth/react';
 
 interface LoginProps {
   validateForm: () => Promise<boolean>;
@@ -31,7 +31,7 @@ export const LoginPage: React.FC<LoginProps> = ({
       e.preventDefault();
       if (await validateForm()) {
         setIsLoading(true);
-        await signIn("credentials", {
+        await signIn('credentials', {
           email: formData.email,
           password: formData.password,
           redirect: false,
@@ -40,12 +40,12 @@ export const LoginPage: React.FC<LoginProps> = ({
           if (callback?.error) {
             toast.error(callback.error);
           } else if (callback?.ok && !callback.error) {
-            toast.success("Logged in successfully!");
+            toast.success('Logged in successfully!');
           }
         });
       }
     },
-    [formData.email, formData.password, setIsLoading, validateForm]
+    [formData.email, formData.password, setIsLoading, validateForm],
   );
 
   return (
@@ -70,8 +70,8 @@ export const LoginPage: React.FC<LoginProps> = ({
         isError={formData.isError.email}
         errorMessage={
           formData.email.length !== 0
-            ? "Invalid email format (e.g. email@example.com)"
-            : "Please enter your email"
+            ? 'Invalid email format (e.g. email@example.com)'
+            : 'Please enter your email'
         }
       />
       <Input
@@ -85,8 +85,8 @@ export const LoginPage: React.FC<LoginProps> = ({
         isError={formData.isError.password}
         errorMessage={
           formData.password.length !== 0
-            ? "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
-            : "Please enter your password"
+            ? 'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
+            : 'Please enter your password'
         }
       />
 
@@ -96,10 +96,10 @@ export const LoginPage: React.FC<LoginProps> = ({
             width={50}
             height={50}
             wrapperClass="absolute"
-            colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+            colors={['#fff', '#fff', '#fff', '#fff', '#fff']}
           />
         ) : (
-          "Log in"
+          'Log in'
         )}
       </button>
       <div className="flex justify-center relative w-full">
@@ -109,12 +109,12 @@ export const LoginPage: React.FC<LoginProps> = ({
       <Button
         icon={FcGoogle}
         text="Continue with Google"
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn('google', { callbackUrl: '/' })}
       />
       <Button
         icon={AiOutlineGithub}
         text="Continue with GitHub"
-        onClick={() => signIn("github", { callbackUrl: "/" })}
+        onClick={() => signIn('github', { callbackUrl: '/' })}
       />
       <p className="text-md md:text-xl lg:text-sm mt-4">
         Don&apos;t have an account?

@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import { hash } from "bcrypt";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { hash } from 'bcrypt';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   const validateEmail = (email: string) => {
@@ -15,23 +15,23 @@ export async function POST(req: Request) {
     const { email, username, password } = await req.json();
 
     if (!email || !username || !password) {
-      return new NextResponse("Missing fields", { status: 400 });
+      return new NextResponse('Missing fields', { status: 400 });
     }
 
     if (username.length < 3) {
-      return new NextResponse("Username must consist of minimum 3 characters", {
+      return new NextResponse('Username must consist of minimum 3 characters', {
         status: 422,
       });
     }
 
     if (!validateEmail(email)) {
-      return new NextResponse("Invalid email", { status: 422 });
+      return new NextResponse('Invalid email', { status: 422 });
     }
 
     if (!validatePassword(password)) {
       return new NextResponse(
-        "Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number",
-        { status: 422 }
+        'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number',
+        { status: 422 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     });
 
     if (userExists) {
-      return new NextResponse("Email already taken", {
+      return new NextResponse('Email already taken', {
         status: 422,
       });
     }
@@ -55,13 +55,13 @@ export async function POST(req: Request) {
         emailVerified: new Date(),
         name: username,
         hashedPassword,
-        image: "",
+        image: '',
       },
     });
 
     return NextResponse.json(user);
   } catch (error) {
-    return new NextResponse("Something went wrong", {
+    return new NextResponse('Something went wrong', {
       status: 400,
     });
   }

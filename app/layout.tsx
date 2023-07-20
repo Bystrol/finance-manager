@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import "./globals.css";
-import SessionContext from "@/contexts/SessionContext";
-import ToasterContext from "@/contexts/ToasterContext";
-import { AuthContext } from "@/contexts/AuthContext";
+import './globals.css';
+import SessionContext from '@/contexts/SessionContext';
+import ToasterContext from '@/contexts/ToasterContext';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export const metadata = {
-  title: "FINEances",
-  description: "Application for managing your personal finances.",
+  title: 'FINEances',
+  description: 'Application for managing your personal finances.',
 };
 
 export default function RootLayout({

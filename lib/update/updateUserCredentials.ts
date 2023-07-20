@@ -1,5 +1,5 @@
-import axios from "axios";
-import { toast } from "react-hot-toast";
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 export const updateUserCredentials = async (
   currentEmail: string,
@@ -7,11 +7,11 @@ export const updateUserCredentials = async (
   newEmail: string,
   oldPassword: string,
   newPassword: string,
-  update: ({ name, email }: { name: string; email: string }) => void
+  update: ({ name, email }: { name: string; email: string }) => void,
 ) => {
   try {
     await axios
-      .post("/api/update", {
+      .post('/api/update', {
         currentEmail,
         newUsername,
         newEmail,
@@ -20,7 +20,7 @@ export const updateUserCredentials = async (
       })
       .then(() => {
         update({ name: newUsername, email: newEmail });
-        toast.success("Profile updated successfully!");
+        toast.success('Profile updated successfully!');
       });
   } catch (error) {
     toast.error(Object(error).response.data);

@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React, { useState, useCallback, useMemo } from "react";
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
-import { isValidEmail } from "@/lib/form/isValidEmail";
-import { isValidPassword } from "@/lib/form/isValidPassword";
-import { FormData, UpdatedError } from "@/interfaces/form_interfaces";
-import LoginPage from "@/components/Auth/LoginPage";
-import RegisterPage from "@/components/Auth/RegisterPage";
+import React, { useState, useCallback, useMemo } from 'react';
+import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { RiMoneyDollarCircleFill } from 'react-icons/ri';
+import { isValidEmail } from '@/lib/form/isValidEmail';
+import { isValidPassword } from '@/lib/form/isValidPassword';
+import { FormData, UpdatedError } from '@/interfaces/form_interfaces';
+import LoginPage from '@/components/Auth/LoginPage';
+import RegisterPage from '@/components/Auth/RegisterPage';
 
 const Auth: React.FC = () => {
   const initialFormData = useMemo(
     () => ({
-      username: "",
-      email: "",
-      password: "",
-      variant: "login",
+      username: '',
+      email: '',
+      password: '',
+      variant: 'login',
       isError: {
         username: false,
         email: false,
@@ -28,7 +28,7 @@ const Auth: React.FC = () => {
         password: false,
       },
     }),
-    []
+    [],
   );
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -36,15 +36,15 @@ const Auth: React.FC = () => {
 
   const { status } = useSession();
 
-  if (status === "authenticated") {
-    redirect("/");
+  if (status === 'authenticated') {
+    redirect('/');
   }
 
   const toggleVariant = useCallback(() => {
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
-        variant: prevFormData.variant === "login" ? "register" : "login",
+        variant: prevFormData.variant === 'login' ? 'register' : 'login',
       };
     });
   }, []);
@@ -65,7 +65,7 @@ const Auth: React.FC = () => {
         password: true,
       };
 
-      if (formData.variant === "register") {
+      if (formData.variant === 'register') {
         if (formData.username.length < 3) {
           updatedError.username = true;
           isValid = false;
@@ -92,9 +92,9 @@ const Auth: React.FC = () => {
 
   const resetInputs = useCallback(() => {
     setFormData(initialFormData);
-    document.getElementById("username")!.removeAttribute("data-input-active");
-    document.getElementById("email")!.removeAttribute("data-input-active");
-    document.getElementById("password")!.removeAttribute("data-input-active");
+    document.getElementById('username')!.removeAttribute('data-input-active');
+    document.getElementById('email')!.removeAttribute('data-input-active');
+    document.getElementById('password')!.removeAttribute('data-input-active');
   }, [initialFormData]);
 
   return (
@@ -106,7 +106,7 @@ const Auth: React.FC = () => {
         </div>
         <div className="flex w-full h-full justify-center my-8">
           <section className="flex justify-center w-8/12 lg:w-1/2">
-            {formData.variant === "login" ? (
+            {formData.variant === 'login' ? (
               <LoginPage
                 validateForm={validateForm}
                 isLoading={isLoading}
