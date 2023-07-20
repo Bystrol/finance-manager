@@ -3,92 +3,62 @@ import { toast } from "react-hot-toast";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { FormData } from "../../interfaces/form_interfaces";
-import { handleInputEvent } from "@/app/utils/handleInputEvent";
+import { handleInputEvent } from "@/lib/form/handleInputEvent";
 import { ColorRing } from "react-loader-spinner";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineGithub } from "react-icons/ai";
 import { signIn } from "next-auth/react";
-import axios from "axios";
 
-interface RegisterProps {
+interface LoginProps {
   validateForm: () => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
   formData: FormData;
   setFormData: React.Dispatch<SetStateAction<FormData>>;
   toggleVariant: () => void;
-  resetInputs: () => void;
 }
 
-export const RegisterPage: React.FC<RegisterProps> = ({
+export const LoginPage: React.FC<LoginProps> = ({
   validateForm,
   isLoading,
   setIsLoading,
   formData,
   setFormData,
   toggleVariant,
-  resetInputs,
 }) => {
-  const handleRegister = useCallback(
+  const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
       if (await validateForm()) {
         setIsLoading(true);
-        try {
-          await axios
-            .post("/api/register", {
-              email: formData.email,
-              username: formData.username,
-              password: formData.password,
-            })
-            .then(() => {
-              setIsLoading(false);
-              toast.success("User has been registered!");
-              resetInputs();
-            });
-        } catch (error) {
+        await signIn("credentials", {
+          email: formData.email,
+          password: formData.password,
+          redirect: false,
+        }).then((callback) => {
           setIsLoading(false);
-          toast.error(Object(error).response.data);
-        }
+          if (callback?.error) {
+            toast.error(callback.error);
+          } else if (callback?.ok && !callback.error) {
+            toast.success("Logged in successfully!");
+          }
+        });
       }
     },
-    [
-      formData.email,
-      formData.username,
-      formData.password,
-      validateForm,
-      resetInputs,
-      setIsLoading,
-    ]
+    [formData.email, formData.password, setIsLoading, validateForm]
   );
 
   return (
     <form
-      onSubmit={handleRegister}
+      onSubmit={handleLogin}
       className="flex flex-col items-center justify-center w-full lg:w-8/12 h-full text-center gap-3 relative"
     >
       <h1 className="font-bold text-2xl md:text-4xl lg:text-xl">
-        First time here?
+        Welcome back!
       </h1>
       <h2 className=" text-md md:text-xl lg:text-sm text-zinc-600 mb-5">
         Please enter your details.
       </h2>
-      <Input
-        id="username"
-        type="text"
-        label="Enter your username *"
-        value={formData.username}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.username}
-        errorMessage={
-          formData.username.length !== 0
-            ? "Username must consist of minimum 3 characters"
-            : "Please enter your username"
-        }
-      />
       <Input
         id="email"
         type="text"
@@ -129,7 +99,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
             colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
           />
         ) : (
-          "Register"
+          "Log in"
         )}
       </button>
       <div className="flex justify-center relative w-full">
@@ -147,16 +117,16 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         onClick={() => signIn("github", { callbackUrl: "/" })}
       />
       <p className="text-md md:text-xl lg:text-sm mt-4">
-        Already have an account?
+        Don&apos;t have an account?
         <span
           onClick={toggleVariant}
           className="hover:underline cursor-pointer font-bold ml-1"
         >
-          Log in
+          Register
         </span>
       </p>
     </form>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

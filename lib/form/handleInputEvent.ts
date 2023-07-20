@@ -1,6 +1,6 @@
 import { validateInput } from "./validateInput";
-import { setDataAttribute } from "@/app/utils/setDataAttribute";
-import { FormData, UpdatedError } from "../interfaces/form_interfaces";
+import { setDataAttribute } from "@/lib/form/setDataAttribute";
+import { FormData, UpdatedError } from "@/interfaces/form_interfaces";
 
 export const handleInputEvent = (
   event: React.ChangeEvent<HTMLInputElement>,
