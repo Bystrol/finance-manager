@@ -1,5 +1,5 @@
 import Image from "next/image";
-import image from "../../public/images/blank-profile-picture.png";
+import image from "@/public/images/blank-profile-picture.png";
 import { useSession } from "next-auth/react";
 
 const ProfileImage: React.FC<{ onClick?: () => void }> = ({ onClick }) => {

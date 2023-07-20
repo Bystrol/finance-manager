@@ -4,11 +4,11 @@ import React, { useState, useCallback, useMemo } from "react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
-import { isValidEmail } from "@/app/utils/isValidEmail";
-import { isValidPassword } from "@/app/utils/isValidPassword";
-import { FormData, UpdatedError } from "@/app/interfaces/form_interfaces";
-import LoginPage from "@/app/components/Auth/LoginPage";
-import RegisterPage from "@/app/components/Auth/RegisterPage";
+import { isValidEmail } from "@/lib/form/isValidEmail";
+import { isValidPassword } from "@/lib/form/isValidPassword";
+import { FormData, UpdatedError } from "@/interfaces/form_interfaces";
+import LoginPage from "@/components/Auth/LoginPage";
+import RegisterPage from "@/components/Auth/RegisterPage";
 
 const Auth: React.FC = () => {
   const initialFormData = useMemo(

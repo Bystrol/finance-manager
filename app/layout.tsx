@@ -1,10 +1,10 @@
 "use client";
 
 import "./globals.css";
-import SessionContext from "./contexts/SessionContext";
-import ToasterContext from "./contexts/ToasterContext";
-import { AuthContext } from "./contexts/AuthContext";
-import Header from "./components/Header";
+import SessionContext from "@/contexts/SessionContext";
+import ToasterContext from "@/contexts/ToasterContext";
+import { AuthContext } from "@/contexts/AuthContext";
+import Header from "@/components/Header";
 
 export const metadata = {
   title: "FINEances",

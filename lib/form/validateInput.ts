@@ -1,5 +1,5 @@
-import { isValidEmail } from "@/app/utils/isValidEmail";
-import { isValidPassword } from "@/app/utils/isValidPassword";
+import { isValidEmail } from "@/lib/form/isValidEmail";
+import { isValidPassword } from "@/lib/form/isValidPassword";
 
 export const validateInput = (id: string, value: string) => {
   if (id === "username") {

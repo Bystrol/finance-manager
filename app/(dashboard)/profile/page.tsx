@@ -5,13 +5,13 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { FaRegEdit } from "react-icons/fa";
-import Input from "@/app/components/UI/Input";
+import Input from "@/components/UI/Input";
 import blankImage from "../../../public/images/blank-profile-picture.png";
-import { isValidEmail } from "@/app/utils/isValidEmail";
-import { isValidPassword } from "@/app/utils/isValidPassword";
-import { setDataAttribute } from "@/app/utils/setDataAttribute";
-import { updateUserCredentials } from "@/app/utils/updateUserCredentials";
-import { updateUserPicture } from "@/app/utils/updateUserPicture";
+import { isValidEmail } from "@/lib/form/isValidEmail";
+import { isValidPassword } from "@/lib/form/isValidPassword";
+import { setDataAttribute } from "@/lib/form/setDataAttribute";
+import { updateUserCredentials } from "@/lib/update/updateUserCredentials";
+import { updateUserPicture } from "@/lib/update/updateUserPicture";
 
 const Profile: React.FC = () => {
   const { data: session, update } = useSession();
