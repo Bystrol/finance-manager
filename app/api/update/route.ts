@@ -27,12 +27,6 @@ export async function POST(req: Request) {
       },
     });
 
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: newEmail,
-      },
-    });
-
     if (image || image === '') {
       await prisma.user.update({
         where: {
@@ -73,6 +67,12 @@ export async function POST(req: Request) {
       if (!validateEmail(newEmail)) {
         return new NextResponse('Invalid email', { status: 422 });
       }
+
+      const userExists = await prisma.user.findUnique({
+        where: {
+          email: newEmail,
+        },
+      });
 
       if (user && newEmail !== user.email) {
         if (!userExists) {
