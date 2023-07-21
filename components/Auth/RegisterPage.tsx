@@ -81,7 +81,6 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         value={formData.username}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.username}
         errorMessage={
           formData.username.length !== 0
@@ -96,7 +95,6 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         value={formData.email}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.email}
         errorMessage={
           formData.email.length !== 0
@@ -111,7 +109,6 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         value={formData.password}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.password}
         errorMessage={
           formData.password.length !== 0

@@ -66,7 +66,6 @@ export const LoginPage: React.FC<LoginProps> = ({
         value={formData.email}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.email}
         errorMessage={
           formData.email.length !== 0
@@ -81,7 +80,6 @@ export const LoginPage: React.FC<LoginProps> = ({
         value={formData.password}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
-        onFocus={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.password}
         errorMessage={
           formData.password.length !== 0

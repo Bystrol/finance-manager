@@ -14,7 +14,9 @@ export const updateUserPicture = async (
       })
       .then(() => {
         update({ image: image });
-        toast.success('Profile updated successfully!');
+        setTimeout(() => {
+          toast.success('Profile updated successfully!');
+        }, 1000);
       });
   } catch (error) {
     toast.error(Object(error).response.data);

@@ -5,7 +5,6 @@ interface InputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   isError?: boolean;
   errorMessage?: string;
 }
@@ -17,7 +16,6 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   onBlur,
-  onFocus,
   isError,
   errorMessage,
 }) => {
@@ -46,7 +44,6 @@ const Input: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        onFocus={onFocus}
       />
       <label
         className={`

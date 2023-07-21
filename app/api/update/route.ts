@@ -27,6 +27,12 @@ export async function POST(req: Request) {
       },
     });
 
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: newEmail,
+      },
+    });
+
     if (image || image === '') {
       await prisma.user.update({
         where: {
@@ -39,7 +45,7 @@ export async function POST(req: Request) {
     }
 
     if (newUsername) {
-      if (newUsername.length > 3) {
+      if (newUsername.length >= 3) {
         if (newUsername !== user!.name) {
           await prisma.user.update({
             where: {
@@ -69,14 +75,18 @@ export async function POST(req: Request) {
       }
 
       if (user && newEmail !== user.email) {
-        await prisma.user.update({
-          where: {
-            email: currentEmail,
-          },
-          data: {
-            email: newEmail,
-          },
-        });
+        if (!userExists) {
+          await prisma.user.update({
+            where: {
+              email: currentEmail,
+            },
+            data: {
+              email: newEmail,
+            },
+          });
+        } else {
+          return new NextResponse('Email already taken', { status: 422 });
+        }
       } else {
         return new NextResponse(
           'New email must be different from the current one',
