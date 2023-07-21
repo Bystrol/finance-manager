@@ -1,9 +1,9 @@
 'use client';
 
 import './globals.css';
-import SessionContext from '@/contexts/SessionContext';
-import ToasterContext from '@/contexts/ToasterContext';
-import { AuthContext } from '@/contexts/AuthContext';
+import NextSessionProvider from '@/providers/NextSessionProvider';
+import ToasterProvider from '@/providers/ToasterProvider';
+import { AuthProvider } from '@/providers/AuthProvider';
 
 export const metadata = {
   title: 'FINEances',
@@ -18,12 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <SessionContext>
-          <AuthContext>
-            <ToasterContext />
+        <NextSessionProvider>
+          <AuthProvider>
+            <ToasterProvider />
             {children}
-          </AuthContext>
-        </SessionContext>
+          </AuthProvider>
+        </NextSessionProvider>
       </body>
     </html>
   );

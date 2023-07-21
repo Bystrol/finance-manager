@@ -17,7 +17,7 @@ interface SessionContextProps {
   status: 'loading' | 'authenticated' | 'unauthenticated' | 'error';
 }
 
-interface AuthContextProps {
+interface AuthProviderProps {
   children: ReactNode;
 }
 
@@ -26,7 +26,7 @@ export const SessionContext = createContext<SessionContextProps>({
   status: 'loading',
 });
 
-export const AuthContext: React.FC<AuthContextProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [status, setStatus] = useState<
     'loading' | 'authenticated' | 'unauthenticated' | 'error'

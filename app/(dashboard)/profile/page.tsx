@@ -13,7 +13,6 @@ import { setDataAttribute } from '@/lib/form/setDataAttribute';
 import { updateUserCredentials } from '@/lib/update/updateUserCredentials';
 import { updateUserPicture } from '@/lib/update/updateUserPicture';
 import styles from '@/styles/fileInput.module.css';
-import { validateInput } from '@/lib/form/validateInput';
 import { UpdatedError } from '@/interfaces/form_interfaces';
 
 const Profile: React.FC = () => {

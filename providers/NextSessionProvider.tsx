@@ -7,8 +7,8 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-const SessionContext = ({ children }: ProviderProps) => {
+const NextSessionProvider = ({ children }: ProviderProps) => {
   return <SessionProvider>{children}</SessionProvider>;
 };
 
-export default SessionContext;
+export default NextSessionProvider;
