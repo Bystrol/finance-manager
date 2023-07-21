@@ -50,7 +50,7 @@ export const AuthContext: React.FC<AuthContextProps> = ({ children }) => {
 
   if (sessionStatus === 'loading') {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center text-4xl font-bold">
+      <main className="h-screen flex flex-col items-center justify-center text-4xl font-bold">
         <Triangle
           width={100}
           height={100}
