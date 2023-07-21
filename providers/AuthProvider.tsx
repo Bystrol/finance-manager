@@ -48,18 +48,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [sessionData, sessionStatus]);
 
-  if (sessionStatus === 'loading') {
-    return (
-      <main className="h-screen flex flex-col items-center justify-center text-4xl font-bold">
-        <Triangle
-          width={100}
-          height={100}
-          wrapperClass="absolute"
-          color="#fff"
-        />
-      </main>
-    );
-  }
+  // if (sessionStatus === 'loading') {
+  //   return (
+  //     <main className="h-screen flex flex-col items-center justify-center text-4xl font-bold">
+  //       <Triangle
+  //         width={100}
+  //         height={100}
+  //         wrapperClass="absolute"
+  //         color="#fff"
+  //       />
+  //     </main>
+  //   );
+  // }
 
   return (
     <SessionContext.Provider value={{ session, status }}>
