@@ -20,7 +20,9 @@ export const updateUserCredentials = async (
       })
       .then(() => {
         update({ name: newUsername, email: newEmail });
-        toast.success('Profile updated successfully!');
+        setTimeout(() => {
+          toast.success('Profile updated successfully!');
+        }, 1000);
       });
   } catch (error) {
     toast.error(Object(error).response.data);
