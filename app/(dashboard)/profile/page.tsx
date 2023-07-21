@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { FaRegEdit } from 'react-icons/fa';
@@ -13,6 +13,8 @@ import { setDataAttribute } from '@/lib/form/setDataAttribute';
 import { updateUserCredentials } from '@/lib/update/updateUserCredentials';
 import { updateUserPicture } from '@/lib/update/updateUserPicture';
 import styles from '@/styles/fileInput.module.css';
+import { validateInput } from '@/lib/form/validateInput';
+import { UpdatedError } from '@/interfaces/form_interfaces';
 
 const Profile: React.FC = () => {
   const { data: session, update } = useSession();
@@ -20,10 +22,10 @@ const Profile: React.FC = () => {
   const email = session?.user?.email;
 
   interface FormData {
-    newUsername: string;
-    newEmail: string;
+    username: string;
+    email: string;
     oldPassword: string;
-    newPassword: string;
+    password: string;
     isError: {
       username: boolean;
       email: boolean;
@@ -31,41 +33,44 @@ const Profile: React.FC = () => {
     };
     inputTouched: {
       [key: string]: boolean;
-      newUsername: boolean;
-      newEmail: boolean;
-      newPassword: boolean;
+      username: boolean;
+      email: boolean;
+      password: boolean;
     };
     isFormNotEmpty: boolean;
     [key: string]: string | boolean | { [key: string]: boolean };
   }
 
-  const formInitialState = {
-    newUsername: '',
-    newEmail: '',
-    oldPassword: '',
-    newPassword: '',
-    isError: {
-      username: false,
-      email: false,
-      password: false,
-    },
-    inputTouched: {
-      newUsername: false,
-      newEmail: false,
-      newPassword: false,
-    },
-    isFormNotEmpty: false,
-  };
+  const initialFormData = useMemo(
+    () => ({
+      username: '',
+      email: '',
+      oldPassword: '',
+      password: '',
+      isError: {
+        username: false,
+        email: false,
+        password: false,
+      },
+      inputTouched: {
+        username: false,
+        email: false,
+        password: false,
+      },
+      isFormNotEmpty: false,
+    }),
+    [],
+  );
 
   const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FormData>(formInitialState);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setFormData((prevFormData) => {
-      const updatedError = {
+      const updatedError: UpdatedError = {
         username: prevFormData.isError.username,
         email: prevFormData.isError.email,
         password: prevFormData.isError.password,
@@ -73,32 +78,31 @@ const Profile: React.FC = () => {
 
       let updatedFormNotEmpty = prevFormData.isFormNotEmpty;
 
-      if (id === 'newUsername') {
+      if (id === 'username') {
         updatedError.username =
           event.type === 'change'
-            ? value.length < 3 && prevFormData.inputTouched.newUsername
+            ? value.length < 3 && prevFormData.inputTouched.username
             : value.length < 3;
         updatedFormNotEmpty = value.length >= 3;
-      } else if (id === 'newEmail') {
+      } else if (id === 'email') {
         updatedError.email =
           event.type === 'change'
-            ? !isValidEmail(value) && prevFormData.inputTouched.newEmail
+            ? !isValidEmail(value) && prevFormData.inputTouched.email
             : !isValidEmail(value);
         updatedFormNotEmpty = isValidEmail(value);
-      } else if (id === 'newPassword') {
+      } else if (id === 'password') {
         updatedError.password =
           event.type === 'change'
-            ? !isValidPassword(value) && prevFormData.inputTouched.newPassword
+            ? !isValidPassword(value) && prevFormData.inputTouched.password
             : !isValidPassword(value);
         updatedFormNotEmpty =
           isValidPassword(value) && isValidPassword(formData.oldPassword);
       } else if (id === 'oldPassword') {
         updatedFormNotEmpty =
-          isValidPassword(value) && isValidPassword(formData.newPassword);
+          isValidPassword(value) && isValidPassword(formData.password);
       }
 
       setDataAttribute(event);
-      console.log(updatedFormNotEmpty);
 
       return {
         ...prevFormData,
@@ -113,23 +117,19 @@ const Profile: React.FC = () => {
     });
   };
 
-  const toggleDropdown = useCallback(() => {
+  const toggleDropdown = () => {
     setShowDropdownMenu((state) => !state);
-  }, []);
+  };
 
-  const resetInputs = () => {
-    setFormData(formInitialState);
-    document
-      .getElementById('newUsername')!
-      .removeAttribute('data-input-active');
-    document.getElementById('newEmail')!.removeAttribute('data-input-active');
+  const resetInputs = useCallback(() => {
+    setFormData(initialFormData);
+    document.getElementById('username')!.removeAttribute('data-input-active');
+    document.getElementById('email')!.removeAttribute('data-input-active');
     document
       .getElementById('oldPassword')!
       .removeAttribute('data-input-active');
-    document
-      .getElementById('newPassword')!
-      .removeAttribute('data-input-active');
-  };
+    document.getElementById('password')!.removeAttribute('data-input-active');
+  }, [initialFormData]);
 
   const convertToBase64 = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +148,7 @@ const Profile: React.FC = () => {
       };
       toggleDropdown();
     },
-    [toggleDropdown, email, update],
+    [email, update],
   );
 
   const clickOutside = useCallback((e: MouseEvent) => {
@@ -222,14 +222,14 @@ const Profile: React.FC = () => {
               if (formData.isFormNotEmpty) {
                 await updateUserCredentials(
                   email!,
-                  formData.newUsername,
-                  formData.newEmail,
+                  formData.username,
+                  formData.email,
                   formData.oldPassword,
-                  formData.newPassword,
+                  formData.password,
                   () => {
                     update({
-                      name: formData.newUsername,
-                      email: formData.newEmail,
+                      name: formData.username,
+                      email: formData.email,
                     });
                   },
                 ).then(resetInputs);
@@ -242,28 +242,36 @@ const Profile: React.FC = () => {
               <h2 className="text-sm font-medium">Username</h2>
               <p className="text-xs">Current username: {session?.user?.name}</p>
               <Input
-                id="newUsername"
+                id="username"
                 type="text"
                 label="Enter new username"
-                value={formData.newUsername}
+                value={formData.username}
                 onChange={handleInputEvent}
                 onBlur={handleInputEvent}
                 isError={formData.isError.username}
-                errorMessage={'Username must consist of minimum 3 characters'}
+                errorMessage={
+                  formData.username.length !== 0
+                    ? 'Username must consist of minimum 3 characters'
+                    : 'Please enter your username'
+                }
               />
             </section>
             <section className="flex flex-col gap-2 lg:w-full h-full">
               <h2 className="text-sm font-medium">Email</h2>
               <p className="text-xs">Current email: {session?.user?.email}</p>
               <Input
-                id="newEmail"
+                id="email"
                 type="text"
                 label="Enter new email"
-                value={formData.newEmail}
+                value={formData.email}
                 onChange={handleInputEvent}
                 onBlur={handleInputEvent}
                 isError={formData.isError.email}
-                errorMessage={'Invalid email format'}
+                errorMessage={
+                  formData.email.length !== 0
+                    ? 'Invalid email format (e.g. email@example.com)'
+                    : 'Please enter your email'
+                }
               />
             </section>
             <section className="flex flex-col gap-2 lg:w-full h-full">
@@ -276,15 +284,17 @@ const Profile: React.FC = () => {
                 onChange={handleInputEvent}
               />
               <Input
-                id="newPassword"
+                id="password"
                 type="password"
                 label="Enter new password"
-                value={formData.newPassword}
+                value={formData.password}
                 onChange={handleInputEvent}
                 onBlur={handleInputEvent}
                 isError={formData.isError.password}
                 errorMessage={
-                  'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
+                  formData.password.length !== 0
+                    ? 'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
+                    : 'Please enter your password'
                 }
               />
             </section>
