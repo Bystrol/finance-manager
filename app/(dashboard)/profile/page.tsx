@@ -199,12 +199,13 @@ const Profile: React.FC = () => {
                   />
                   <div
                     onClick={async () => {
+                      toggleDropdown();
+
                       await updateUserPicture(email!, '', () => {
                         update({
                           image: '',
                         });
                       });
-                      toggleDropdown();
                     }}
                     className="rounded-b-md hover:bg-zinc-100"
                   >
