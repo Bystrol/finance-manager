@@ -14,9 +14,13 @@ import { updateUserCredentials } from '@/lib/update/updateUserCredentials';
 import { updateUserPicture } from '@/lib/update/updateUserPicture';
 import styles from '@/styles/fileInput.module.css';
 import { UpdatedError } from '@/interfaces/form_interfaces';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '@/features/loading/loadingSlice';
 
 const Profile: React.FC = () => {
   const { data: session, update } = useSession();
+
+  const dispatch = useDispatch();
 
   const email = session?.user?.email;
 
@@ -135,11 +139,14 @@ const Profile: React.FC = () => {
       const reader = new FileReader();
       reader.readAsDataURL(e.target.files![0]);
       reader.onload = async () => {
+        dispatch(setLoading(true));
         const image = String(reader.result);
         await updateUserPicture(email!, image, () => {
           update({
             image,
           });
+        }).then(() => {
+          dispatch(setLoading(false));
         });
       };
       reader.onerror = (error) => {
@@ -147,7 +154,7 @@ const Profile: React.FC = () => {
       };
       toggleDropdown();
     },
-    [email, update],
+    [email, update, dispatch],
   );
 
   const clickOutside = useCallback((e: MouseEvent) => {
@@ -199,12 +206,15 @@ const Profile: React.FC = () => {
                   />
                   <div
                     onClick={async () => {
+                      dispatch(setLoading(true));
                       toggleDropdown();
 
                       await updateUserPicture(email!, '', () => {
                         update({
                           image: '',
                         });
+                      }).then(() => {
+                        dispatch(setLoading(false));
                       });
                     }}
                     className="rounded-b-md hover:bg-zinc-100"
@@ -220,6 +230,7 @@ const Profile: React.FC = () => {
             onSubmit={async (e: React.FormEvent) => {
               e.preventDefault();
               if (formData.isFormNotEmpty) {
+                dispatch(setLoading(true));
                 await updateUserCredentials(
                   email!,
                   formData.username,
@@ -232,7 +243,11 @@ const Profile: React.FC = () => {
                       email: formData.email,
                     });
                   },
-                ).then(resetInputs);
+                ).then(() => {
+                  dispatch(setLoading(false));
+                  (document.activeElement as HTMLElement).blur();
+                  resetInputs();
+                });
               } else {
                 toast.error('Form is incorrect');
               }

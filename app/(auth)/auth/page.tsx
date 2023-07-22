@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { redirect } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { isValidEmail } from '@/lib/form/isValidEmail';
 import { isValidPassword } from '@/lib/form/isValidPassword';
@@ -33,12 +31,6 @@ const Auth: React.FC = () => {
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { status } = useSession();
-
-  if (status === 'authenticated') {
-    redirect('/');
-  }
 
   const toggleVariant = useCallback(() => {
     setFormData((prevFormData) => {
