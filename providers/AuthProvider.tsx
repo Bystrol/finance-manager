@@ -38,6 +38,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (sessionData) {
       setSession(sessionData as Session);
       setStatus('authenticated');
+      if (window.location.pathname === '/auth') {
+        redirect('/');
+      }
     } else if (sessionStatus === 'loading') {
       setStatus('loading');
     } else {
@@ -48,18 +51,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [sessionData, sessionStatus]);
 
-  // if (sessionStatus === 'loading') {
-  //   return (
-  //     <main className="h-screen flex flex-col items-center justify-center text-4xl font-bold">
-  //       <Triangle
-  //         width={100}
-  //         height={100}
-  //         wrapperClass="absolute"
-  //         color="#fff"
-  //       />
-  //     </main>
-  //   );
-  // }
+  if (status === 'loading') {
+    return (
+      <main className="h-screen flex flex-col items-center justify-center text-4xl font-bold">
+        <Triangle
+          width={100}
+          height={100}
+          wrapperClass="absolute"
+          color="#fff"
+        />
+      </main>
+    );
+  }
 
   return (
     <SessionContext.Provider value={{ session, status }}>
