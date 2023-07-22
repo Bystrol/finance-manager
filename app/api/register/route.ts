@@ -1,16 +1,10 @@
 import prisma from '@/lib/prisma';
 import { hash } from 'bcrypt';
 import { NextResponse } from 'next/server';
+import { isValidEmail } from '@/lib/form/isValidEmail';
+import { isValidPassword } from '@/lib/form/isValidPassword';
 
 export async function POST(req: Request) {
-  const validateEmail = (email: string) => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-  };
-
-  const validatePassword = (password: string) => {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
-  };
-
   try {
     const { email, username, password } = await req.json();
 
@@ -24,11 +18,11 @@ export async function POST(req: Request) {
       });
     }
 
-    if (!validateEmail(email)) {
-      return new NextResponse('Invalid email', { status: 422 });
+    if (!isValidEmail(email)) {
+      return new NextResponse('Invalid email format', { status: 422 });
     }
 
-    if (!validatePassword(password)) {
+    if (!isValidPassword(password)) {
       return new NextResponse(
         'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number',
         { status: 422 },
