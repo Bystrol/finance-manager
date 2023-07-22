@@ -1,14 +1,17 @@
 import { validateInput } from './validateInput';
 import { setDataAttribute } from '@/lib/form/setDataAttribute';
-import { FormData, UpdatedError } from '@/interfaces/form_interfaces';
+import {
+  RegisterFormData,
+  RegisterUpdatedError,
+} from '@/interfaces/form_interfaces';
 
 export const handleInputEvent = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>,
+  setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>,
 ) => {
   const { id, value } = event.target;
   setFormData((prevFormData) => {
-    const updatedError: UpdatedError = {
+    const updatedError: RegisterUpdatedError = {
       username: prevFormData.isError.username,
       email: prevFormData.isError.email,
       password: prevFormData.isError.password,

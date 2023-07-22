@@ -4,7 +4,11 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { isValidEmail } from '@/lib/form/isValidEmail';
 import { isValidPassword } from '@/lib/form/isValidPassword';
-import { LoginFormData, LoginUpdatedError } from '@/interfaces/form_interfaces';
+import {
+  LoginFormData,
+  LoginUpdatedError,
+  LoginUpdatedTouched,
+} from '@/interfaces/form_interfaces';
 import LoginPage from '@/components/Auth/LoginPage';
 
 const SignIn: React.FC = () => {
@@ -36,7 +40,7 @@ const SignIn: React.FC = () => {
         password: prevFormData.isError.password,
       };
 
-      const updatedTouched = {
+      const updatedTouched: LoginUpdatedTouched = {
         email: true,
         password: true,
       };
