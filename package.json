@@ -13,6 +13,7 @@
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.14.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
@@ -26,6 +27,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
     "react-loader-spinner": "^5.3.4",
+    "react-redux": "^8.1.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   },
