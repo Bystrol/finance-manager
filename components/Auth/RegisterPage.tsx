@@ -2,22 +2,21 @@ import { SetStateAction, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { FormData } from '../../interfaces/form_interfaces';
+import { RegisterFormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface RegisterProps {
   validateForm: () => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-  formData: FormData;
-  setFormData: React.Dispatch<SetStateAction<FormData>>;
-  toggleVariant: () => void;
-  resetInputs: () => void;
+  formData: RegisterFormData;
+  setFormData: React.Dispatch<SetStateAction<RegisterFormData>>;
 }
 
 export const RegisterPage: React.FC<RegisterProps> = ({
@@ -26,9 +25,9 @@ export const RegisterPage: React.FC<RegisterProps> = ({
   setIsLoading,
   formData,
   setFormData,
-  toggleVariant,
-  resetInputs,
 }) => {
+  const router = useRouter();
+
   const handleRegister = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -45,7 +44,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
             .then(() => {
               setIsLoading(false);
               toast.success('User has been registered!');
-              resetInputs();
+              router.push('/auth/sign-in');
             });
         } catch (error) {
           setIsLoading(false);
@@ -58,8 +57,8 @@ export const RegisterPage: React.FC<RegisterProps> = ({
       formData.username,
       formData.password,
       validateForm,
-      resetInputs,
       setIsLoading,
+      router,
     ],
   );
 
@@ -146,7 +145,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
       <p className="text-md md:text-xl lg:text-sm mt-4">
         Already have an account?
         <span
-          onClick={toggleVariant}
+          onClick={() => router.push('/auth/sign-in')}
           className="hover:underline cursor-pointer font-bold ml-1"
         >
           Log in
