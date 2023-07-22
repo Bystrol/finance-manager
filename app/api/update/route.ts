@@ -1,16 +1,10 @@
 import prisma from '@/lib/prisma';
 import { compare, hash } from 'bcrypt';
 import { NextResponse } from 'next/server';
+import { isValidEmail } from '@/lib/form/isValidEmail';
+import { isValidPassword } from '@/lib/form/isValidPassword';
 
 export async function POST(req: Request) {
-  const validateEmail = (email: string) => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-  };
-
-  const validatePassword = (password: string) => {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
-  };
-
   try {
     const {
       currentEmail,
@@ -20,6 +14,17 @@ export async function POST(req: Request) {
       oldPassword,
       newPassword,
     } = await req.json();
+
+    if (
+      !currentEmail &&
+      !image &&
+      !newUsername &&
+      !newEmail &&
+      !oldPassword &&
+      !newPassword
+    ) {
+      return new NextResponse('Empty fields', { status: 400 });
+    }
 
     const user = await prisma.user.findUnique({
       where: {
@@ -64,34 +69,34 @@ export async function POST(req: Request) {
     }
 
     if (newEmail) {
-      if (!validateEmail(newEmail)) {
-        return new NextResponse('Invalid email', { status: 422 });
-      }
-
-      const userExists = await prisma.user.findUnique({
-        where: {
-          email: newEmail,
-        },
-      });
-
-      if (user && newEmail !== user.email) {
-        if (!userExists) {
-          await prisma.user.update({
+      if (isValidEmail(newEmail)) {
+        if (user && newEmail !== user.email) {
+          const userExists = await prisma.user.findUnique({
             where: {
-              email: currentEmail,
-            },
-            data: {
               email: newEmail,
             },
           });
+
+          if (!userExists) {
+            await prisma.user.update({
+              where: {
+                email: currentEmail,
+              },
+              data: {
+                email: newEmail,
+              },
+            });
+          } else {
+            return new NextResponse('Email already taken', { status: 422 });
+          }
         } else {
-          return new NextResponse('Email already taken', { status: 422 });
+          return new NextResponse(
+            'New email must be different from the current one',
+            { status: 422 },
+          );
         }
       } else {
-        return new NextResponse(
-          'New email must be different from the current one',
-          { status: 422 },
-        );
+        return new NextResponse('Invalid email format', { status: 422 });
       }
     }
 
@@ -103,7 +108,7 @@ export async function POST(req: Request) {
       const isPasswordSame = await compare(newPassword, user!.hashedPassword!);
 
       if (isPasswordCorrect) {
-        if (!validatePassword(newPassword)) {
+        if (!isValidPassword(newPassword)) {
           return new NextResponse(
             'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number',
             { status: 422 },
