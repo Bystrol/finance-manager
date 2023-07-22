@@ -6,7 +6,7 @@ interface ItemProps {
   href: string;
   icon: IconType;
   text: string;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const MenuItem: React.FC<ItemProps> = ({ href, icon, text, onClick }) => {

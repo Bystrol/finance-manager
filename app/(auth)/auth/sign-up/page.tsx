@@ -7,6 +7,7 @@ import { isValidPassword } from '@/lib/form/isValidPassword';
 import {
   RegisterFormData,
   RegisterUpdatedError,
+  RegisterUpdatedTouched,
 } from '@/interfaces/form_interfaces';
 import RegisterPage from '@/components/Auth/RegisterPage';
 
@@ -43,7 +44,7 @@ const SignUp: React.FC = () => {
         password: prevFormData.isError.password,
       };
 
-      const updatedTouched = {
+      const updatedTouched: RegisterUpdatedTouched = {
         username: true,
         email: true,
         password: true,
