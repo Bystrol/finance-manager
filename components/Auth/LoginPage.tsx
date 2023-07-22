@@ -2,20 +2,20 @@ import { SetStateAction, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { FormData } from '../../interfaces/form_interfaces';
+import { LoginFormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface LoginProps {
   validateForm: () => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-  formData: FormData;
-  setFormData: React.Dispatch<SetStateAction<FormData>>;
-  toggleVariant: () => void;
+  formData: LoginFormData;
+  setFormData: React.Dispatch<SetStateAction<LoginFormData>>;
 }
 
 export const LoginPage: React.FC<LoginProps> = ({
@@ -24,8 +24,9 @@ export const LoginPage: React.FC<LoginProps> = ({
   setIsLoading,
   formData,
   setFormData,
-  toggleVariant,
 }) => {
+  const router = useRouter();
+
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -40,7 +41,7 @@ export const LoginPage: React.FC<LoginProps> = ({
           if (callback?.error) {
             toast.error(callback.error);
           } else if (callback?.ok && !callback.error) {
-            toast.success('Logged in successfully!');
+            setTimeout(() => toast.success('Logged in successfully!'), 1000);
           }
         });
       }
@@ -117,7 +118,7 @@ export const LoginPage: React.FC<LoginProps> = ({
       <p className="text-md md:text-xl lg:text-sm mt-4">
         Don&apos;t have an account?
         <span
-          onClick={toggleVariant}
+          onClick={() => router.push('/auth/sign-up')}
           className="hover:underline cursor-pointer font-bold ml-1"
         >
           Register
