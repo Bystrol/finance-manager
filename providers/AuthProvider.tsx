@@ -38,15 +38,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (sessionData) {
       setSession(sessionData as Session);
       setStatus('authenticated');
-      if (window.location.pathname === '/auth') {
+      if (
+        window.location.pathname === '/auth/sign-in' ||
+        window.location.pathname === '/auth/sign-up'
+      ) {
         redirect('/');
       }
     } else if (sessionStatus === 'loading') {
       setStatus('loading');
     } else {
       setStatus('unauthenticated');
-      if (window.location.pathname !== '/auth') {
-        redirect('/auth');
+      if (
+        window.location.pathname !== '/auth/sign-in' &&
+        window.location.pathname !== '/auth/sign-up'
+      ) {
+        redirect('/auth/sign-in');
       }
     }
   }, [sessionData, sessionStatus]);
