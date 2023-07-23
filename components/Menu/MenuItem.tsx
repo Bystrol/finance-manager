@@ -6,10 +6,17 @@ interface ItemProps {
   href: string;
   icon: IconType;
   text: string;
+  color: string;
   onClick: () => void;
 }
 
-const MenuItem: React.FC<ItemProps> = ({ href, icon, text, onClick }) => {
+const MenuItem: React.FC<ItemProps> = ({
+  href,
+  icon,
+  text,
+  color,
+  onClick,
+}) => {
   const Icon = icon;
 
   return (
@@ -18,7 +25,7 @@ const MenuItem: React.FC<ItemProps> = ({ href, icon, text, onClick }) => {
         className="flex items-center gap-x-2 p-2 rounded-md cursor-pointer hover:bg-black/5"
         onClick={onClick}
       >
-        <Icon size={20} />
+        <Icon size={20} color={color} />
         {text}
       </li>
     </Link>
