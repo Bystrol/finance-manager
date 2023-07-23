@@ -8,11 +8,11 @@ const Loading = () => {
   return (
     <>
       {isLoading && (
-        <div className="fixed top-0 left-0 flex justify-center items-center w-full h-screen bg-white/70">
+        <div className="fixed top-0 left-0 flex justify-center items-center w-full h-screen bg-black/50">
           <ColorRing
             width={100}
             height={100}
-            colors={['#8e8b8b', '#8e8b8b', '#8e8b8b', '#8e8b8b', '#8e8b8b']}
+            colors={['#fff', '#fff', '#fff', '#fff', '#fff']}
           />
         </div>
       )}
