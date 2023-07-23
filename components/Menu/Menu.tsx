@@ -6,12 +6,44 @@ import { CgProfile } from 'react-icons/cg';
 import { GoSignOut } from 'react-icons/go';
 import { SlClose } from 'react-icons/sl';
 import { IoHomeOutline } from 'react-icons/io5';
+import { TbPigMoney } from 'react-icons/tb';
 
 const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
   isVisible,
   closeMenu,
 }) => {
   const { data: session } = useSession();
+
+  const menuItems = [
+    {
+      href: '/',
+      icon: IoHomeOutline,
+      text: 'Home',
+      color: '#EA580C',
+      onClick: closeMenu,
+    },
+    {
+      href: 'profile',
+      icon: CgProfile,
+      text: 'Profile',
+      color: '#C026D3',
+      onClick: closeMenu,
+    },
+    {
+      href: '/expenses',
+      icon: TbPigMoney,
+      text: 'Expenses',
+      color: '#65A30D',
+      onClick: closeMenu,
+    },
+    {
+      href: '/',
+      icon: GoSignOut,
+      text: 'Sign out',
+      color: '#BE123C',
+      onClick: signOut,
+    },
+  ];
 
   return (
     <div
@@ -32,29 +64,16 @@ const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
       </div>
       <nav>
         <ul className="flex flex-col">
-          <MenuItem
-            href="/"
-            icon={IoHomeOutline}
-            text="Home"
-            onClick={closeMenu}
-          />
-          <hr />
-          <MenuItem
-            href="profile"
-            icon={CgProfile}
-            text="Your profile"
-            onClick={closeMenu}
-          />
-          <hr />
-          <MenuItem
-            href="/"
-            icon={GoSignOut}
-            text="Sign out"
-            onClick={() => {
-              signOut();
-              closeMenu();
-            }}
-          />
+          {menuItems.map((item) => (
+            <MenuItem
+              key={item.text}
+              href={item.href}
+              icon={item.icon}
+              text={item.text}
+              color={item.color}
+              onClick={item.onClick}
+            />
+          ))}
         </ul>
       </nav>
     </div>
