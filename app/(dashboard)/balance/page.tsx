@@ -2,11 +2,31 @@
 
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { FiFilter } from 'react-icons/fi';
+import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
+
+import OperationButton from '@/components/Balance/OperationButton';
+import { IconType } from 'react-icons';
 
 interface BalanceProps {
   month: string;
   year: number;
 }
+
+const operationsArray: { icon: IconType; text: string }[] = [
+  {
+    icon: FiFilter,
+    text: 'Filter',
+  },
+  {
+    icon: HiArrowUpRight,
+    text: 'Income',
+  },
+  {
+    icon: HiArrowDownRight,
+    text: 'Expense',
+  },
+];
 
 const currentDate: Date = new Date();
 const currentMonthNumber: number = currentDate.getMonth();
@@ -36,7 +56,7 @@ const checkIfDisabled = (month: string): boolean => {
   return monthsArray.indexOf(month) > monthsArray.indexOf(currentMonthName);
 };
 
-const Balance = () => {
+const Balance: React.FC = () => {
   const { data: session } = useSession();
   const [date, setDate] = useState<BalanceProps>({
     month: currentMonthName,
@@ -49,7 +69,19 @@ const Balance = () => {
         {session?.user?.name}&apos;s balance in {date?.month} {date?.year}
       </h1>
       <hr className="w-full" />
-      <h2 className="text-4xl font-bold">1000zł</h2>
+      <h2 className="text-4xl font-bold my-4">1000zł</h2>
+      <div className="flex justify-center gap-4">
+        {operationsArray.map((operation) => {
+          return (
+            <OperationButton
+              key={operation.text}
+              icon={operation.icon}
+              text={operation.text}
+              onClick={() => {}}
+            />
+          );
+        })}
+      </div>
       <select
         name="month"
         id="month"
