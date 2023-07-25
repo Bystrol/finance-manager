@@ -1,13 +1,10 @@
 import { validateInput } from './validateInput';
 import { setDataAttribute } from '@/lib/form/setDataAttribute';
-import {
-  RegisterFormData,
-  RegisterUpdatedError,
-} from '@/interfaces/form_interfaces';
+import { FormData, RegisterUpdatedError } from '@/interfaces/form_interfaces';
 
 export const handleInputEvent = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>,
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>,
 ) => {
   const { id, value } = event.target;
   setFormData((prevFormData) => {
