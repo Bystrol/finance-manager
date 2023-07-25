@@ -2,7 +2,7 @@ import { SetStateAction, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { RegisterFormData } from '../../interfaces/form_interfaces';
+import { FormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
@@ -15,8 +15,8 @@ interface RegisterProps {
   validateForm: () => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-  formData: RegisterFormData;
-  setFormData: React.Dispatch<SetStateAction<RegisterFormData>>;
+  formData: FormData;
+  setFormData: React.Dispatch<SetStateAction<FormData>>;
 }
 
 export const RegisterPage: React.FC<RegisterProps> = ({
@@ -77,12 +77,12 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         id="username"
         type="text"
         label="Enter your username *"
-        value={formData.username}
+        value={formData.username!}
         onChange={(event) => handleInputEvent(event, setFormData)}
         onBlur={(event) => handleInputEvent(event, setFormData)}
         isError={formData.isError.username}
         errorMessage={
-          formData.username.length !== 0
+          formData.username!.length !== 0
             ? 'Username must consist of minimum 3 characters'
             : 'Please enter your username'
         }

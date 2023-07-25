@@ -2,7 +2,7 @@ import { SetStateAction, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { LoginFormData } from '../../interfaces/form_interfaces';
+import { FormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
@@ -14,8 +14,8 @@ interface LoginProps {
   validateForm: () => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-  formData: LoginFormData;
-  setFormData: React.Dispatch<SetStateAction<LoginFormData>>;
+  formData: FormData;
+  setFormData: React.Dispatch<SetStateAction<FormData>>;
 }
 
 export const LoginPage: React.FC<LoginProps> = ({

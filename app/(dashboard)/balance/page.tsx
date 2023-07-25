@@ -2,66 +2,49 @@
 
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { FiFilter } from 'react-icons/fi';
-import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 
 import OperationButton from '@/components/Balance/OperationButton';
+import FilterModal from '@/components/Balance/FilterModal';
+
+import { FilterProps } from '@/interfaces/operation_interfaces';
+
+import { currentMonthName, currentYear } from '@/constants/date';
+
+import { FiFilter } from 'react-icons/fi';
+import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import { IconType } from 'react-icons';
 
-interface BalanceProps {
-  month: string;
-  year: number;
+interface Operation {
+  icon: IconType;
+  text: string;
+  onClick: () => void;
 }
-
-const operationsArray: { icon: IconType; text: string }[] = [
-  {
-    icon: FiFilter,
-    text: 'Filter',
-  },
-  {
-    icon: HiArrowUpRight,
-    text: 'Income',
-  },
-  {
-    icon: HiArrowDownRight,
-    text: 'Expense',
-  },
-];
-
-const currentDate: Date = new Date();
-const currentMonthNumber: number = currentDate.getMonth();
-const monthsArray: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-const currentMonthName: string = monthsArray[currentMonthNumber];
-const currentYear: number = currentDate.getFullYear();
-const yearsArray: number[] = [];
-
-for (let i = currentYear; i >= currentYear - 10; i--) {
-  yearsArray.push(i);
-}
-
-const checkIfDisabled = (month: string): boolean => {
-  return monthsArray.indexOf(month) > monthsArray.indexOf(currentMonthName);
-};
 
 const Balance: React.FC = () => {
   const { data: session } = useSession();
-  const [date, setDate] = useState<BalanceProps>({
+  const [date, setDate] = useState<FilterProps>({
     month: currentMonthName,
     year: currentYear,
   });
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const operationsArray: Operation[] = [
+    {
+      icon: FiFilter,
+      text: 'Filter',
+      onClick: () => setIsModalVisible(true),
+    },
+    {
+      icon: HiArrowUpRight,
+      text: 'Income',
+      onClick: () => {},
+    },
+    {
+      icon: HiArrowDownRight,
+      text: 'Expense',
+      onClick: () => {},
+    },
+  ];
 
   return (
     <div className="flex flex-col items-center w-full gap-2 text-center">
@@ -77,49 +60,18 @@ const Balance: React.FC = () => {
               key={operation.text}
               icon={operation.icon}
               text={operation.text}
-              onClick={() => {}}
+              onClick={operation.onClick}
             />
           );
         })}
       </div>
-      <select
-        name="month"
-        id="month"
-        defaultValue={currentMonthName}
-        onChange={(e) => {
-          setDate({
-            ...date,
-            month: e.target.value,
-          });
-        }}
-      >
-        {monthsArray.map((month) => {
-          return (
-            <option
-              key={month}
-              disabled={checkIfDisabled(month)}
-              className={checkIfDisabled(month) ? 'bg-slate-600/10' : ''}
-            >
-              {month}
-            </option>
-          );
-        })}
-      </select>
-      <select
-        name="year"
-        id="year"
-        defaultValue={currentYear}
-        onChange={(e) => {
-          setDate({
-            ...date,
-            year: parseInt(e.target.value),
-          });
-        }}
-      >
-        {yearsArray.map((year) => {
-          return <option key={year}>{year}</option>;
-        })}
-      </select>
+      {isModalVisible && (
+        <FilterModal
+          date={date}
+          setDate={setDate}
+          onApply={() => setIsModalVisible(false)}
+        />
+      )}
     </div>
   );
 };
