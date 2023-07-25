@@ -30,9 +30,9 @@ const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
       onClick: closeMenu,
     },
     {
-      href: '/expenses',
+      href: '/balance',
       icon: TbPigMoney,
-      text: 'Expenses',
+      text: 'Balance',
       color: '#65A30D',
       onClick: closeMenu,
     },
