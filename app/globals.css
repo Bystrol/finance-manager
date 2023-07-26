@@ -35,3 +35,8 @@ html {
 main {
   @apply px-3;
 }
+
+input,
+select {
+  @apply focus:outline-none;
+}

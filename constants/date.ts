@@ -1,5 +1,6 @@
 const currentDate: Date = new Date();
-const currentMonthNumber: number = currentDate.getMonth();
+export const currentDay = currentDate.getDate();
+export const currentMonthNumber: number = currentDate.getMonth();
 export const monthsArray: string[] = [
   'January',
   'February',
