@@ -3,11 +3,13 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 
 interface BalanceData {
-  incomes: TransactionData[];
+  totalAmount: number;
+  transactions: TransactionData[];
 }
 
 const initialBalanceData: BalanceData = {
-  incomes: [],
+  totalAmount: 0,
+  transactions: [],
 };
 
 const balanceSlice = createSlice({
@@ -15,11 +17,16 @@ const balanceSlice = createSlice({
   initialState: initialBalanceData,
   reducers: {
     addIncome(state, action: PayloadAction<TransactionData>) {
-      state.incomes = [...state.incomes, action.payload];
+      state.transactions = [...state.transactions, action.payload];
+      state.totalAmount += action.payload.amount;
+    },
+    addExpense(state, action: PayloadAction<TransactionData>) {
+      state.transactions = [...state.transactions, action.payload];
+      state.totalAmount -= action.payload.amount;
     },
   },
 });
 
-export const { addIncome } = balanceSlice.actions;
+export const { addIncome, addExpense } = balanceSlice.actions;
 
 export default balanceSlice.reducer;
