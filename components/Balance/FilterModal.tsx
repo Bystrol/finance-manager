@@ -96,6 +96,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <option>Travelling</option>
         </select>
       </div>
+      <button
+        className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
+        onClick={onClick}
+      >
+        Filter
+      </button>
     </ModalCart>
   );
 };
