@@ -105,7 +105,7 @@ const Balance: React.FC = () => {
       )}
       {balanceData.isIncomeModalVisible && (
         <IncomeModal
-          onClick={() => {
+          onClose={() => {
             setBalanceData({
               ...balanceData,
               isIncomeModalVisible: false,
