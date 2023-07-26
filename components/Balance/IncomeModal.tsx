@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import { currentDay, currentMonthName, currentYear } from '@/constants/date';
-import { IoFastFoodOutline } from 'react-icons/io5';
-import { GiClothes } from 'react-icons/gi';
-import { FaBus } from 'react-icons/fa';
+import { MdWorkOutline } from 'react-icons/md';
+import { BiTransfer } from 'react-icons/bi';
 import { BsQuestionSquare } from 'react-icons/bs';
 import { addIncome } from '@/features/balance/balanceSlice';
 
@@ -21,7 +20,7 @@ const initialTransactionData = {
   amount: 0,
   type: 'income',
   date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
-  icon: undefined,
+  icon: BsQuestionSquare,
 };
 
 const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
@@ -35,14 +34,11 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
     let icon;
 
     switch (category) {
-      case 'Food':
-        icon = IoFastFoodOutline;
+      case 'Salary':
+        icon = MdWorkOutline;
         break;
-      case 'Clothes':
-        icon = GiClothes;
-        break;
-      case 'Travelling':
-        icon = FaBus;
+      case 'Transfer':
+        icon = BiTransfer;
         break;
       default:
         icon = BsQuestionSquare;
@@ -51,13 +47,9 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
     setTransactionData({
       ...transactionData,
       category,
-      icon: icon.name,
+      icon: icon,
     });
   };
-
-  useEffect(() => {
-    console.log(transactionData);
-  }, [transactionData]);
 
   return (
     <ModalCart onClick={onClose}>
@@ -91,9 +83,8 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
           defaultValue="- select -"
         >
           <option disabled>- select -</option>
-          <option>Food</option>
-          <option>Clothes</option>
-          <option>Travelling</option>
+          <option>Salary</option>
+          <option>Transfer</option>
         </select>
       </div>
       <div className="flex w-4/5 justify-between items-center">

@@ -2,7 +2,6 @@ import { IconType } from 'react-icons';
 
 interface TransactionProps {
   description: string;
-  category: string;
   amount: number;
   type: string;
   date: string;
@@ -11,14 +10,13 @@ interface TransactionProps {
 
 const Transaction: React.FC<TransactionProps> = ({
   description,
-  category,
   amount,
   type,
   date,
   icon: Icon,
 }) => {
   return (
-    <div className="flex justify-between items-center bg-white rounded-lg p-3">
+    <div className="flex justify-between items-center bg-white rounded-lg p-3 shadow-md">
       <div className="flex items-center gap-3">
         <Icon size={30} />
         <div className="flex flex-col items-start">
