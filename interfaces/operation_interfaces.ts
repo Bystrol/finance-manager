@@ -11,5 +11,5 @@ export interface TransactionData {
   amount: number;
   type: string;
   date: string;
-  icon: IconType | undefined | string;
+  icon: IconType;
 }
