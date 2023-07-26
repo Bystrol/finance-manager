@@ -7,6 +7,10 @@ export const store = configureStore({
     loading: loadingReducer,
     balance: balanceReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
