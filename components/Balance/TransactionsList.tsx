@@ -1,9 +1,6 @@
 import Transaction from '@/components/Balance/Transaction';
-import {
-  currentMonthName,
-  currentMonthNumber,
-  currentYear,
-} from '@/constants/date';
+import { TransactionData } from '@/interfaces/operation_interfaces';
+import { currentDay, currentMonthName, currentYear } from '@/constants/date';
 import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
 import { FaBus } from 'react-icons/fa';
@@ -14,9 +11,7 @@ const transactionsList = [
     category: 'category',
     amount: 100,
     type: 'income',
-    date: String(
-      currentMonthName + ' ' + currentMonthNumber + ', ' + currentYear,
-    ),
+    date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
     icon: IoFastFoodOutline,
   },
   {
@@ -24,24 +19,20 @@ const transactionsList = [
     category: 'category2',
     amount: 200,
     type: 'income',
-    date: String(
-      currentMonthName + ' ' + currentMonthNumber + ', ' + currentYear,
-    ),
+    date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
     icon: GiClothes,
   },
   {
     description: 'description3',
     category: 'category3',
     amount: 300,
-    type: 'income',
-    date: String(
-      currentMonthName + ' ' + currentMonthNumber + ', ' + currentYear,
-    ),
+    type: 'expense',
+    date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
     icon: FaBus,
   },
 ];
 
-const TransactionsList = () => {
+const TransactionsList: React.FC = () => {
   return (
     <section className="flex flex-col w-full items-start mt-4 gap-2">
       <h2 className="font-medium">Transaction History</h2>
