@@ -1,4 +1,4 @@
-import ModalCart from '../UI/ModalCart';
+import ModalCart from '@/components/UI/ModalCart';
 import { monthsArray, yearsArray } from '@/constants/date';
 import { checkIfDisabled } from '@/lib/balance/checkIfDisabled';
 import { FilterProps } from '@/interfaces/operation_interfaces';
@@ -6,16 +6,16 @@ import { FilterProps } from '@/interfaces/operation_interfaces';
 interface FilterModalProps {
   date: FilterProps;
   setDate: React.Dispatch<React.SetStateAction<FilterProps>>;
-  onApply: () => void;
+  onClick: () => void;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
   date,
   setDate,
-  onApply,
+  onClick,
 }) => {
   return (
-    <ModalCart onClick={onApply}>
+    <ModalCart onClick={onClick}>
       <div className="flex w-3/4 justify-between items-center">
         <label htmlFor="month" className="font-bold">
           Month
@@ -96,12 +96,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <option>Travelling</option>
         </select>
       </div>
-      <button
-        className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700"
-        onClick={onApply}
-      >
-        Apply
-      </button>
     </ModalCart>
   );
 };
