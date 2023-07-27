@@ -4,7 +4,7 @@ interface TransactionProps {
   description: string;
   amount: number;
   type: string;
-  date: string;
+  dateText: string;
   icon: IconType;
 }
 
@@ -12,7 +12,7 @@ const Transaction: React.FC<TransactionProps> = ({
   description,
   amount,
   type,
-  date,
+  dateText,
   icon: Icon,
 }) => {
   return (
@@ -21,7 +21,7 @@ const Transaction: React.FC<TransactionProps> = ({
         <Icon size={30} />
         <div className="flex flex-col items-start">
           <p className="text-md">{description}</p>
-          <p className="text-xs">{date}</p>
+          <p className="text-xs">{dateText}</p>
         </div>
       </div>
       <p
