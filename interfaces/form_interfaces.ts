@@ -8,6 +8,7 @@ export interface FormData {
     password: boolean;
   };
   inputTouched: {
+    [key: string]: boolean | undefined;
     username?: boolean;
     email: boolean;
     password: boolean;
@@ -15,7 +16,7 @@ export interface FormData {
 }
 
 export interface RegisterUpdatedError {
-  [key: string]: boolean;
+  [key: string]: boolean | undefined;
   username: boolean;
   email: boolean;
   password: boolean;
