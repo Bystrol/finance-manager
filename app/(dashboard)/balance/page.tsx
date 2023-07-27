@@ -3,17 +3,17 @@
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { FilterProps } from '@/interfaces/operation_interfaces';
+import { BalanceData } from '@/interfaces/operation_interfaces';
 import { RootState } from '@/store/store';
 import OperationButton from '@/components/Balance/OperationButton';
 import FilterModal from '@/components/Balance/FilterModal';
 import IncomeModal from '@/components/Balance/IncomeModal';
+import ExpenseModal from '@/components/Balance/ExpenseModal';
 import TransactionsList from '@/components/Balance/TransactionsList';
 import { currentMonthName, currentYear } from '@/constants/date';
 import { FiFilter } from 'react-icons/fi';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import { IconType } from 'react-icons';
-import ExpenseModal from '@/components/Balance/ExpenseModal';
 
 interface Operation {
   icon: IconType;
@@ -21,13 +21,11 @@ interface Operation {
   onClick: () => void;
 }
 
-interface BalanceData {
-  isFilterModalVisible: boolean;
-  isIncomeModalVisible: boolean;
-  isExpenseModalVisible: boolean;
-}
-
 const initialBalanceData = {
+  month: currentMonthName,
+  year: currentYear,
+  type: 'All',
+  category: 'All',
   isFilterModalVisible: false,
   isIncomeModalVisible: false,
   isExpenseModalVisible: false,
@@ -36,10 +34,6 @@ const initialBalanceData = {
 const Balance: React.FC = () => {
   const { data: session } = useSession();
 
-  const [date, setDate] = useState<FilterProps>({
-    month: currentMonthName,
-    year: currentYear,
-  });
   const [balanceData, setBalanceData] =
     useState<BalanceData>(initialBalanceData);
 
@@ -83,7 +77,8 @@ const Balance: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-full gap-2 text-center">
       <h1 className="text-xl font-medium">
-        {session?.user?.name}&apos;s balance in {date?.month} {date?.year}
+        {session?.user?.name}&apos;s balance in {balanceData.month}{' '}
+        {balanceData.year}
       </h1>
       <hr className="w-full" />
       <h2 className="text-4xl font-bold my-4">{totalAmount} PLN</h2>
@@ -99,11 +94,11 @@ const Balance: React.FC = () => {
           );
         })}
       </div>
-      <TransactionsList />
+      <TransactionsList balanceData={balanceData} />
       {balanceData.isFilterModalVisible && (
         <FilterModal
-          date={date}
-          setDate={setDate}
+          balanceData={balanceData}
+          setBalanceData={setBalanceData}
           onClick={() => {
             setBalanceData({
               ...balanceData,
