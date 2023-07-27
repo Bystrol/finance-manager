@@ -18,9 +18,11 @@ const initialTransactionData = {
   description: '',
   category: '',
   amount: 0,
-  type: 'income',
+  type: 'Incomes',
   date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
   icon: BsQuestionSquare,
+  month: currentMonthName,
+  year: currentYear,
 };
 
 const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
@@ -79,7 +81,7 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
           onChange={(e) => {
             setCategory(e.target.value);
           }}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
           defaultValue="- select -"
         >
           <option disabled>- select -</option>

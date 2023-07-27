@@ -3,13 +3,28 @@ import { IconType } from 'react-icons';
 export interface FilterProps {
   month: string;
   year: number;
+  type: string;
+  category: string;
+  isFilterModalVisible: boolean;
 }
 
 export interface TransactionData {
-  description: string;
-  category: string;
-  amount: number;
-  type: string;
+  month: string;
+  year: number;
   date: string;
+  type: string;
+  category: string;
+  description: string;
+  amount: number;
   icon: IconType;
+}
+
+export interface BalanceData {
+  month: string;
+  year: number;
+  type: string;
+  category: string;
+  isFilterModalVisible: boolean;
+  isIncomeModalVisible: boolean;
+  isExpenseModalVisible: boolean;
 }
