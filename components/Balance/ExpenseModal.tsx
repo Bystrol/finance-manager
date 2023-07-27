@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
-import { currentDay, currentMonthName, currentYear } from '@/constants/date';
+import {
+  currentDay,
+  currentMonthName,
+  currentYear,
+  currentDate,
+} from '@/constants/date';
 import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
 import { FaBusAlt } from 'react-icons/fa';
@@ -20,7 +25,8 @@ const initialTransactionData = {
   category: '',
   amount: 0,
   type: 'Expenses',
-  date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
+  date: currentDate,
+  dateText: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
   icon: BsQuestionSquare,
   month: currentMonthName,
   year: currentYear,
@@ -71,6 +77,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
             setTransactionData({
               ...transactionData,
               description: e.target.value,
+              date: new Date(),
             });
           }}
         />
