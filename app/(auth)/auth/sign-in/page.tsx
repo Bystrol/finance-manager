@@ -5,7 +5,7 @@ import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { isValidEmail } from '@/lib/form/isValidEmail';
 import { isValidPassword } from '@/lib/form/isValidPassword';
 import {
-  LoginFormData,
+  FormData,
   LoginUpdatedError,
   LoginUpdatedTouched,
 } from '@/interfaces/form_interfaces';
@@ -28,7 +28,7 @@ const SignIn: React.FC = () => {
     [],
   );
 
-  const [formData, setFormData] = useState<LoginFormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const validateForm: () => Promise<boolean> = useCallback(async () => {

@@ -3,13 +3,12 @@ export interface FormData {
   email: string;
   password: string;
   isError: {
-    username: boolean;
+    username?: boolean;
     email: boolean;
     password: boolean;
   };
   inputTouched: {
-    [key: string]: boolean;
-    username: boolean;
+    username?: boolean;
     email: boolean;
     password: boolean;
   };
