@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
@@ -17,6 +17,12 @@ interface IncomeModalProps {
   onClose: () => void;
 }
 
+interface IsEmptyProps {
+  description: boolean;
+  category: boolean;
+  amount: boolean;
+}
+
 const initialTransactionData = {
   description: '',
   category: '',
@@ -29,14 +35,22 @@ const initialTransactionData = {
   year: currentYear,
 };
 
+const initialIsEmptyData = {
+  description: false,
+  category: false,
+  amount: false,
+};
+
 const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
 
+  const [isEmpty, setIsEmpty] = useState<IsEmptyProps>(initialIsEmptyData);
+
   const dispatch = useDispatch();
 
-  const setCategory = (category: string) => {
+  const setCategory = (category: string): void => {
     let icon;
 
     switch (category) {
@@ -57,9 +71,54 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
     });
   };
 
+  const validateModal = useCallback(async (): Promise<boolean> => {
+    let isModalValid: boolean = true;
+
+    await setIsEmpty((prevIsEmpty) => {
+      const updatedIsEmpty: IsEmptyProps = {
+        description: prevIsEmpty.description,
+        category: prevIsEmpty.category,
+        amount: prevIsEmpty.amount,
+      };
+
+      if (transactionData.description === '') {
+        updatedIsEmpty.description = true;
+        isModalValid = false;
+      } else {
+        updatedIsEmpty.description = false;
+      }
+
+      if (transactionData.category === '') {
+        updatedIsEmpty.category = true;
+        isModalValid = false;
+      } else {
+        updatedIsEmpty.category = false;
+      }
+
+      if (transactionData.amount === 0) {
+        updatedIsEmpty.amount = true;
+        isModalValid = false;
+      } else {
+        updatedIsEmpty.amount = false;
+      }
+
+      return {
+        description: updatedIsEmpty.description,
+        category: updatedIsEmpty.category,
+        amount: updatedIsEmpty.amount,
+      };
+    });
+
+    return isModalValid;
+  }, [
+    transactionData.description,
+    transactionData.category,
+    transactionData.amount,
+  ]);
+
   return (
     <ModalCart onClick={onClose}>
-      <div className="flex w-4/5 justify-between items-center">
+      <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="description" className="font-bold">
           Description
         </label>
@@ -67,7 +126,7 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
           id="description"
           type="text"
           className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
-          onChange={(e) => {
+          onChange={async (e) => {
             setTransactionData({
               ...transactionData,
               description: e.target.value,
@@ -75,8 +134,13 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
             });
           }}
         />
+        {isEmpty.description && (
+          <p className="w-full text-right text-xs text-red-700">
+            This field is required
+          </p>
+        )}
       </div>
-      <div className="flex w-4/5 justify-between items-center">
+      <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="category" className="font-bold">
           Category
         </label>
@@ -93,8 +157,13 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
           <option>Salary</option>
           <option>Transfer</option>
         </select>
+        {isEmpty.category && (
+          <p className="w-full text-right text-xs text-red-700">
+            This field is required
+          </p>
+        )}
       </div>
-      <div className="flex w-4/5 justify-between items-center">
+      <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="amount" className="font-bold">
           Amount
         </label>
@@ -109,12 +178,19 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
             });
           }}
         />
+        {isEmpty.amount && (
+          <p className="w-full text-right text-xs text-red-700">
+            This field is required
+          </p>
+        )}
       </div>
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
-        onClick={() => {
-          dispatch(addIncome(transactionData));
-          onClose();
+        onClick={async () => {
+          if (await validateModal()) {
+            dispatch(addIncome(transactionData));
+            onClose();
+          }
         }}
       >
         Add income

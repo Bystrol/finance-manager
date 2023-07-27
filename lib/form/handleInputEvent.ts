@@ -9,7 +9,7 @@ export const handleInputEvent = (
   const { id, value } = event.target;
   setFormData((prevFormData) => {
     const updatedError: RegisterUpdatedError = {
-      username: prevFormData.isError.username,
+      username: prevFormData.isError.username!,
       email: prevFormData.isError.email,
       password: prevFormData.isError.password,
     };
