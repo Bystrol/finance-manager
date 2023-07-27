@@ -1,5 +1,8 @@
-import { monthsArray, currentMonthName } from '@/constants/date';
+import { monthsArray, currentMonthName, currentYear } from '@/constants/date';
 
-export const checkIfDisabled = (month: string): boolean => {
-  return monthsArray.indexOf(month) > monthsArray.indexOf(currentMonthName);
+export const checkIfDisabled = (month: string, year: number): boolean => {
+  return (
+    monthsArray.indexOf(month) > monthsArray.indexOf(currentMonthName) &&
+    year === currentYear
+  );
 };
