@@ -13,6 +13,7 @@ import { currentMonthName, currentYear } from '@/constants/date';
 import { FiFilter } from 'react-icons/fi';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import { IconType } from 'react-icons';
+import ExpenseModal from '@/components/Balance/ExpenseModal';
 
 interface Operation {
   icon: IconType;
@@ -42,8 +43,8 @@ const Balance: React.FC = () => {
   const [balanceData, setBalanceData] =
     useState<BalanceData>(initialBalanceData);
 
-  const totalAmount = useSelector(
-    (state: RootState) => state.balance.totalAmount,
+  const totalAmount = useSelector((state: RootState) =>
+    state.balance.totalAmount.toFixed(2),
   );
 
   const operationsArray: Operation[] = [
@@ -70,7 +71,12 @@ const Balance: React.FC = () => {
     {
       icon: HiArrowDownRight,
       text: 'Expense',
-      onClick: () => {},
+      onClick: () => {
+        setBalanceData({
+          ...balanceData,
+          isExpenseModalVisible: true,
+        });
+      },
     },
   ];
 
@@ -112,6 +118,16 @@ const Balance: React.FC = () => {
             setBalanceData({
               ...balanceData,
               isIncomeModalVisible: false,
+            });
+          }}
+        />
+      )}
+      {balanceData.isExpenseModalVisible && (
+        <ExpenseModal
+          onClose={() => {
+            setBalanceData({
+              ...balanceData,
+              isExpenseModalVisible: false,
             });
           }}
         />
