@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
