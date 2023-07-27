@@ -1,19 +1,31 @@
+import { useState } from 'react';
 import ModalCart from '@/components/UI/ModalCart';
 import { monthsArray, yearsArray } from '@/constants/date';
 import { checkIfDisabled } from '@/lib/balance/checkIfDisabled';
 import { FilterProps } from '@/interfaces/operation_interfaces';
+import { BalanceData } from '@/interfaces/operation_interfaces';
 
 interface FilterModalProps {
-  date: FilterProps;
-  setDate: React.Dispatch<React.SetStateAction<FilterProps>>;
+  balanceData: BalanceData;
+  setBalanceData: React.Dispatch<React.SetStateAction<BalanceData>>;
   onClick: () => void;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
-  date,
-  setDate,
+  balanceData,
+  setBalanceData,
   onClick,
 }) => {
+  const initialFilterData = {
+    month: balanceData.month,
+    year: balanceData.year,
+    type: balanceData.type,
+    category: balanceData.category,
+    isFilterModalVisible: false,
+  };
+
+  const [filterData, setFilterData] = useState<FilterProps>(initialFilterData);
+
   return (
     <ModalCart onClick={onClick}>
       <div className="flex w-3/4 justify-between items-center">
@@ -23,10 +35,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
         <select
           name="month"
           id="month"
-          defaultValue={date.month}
+          defaultValue={balanceData.month}
           onChange={(e) => {
-            setDate({
-              ...date,
+            setFilterData({
+              ...filterData,
               month: e.target.value,
             });
           }}
@@ -36,8 +48,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
             return (
               <option
                 key={month}
-                disabled={checkIfDisabled(month)}
-                className={checkIfDisabled(month) ? 'bg-slate-600/10' : ''}
+                disabled={checkIfDisabled(month, filterData.year)}
+                className={
+                  checkIfDisabled(month, filterData.year)
+                    ? 'bg-slate-600/10'
+                    : ''
+                }
               >
                 {month}
               </option>
@@ -52,14 +68,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
         <select
           name="year"
           id="year"
-          defaultValue={date.year}
+          defaultValue={balanceData.year}
           onChange={(e) => {
-            setDate({
-              ...date,
+            setFilterData({
+              ...filterData,
               year: parseInt(e.target.value),
             });
           }}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md"
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
         >
           {yearsArray.map((year) => {
             return <option key={year}>{year}</option>;
@@ -73,32 +89,68 @@ const FilterModal: React.FC<FilterModalProps> = ({
         <select
           name="type"
           id="type"
-          onChange={() => {}}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md"
+          defaultValue={balanceData.type}
+          onChange={(e) => {
+            setFilterData({
+              ...filterData,
+              type: e.target.value,
+            });
+          }}
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
         >
           <option>All</option>
           <option>Incomes</option>
           <option>Expenses</option>
         </select>
       </div>
-      <div className="flex w-3/4 justify-between items-center">
-        <label htmlFor="category" className="font-bold">
-          Category
-        </label>
-        <select
-          name="category"
-          id="category"
-          onChange={() => {}}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md"
-        >
-          <option>Food</option>
-          <option>Clothes</option>
-          <option>Travelling</option>
-        </select>
-      </div>
+
+      {filterData.type !== 'All' && (
+        <div className="flex w-3/4 justify-between items-center">
+          <label htmlFor="category" className="font-bold">
+            Category
+          </label>
+          <select
+            name="category"
+            id="category"
+            defaultValue={balanceData.category}
+            onChange={(e) => {
+              setFilterData({
+                ...filterData,
+                category: e.target.value,
+              });
+            }}
+            className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
+          >
+            {filterData.type === 'Incomes' ? (
+              <>
+                <option>All</option>
+                <option>Salary</option>
+                <option>Transfer</option>
+              </>
+            ) : (
+              <>
+                <option>All</option>
+                <option>Food</option>
+                <option>Clothes</option>
+                <option>Transportation</option>
+              </>
+            )}
+          </select>
+        </div>
+      )}
+
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
-        onClick={onClick}
+        onClick={() =>
+          setBalanceData({
+            ...balanceData,
+            month: filterData.month,
+            year: filterData.year,
+            type: filterData.type,
+            category: filterData.category,
+            isFilterModalVisible: filterData.isFilterModalVisible,
+          })
+        }
       >
         Filter
       </button>
