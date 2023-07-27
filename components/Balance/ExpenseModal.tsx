@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import { currentDay, currentMonthName, currentYear } from '@/constants/date';
-import { MdWorkOutline } from 'react-icons/md';
-import { BiTransfer } from 'react-icons/bi';
+import { IoFastFoodOutline } from 'react-icons/io5';
+import { GiClothes } from 'react-icons/gi';
+import { FaBusAlt } from 'react-icons/fa';
 import { BsQuestionSquare } from 'react-icons/bs';
-import { addIncome } from '@/features/balance/balanceSlice';
+import { addExpense } from '@/features/balance/balanceSlice';
 
-interface IncomeModalProps {
+interface ExpenseModalProps {
   onClose: () => void;
 }
 
@@ -18,12 +19,12 @@ const initialTransactionData = {
   description: '',
   category: '',
   amount: 0,
-  type: 'income',
+  type: 'expense',
   date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
   icon: BsQuestionSquare,
 };
 
-const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
+const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
@@ -34,12 +35,14 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
     let icon;
 
     switch (category) {
-      case 'Salary':
-        icon = MdWorkOutline;
+      case 'Food':
+        icon = IoFastFoodOutline;
         break;
-      case 'Transfer':
-        icon = BiTransfer;
+      case 'Clothes':
+        icon = GiClothes;
         break;
+      case 'Transportation':
+        icon = FaBusAlt;
       default:
         icon = BsQuestionSquare;
     }
@@ -83,8 +86,9 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
           defaultValue="- select -"
         >
           <option disabled>- select -</option>
-          <option>Salary</option>
-          <option>Transfer</option>
+          <option>Food</option>
+          <option>Clothes</option>
+          <option>Transportation</option>
         </select>
       </div>
       <div className="flex w-4/5 justify-between items-center">
@@ -106,14 +110,14 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
         onClick={() => {
-          dispatch(addIncome(transactionData));
+          dispatch(addExpense(transactionData));
           onClose();
         }}
       >
-        Add income
+        Add expense
       </button>
     </ModalCart>
   );
 };
 
-export default IncomeModal;
+export default ExpenseModal;
