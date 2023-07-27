@@ -19,9 +19,11 @@ const initialTransactionData = {
   description: '',
   category: '',
   amount: 0,
-  type: 'expense',
+  type: 'Expenses',
   date: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
   icon: BsQuestionSquare,
+  month: currentMonthName,
+  year: currentYear,
 };
 
 const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
@@ -43,6 +45,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
         break;
       case 'Transportation':
         icon = FaBusAlt;
+        break;
       default:
         icon = BsQuestionSquare;
     }
@@ -82,7 +85,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
           onChange={(e) => {
             setCategory(e.target.value);
           }}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
           defaultValue="- select -"
         >
           <option disabled>- select -</option>
