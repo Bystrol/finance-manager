@@ -11,7 +11,8 @@ export interface FilterProps {
 export interface TransactionData {
   month: string;
   year: number;
-  date: string;
+  date: Date;
+  dateText: string;
   type: string;
   category: string;
   description: string;
