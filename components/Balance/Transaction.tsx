@@ -26,10 +26,10 @@ const Transaction: React.FC<TransactionProps> = ({
       </div>
       <p
         className={`text-lg font-bold ${
-          type === 'income' ? 'text-emerald-500' : 'text-red-700'
+          type === 'Incomes' ? 'text-emerald-500' : 'text-red-700'
         }`}
       >
-        {type === 'income' ? '+' : '-'}
+        {type === 'Incomes' ? '+' : '-'}
         {amount} PLN
       </p>
     </div>
