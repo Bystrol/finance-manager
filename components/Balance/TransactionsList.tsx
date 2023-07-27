@@ -37,19 +37,23 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
     }
   };
 
+  const sortedTransactions = filteredTransactions().sort(
+    (objA, objB) => Number(objB.date) - Number(objA.date),
+  );
+
   return (
     <section className="flex flex-col w-full items-start mt-4 gap-2">
       <h2 className="font-medium">Transaction History</h2>
       <hr className="w-full h-[2px] bg-zinc-100" />
       <div className="flex flex-col w-full gap-4">
-        {filteredTransactions().map((transaction) => {
+        {sortedTransactions.map((transaction) => {
           return (
             <Transaction
               key={Math.random()}
               description={transaction.description}
               amount={transaction.amount}
               type={transaction.type}
-              date={transaction.date}
+              dateText={transaction.dateText}
               icon={transaction.icon}
             />
           );
