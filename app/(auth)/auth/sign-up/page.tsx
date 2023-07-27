@@ -5,7 +5,7 @@ import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { isValidEmail } from '@/lib/form/isValidEmail';
 import { isValidPassword } from '@/lib/form/isValidPassword';
 import {
-  RegisterFormData,
+  FormData,
   RegisterUpdatedError,
   RegisterUpdatedTouched,
 } from '@/interfaces/form_interfaces';
@@ -31,7 +31,7 @@ const SignUp: React.FC = () => {
     [],
   );
 
-  const [formData, setFormData] = useState<RegisterFormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const validateForm: () => Promise<boolean> = useCallback(async () => {
@@ -39,7 +39,7 @@ const SignUp: React.FC = () => {
 
     await setFormData((prevFormData) => {
       const updatedError: RegisterUpdatedError = {
-        username: prevFormData.isError.username,
+        username: prevFormData.isError.username!,
         email: prevFormData.isError.email,
         password: prevFormData.isError.password,
       };
@@ -50,7 +50,7 @@ const SignUp: React.FC = () => {
         password: true,
       };
 
-      if (formData.username.length < 3) {
+      if (formData.username!.length < 3) {
         updatedError.username = true;
         isValid = false;
       }
