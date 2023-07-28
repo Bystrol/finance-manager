@@ -49,7 +49,8 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
         {sortedTransactions.map((transaction) => {
           return (
             <Transaction
-              key={Math.random()}
+              key={transaction.id}
+              id={transaction.id}
               description={transaction.description}
               amount={transaction.amount}
               type={transaction.type}
