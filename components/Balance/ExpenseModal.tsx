@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import {
   TransactionData,
   TransactionModalProps,
@@ -66,6 +67,7 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           onChange={(e) => {
             setTransactionData({
               ...transactionData,
+              id: uuidv4(),
               description: e.target.value,
               type: 'Expenses',
               date: new Date(),

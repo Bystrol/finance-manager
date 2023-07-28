@@ -9,6 +9,7 @@ export interface FilterProps {
 }
 
 export interface TransactionData {
+  id: string;
   month: string;
   year: number;
   date: Date;

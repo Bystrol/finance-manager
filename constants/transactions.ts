@@ -2,6 +2,7 @@ import { currentDate, currentMonthName, currentDay, currentYear } from './date';
 import { BsQuestionSquare } from 'react-icons/bs';
 
 export const initialTransactionData = {
+  id: '',
   description: '',
   category: '',
   amount: 0,
