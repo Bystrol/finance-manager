@@ -32,8 +32,10 @@ const Transaction: React.FC<TransactionProps> = ({
 
   return (
     <div
+      tabIndex={1}
       className="relative flex justify-between items-center bg-white rounded-lg p-3 shadow-md cursor-pointer"
       onClick={toggleOptionsCart}
+      onBlur={toggleOptionsCart}
     >
       <div className="flex items-center gap-3">
         <Icon size={30} />
