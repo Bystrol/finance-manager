@@ -29,3 +29,13 @@ export interface BalanceData {
   isIncomeModalVisible: boolean;
   isExpenseModalVisible: boolean;
 }
+
+export interface TransactionModalProps {
+  onClose: () => void;
+}
+
+export interface IsModalEmptyProps {
+  description: boolean;
+  category: boolean;
+  amount: boolean;
+}

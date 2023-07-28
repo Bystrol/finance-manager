@@ -1,124 +1,57 @@
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { TransactionData } from '@/interfaces/operation_interfaces';
+import {
+  TransactionData,
+  TransactionModalProps,
+  IsModalEmptyProps,
+} from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import {
-  currentDay,
-  currentMonthName,
-  currentYear,
-  currentDate,
-} from '@/constants/date';
+  initialTransactionData,
+  initialIsEmptyData,
+} from '@/constants/transactions';
 import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
 import { FaBusAlt } from 'react-icons/fa';
 import { BsQuestionSquare } from 'react-icons/bs';
 import { addExpense } from '@/features/balance/balanceSlice';
+import { validateModal } from '@/lib/balance/validateModal';
 
-interface ExpenseModalProps {
-  onClose: () => void;
-}
-
-interface IsEmptyProps {
-  description: boolean;
-  category: boolean;
-  amount: boolean;
-}
-
-const initialTransactionData = {
-  description: '',
-  category: '',
-  amount: 0,
-  type: 'Expenses',
-  date: currentDate,
-  dateText: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
-  icon: BsQuestionSquare,
-  month: currentMonthName,
-  year: currentYear,
-};
-
-const initialIsEmptyData = {
-  description: false,
-  category: false,
-  amount: false,
-};
-
-const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
+const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
 
-  const [isEmpty, setIsEmpty] = useState<IsEmptyProps>(initialIsEmptyData);
+  const [isEmpty, setIsEmpty] = useState<IsModalEmptyProps>(initialIsEmptyData);
 
   const dispatch = useDispatch();
 
-  const setCategory = (category: string) => {
-    let icon;
+  const setCategory = useCallback(
+    (category: string) => {
+      let icon;
 
-    switch (category) {
-      case 'Food':
-        icon = IoFastFoodOutline;
-        break;
-      case 'Clothes':
-        icon = GiClothes;
-        break;
-      case 'Transportation':
-        icon = FaBusAlt;
-        break;
-      default:
-        icon = BsQuestionSquare;
-    }
-
-    setTransactionData({
-      ...transactionData,
-      category,
-      icon: icon,
-    });
-  };
-
-  const validateModal = useCallback(async (): Promise<boolean> => {
-    let isModalValid: boolean = true;
-
-    await setIsEmpty((prevIsEmpty) => {
-      const updatedIsEmpty: IsEmptyProps = {
-        description: prevIsEmpty.description,
-        category: prevIsEmpty.category,
-        amount: prevIsEmpty.amount,
-      };
-
-      if (transactionData.description === '') {
-        updatedIsEmpty.description = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.description = false;
+      switch (category) {
+        case 'Food':
+          icon = IoFastFoodOutline;
+          break;
+        case 'Clothes':
+          icon = GiClothes;
+          break;
+        case 'Transportation':
+          icon = FaBusAlt;
+          break;
+        default:
+          icon = BsQuestionSquare;
       }
 
-      if (transactionData.category === '') {
-        updatedIsEmpty.category = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.category = false;
-      }
-
-      if (transactionData.amount === 0) {
-        updatedIsEmpty.amount = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.amount = false;
-      }
-
-      return {
-        description: updatedIsEmpty.description,
-        category: updatedIsEmpty.category,
-        amount: updatedIsEmpty.amount,
-      };
-    });
-
-    return isModalValid;
-  }, [
-    transactionData.description,
-    transactionData.category,
-    transactionData.amount,
-  ]);
+      setTransactionData({
+        ...transactionData,
+        category,
+        icon: icon,
+      });
+    },
+    [transactionData],
+  );
 
   return (
     <ModalCart onClick={onClose}>
@@ -134,6 +67,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
             setTransactionData({
               ...transactionData,
               description: e.target.value,
+              type: 'Expenses',
               date: new Date(),
             });
           }}
@@ -192,7 +126,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ onClose }) => {
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
         onClick={async () => {
-          if (await validateModal()) {
+          if (await validateModal(transactionData, setIsEmpty)) {
             dispatch(addExpense(transactionData));
             onClose();
           }
