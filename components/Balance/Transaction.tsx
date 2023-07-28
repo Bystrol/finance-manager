@@ -1,6 +1,12 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteTransaction } from '@/features/balance/balanceSlice';
 import { IconType } from 'react-icons';
+import { FiEdit } from 'react-icons/fi';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 interface TransactionProps {
+  id: string;
   description: string;
   amount: number;
   type: string;
@@ -9,14 +15,26 @@ interface TransactionProps {
 }
 
 const Transaction: React.FC<TransactionProps> = ({
+  id,
   description,
   amount,
   type,
   dateText,
   icon: Icon,
 }) => {
+  const [showOptionsCart, setShowOptionsCart] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const toggleOptionsCart = () => {
+    setShowOptionsCart((prevShowOptionsCart) => !prevShowOptionsCart);
+  };
+
   return (
-    <div className="flex justify-between items-center bg-white rounded-lg p-3 shadow-md">
+    <div
+      className="relative flex justify-between items-center bg-white rounded-lg p-3 shadow-md cursor-pointer"
+      onClick={toggleOptionsCart}
+    >
       <div className="flex items-center gap-3">
         <Icon size={30} />
         <div className="flex flex-col items-start">
@@ -32,6 +50,21 @@ const Transaction: React.FC<TransactionProps> = ({
         {type === 'Incomes' ? '+' : '-'}
         {amount} PLN
       </p>
+      {showOptionsCart && (
+        <div className="flex justify-center items-center gap-4 absolute top-0 left-0 w-full h-full bg-white rounded-lg text-sm font-bold">
+          <div className="flex justify-center items-center gap-1 hover:scale-110 transition-all">
+            <FiEdit />
+            <p>EDIT</p>
+          </div>
+          <div
+            className="flex justify-center items-center gap-1 hover:scale-110 transition-all"
+            onClick={() => dispatch(deleteTransaction({ id }))}
+          >
+            <RiDeleteBin6Line />
+            <p>DELETE</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
