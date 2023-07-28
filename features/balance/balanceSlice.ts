@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { TransactionData } from '@/interfaces/operation_interfaces';
+import {
+  TransactionData,
+  EditModalData,
+} from '@/interfaces/operation_interfaces';
 
 interface BalanceSliceData {
   totalAmount: number;
@@ -39,10 +42,27 @@ const balanceSlice = createSlice({
         (transaction) => transaction.id !== action.payload.id,
       );
     },
+    editTransaction(state, action: PayloadAction<EditModalData>) {
+      let transactionToEdit = state.transactions.find(
+        (transaction) => transaction.id === action.payload.id,
+      );
+
+      let transactionToEditIndex = state.transactions.findIndex(
+        (transaction) => transaction.id === action.payload.id,
+      );
+
+      state.transactions[transactionToEditIndex] = {
+        ...transactionToEdit!,
+        description: action.payload.description,
+        category: action.payload.category,
+        icon: action.payload.icon,
+        amount: action.payload.amount,
+      };
+    },
   },
 });
 
-export const { addIncome, addExpense, deleteTransaction } =
+export const { addIncome, addExpense, deleteTransaction, editTransaction } =
   balanceSlice.actions;
 
 export default balanceSlice.reducer;

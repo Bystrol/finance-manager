@@ -35,6 +35,24 @@ export interface TransactionModalProps {
   onClose: () => void;
 }
 
+export interface EditModalProps {
+  id: string;
+  type: string;
+  icon: IconType;
+  description: string;
+  category: string;
+  amount: number;
+  onClose: () => void;
+}
+
+export interface EditModalData {
+  id: string;
+  description: string;
+  category: string;
+  amount: number;
+  icon: IconType;
+}
+
 export interface IsModalEmptyProps {
   description: boolean;
   category: boolean;

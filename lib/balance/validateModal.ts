@@ -1,10 +1,11 @@
 import {
   IsModalEmptyProps,
   TransactionData,
+  EditModalData,
 } from '@/interfaces/operation_interfaces';
 
 export const validateModal = async (
-  transactionData: TransactionData,
+  transactionData: TransactionData | EditModalData,
   setIsEmpty: React.Dispatch<React.SetStateAction<IsModalEmptyProps>>,
 ): Promise<boolean> => {
   let isModalValid: boolean = true;
