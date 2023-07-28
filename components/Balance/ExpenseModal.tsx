@@ -17,6 +17,7 @@ import { GiClothes } from 'react-icons/gi';
 import { FaBusAlt } from 'react-icons/fa';
 import { BsQuestionSquare } from 'react-icons/bs';
 import { addExpense } from '@/features/balance/balanceSlice';
+import { validateModal } from '@/lib/balance/validateModal';
 
 const initialTransactionData = {
   description: '',
@@ -68,51 +69,6 @@ const ExpenseModal: React.FC<ModalProps> = ({ onClose }) => {
       icon: icon,
     });
   };
-
-  const validateModal = useCallback(async (): Promise<boolean> => {
-    let isModalValid: boolean = true;
-
-    await setIsEmpty((prevIsEmpty) => {
-      const updatedIsEmpty: IsModalEmptyProps = {
-        description: prevIsEmpty.description,
-        category: prevIsEmpty.category,
-        amount: prevIsEmpty.amount,
-      };
-
-      if (transactionData.description === '') {
-        updatedIsEmpty.description = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.description = false;
-      }
-
-      if (transactionData.category === '') {
-        updatedIsEmpty.category = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.category = false;
-      }
-
-      if (transactionData.amount === 0) {
-        updatedIsEmpty.amount = true;
-        isModalValid = false;
-      } else {
-        updatedIsEmpty.amount = false;
-      }
-
-      return {
-        description: updatedIsEmpty.description,
-        category: updatedIsEmpty.category,
-        amount: updatedIsEmpty.amount,
-      };
-    });
-
-    return isModalValid;
-  }, [
-    transactionData.description,
-    transactionData.category,
-    transactionData.amount,
-  ]);
 
   return (
     <ModalCart onClick={onClose}>
@@ -186,7 +142,7 @@ const ExpenseModal: React.FC<ModalProps> = ({ onClose }) => {
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
         onClick={async () => {
-          if (await validateModal()) {
+          if (await validateModal(transactionData, setIsEmpty)) {
             dispatch(addExpense(transactionData));
             onClose();
           }
