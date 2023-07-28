@@ -2,41 +2,21 @@ import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   TransactionData,
-  ModalProps,
+  TransactionModalProps,
   IsModalEmptyProps,
 } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import {
-  currentDay,
-  currentMonthName,
-  currentYear,
-  currentDate,
-} from '@/constants/date';
+  initialTransactionData,
+  initialIsEmptyData,
+} from '@/constants/transactions';
 import { MdWorkOutline } from 'react-icons/md';
 import { BiTransfer } from 'react-icons/bi';
 import { BsQuestionSquare } from 'react-icons/bs';
 import { addIncome } from '@/features/balance/balanceSlice';
 import { validateModal } from '@/lib/balance/validateModal';
 
-const initialTransactionData = {
-  description: '',
-  category: '',
-  amount: 0,
-  type: 'Incomes',
-  date: currentDate,
-  dateText: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
-  icon: BsQuestionSquare,
-  month: currentMonthName,
-  year: currentYear,
-};
-
-const initialIsEmptyData = {
-  description: false,
-  category: false,
-  amount: false,
-};
-
-const IncomeModal: React.FC<ModalProps> = ({ onClose }) => {
+const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
@@ -45,26 +25,29 @@ const IncomeModal: React.FC<ModalProps> = ({ onClose }) => {
 
   const dispatch = useDispatch();
 
-  const setCategory = (category: string): void => {
-    let icon;
+  const setCategory = useCallback(
+    (category: string): void => {
+      let icon;
 
-    switch (category) {
-      case 'Salary':
-        icon = MdWorkOutline;
-        break;
-      case 'Transfer':
-        icon = BiTransfer;
-        break;
-      default:
-        icon = BsQuestionSquare;
-    }
+      switch (category) {
+        case 'Salary':
+          icon = MdWorkOutline;
+          break;
+        case 'Transfer':
+          icon = BiTransfer;
+          break;
+        default:
+          icon = BsQuestionSquare;
+      }
 
-    setTransactionData({
-      ...transactionData,
-      category,
-      icon: icon,
-    });
-  };
+      setTransactionData({
+        ...transactionData,
+        category,
+        icon: icon,
+      });
+    },
+    [transactionData],
+  );
 
   return (
     <ModalCart onClick={onClose}>
@@ -80,6 +63,7 @@ const IncomeModal: React.FC<ModalProps> = ({ onClose }) => {
             setTransactionData({
               ...transactionData,
               description: e.target.value,
+              type: 'Incomes',
               date: new Date(),
             });
           }}

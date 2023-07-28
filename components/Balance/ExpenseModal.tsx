@@ -2,16 +2,14 @@ import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   TransactionData,
-  ModalProps,
+  TransactionModalProps,
   IsModalEmptyProps,
 } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import {
-  currentDay,
-  currentMonthName,
-  currentYear,
-  currentDate,
-} from '@/constants/date';
+  initialTransactionData,
+  initialIsEmptyData,
+} from '@/constants/transactions';
 import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
 import { FaBusAlt } from 'react-icons/fa';
@@ -19,25 +17,7 @@ import { BsQuestionSquare } from 'react-icons/bs';
 import { addExpense } from '@/features/balance/balanceSlice';
 import { validateModal } from '@/lib/balance/validateModal';
 
-const initialTransactionData = {
-  description: '',
-  category: '',
-  amount: 0,
-  type: 'Expenses',
-  date: currentDate,
-  dateText: String(currentMonthName + ' ' + currentDay + ', ' + currentYear),
-  icon: BsQuestionSquare,
-  month: currentMonthName,
-  year: currentYear,
-};
-
-const initialIsEmptyData = {
-  description: false,
-  category: false,
-  amount: false,
-};
-
-const ExpenseModal: React.FC<ModalProps> = ({ onClose }) => {
+const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
@@ -46,29 +26,32 @@ const ExpenseModal: React.FC<ModalProps> = ({ onClose }) => {
 
   const dispatch = useDispatch();
 
-  const setCategory = (category: string) => {
-    let icon;
+  const setCategory = useCallback(
+    (category: string) => {
+      let icon;
 
-    switch (category) {
-      case 'Food':
-        icon = IoFastFoodOutline;
-        break;
-      case 'Clothes':
-        icon = GiClothes;
-        break;
-      case 'Transportation':
-        icon = FaBusAlt;
-        break;
-      default:
-        icon = BsQuestionSquare;
-    }
+      switch (category) {
+        case 'Food':
+          icon = IoFastFoodOutline;
+          break;
+        case 'Clothes':
+          icon = GiClothes;
+          break;
+        case 'Transportation':
+          icon = FaBusAlt;
+          break;
+        default:
+          icon = BsQuestionSquare;
+      }
 
-    setTransactionData({
-      ...transactionData,
-      category,
-      icon: icon,
-    });
-  };
+      setTransactionData({
+        ...transactionData,
+        category,
+        icon: icon,
+      });
+    },
+    [transactionData],
+  );
 
   return (
     <ModalCart onClick={onClose}>
@@ -84,6 +67,7 @@ const ExpenseModal: React.FC<ModalProps> = ({ onClose }) => {
             setTransactionData({
               ...transactionData,
               description: e.target.value,
+              type: 'Expenses',
               date: new Date(),
             });
           }}
