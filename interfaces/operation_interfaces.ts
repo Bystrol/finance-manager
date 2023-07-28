@@ -30,7 +30,7 @@ export interface BalanceData {
   isExpenseModalVisible: boolean;
 }
 
-export interface ModalProps {
+export interface TransactionModalProps {
   onClose: () => void;
 }
 
