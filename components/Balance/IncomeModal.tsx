@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { TransactionData } from '@/interfaces/operation_interfaces';
+import {
+  TransactionData,
+  ModalProps,
+  IsModalEmptyProps,
+} from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import {
   currentDay,
@@ -12,16 +16,6 @@ import { MdWorkOutline } from 'react-icons/md';
 import { BiTransfer } from 'react-icons/bi';
 import { BsQuestionSquare } from 'react-icons/bs';
 import { addIncome } from '@/features/balance/balanceSlice';
-
-interface IncomeModalProps {
-  onClose: () => void;
-}
-
-interface IsEmptyProps {
-  description: boolean;
-  category: boolean;
-  amount: boolean;
-}
 
 const initialTransactionData = {
   description: '',
@@ -41,12 +35,12 @@ const initialIsEmptyData = {
   amount: false,
 };
 
-const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
+const IncomeModal: React.FC<ModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
     initialTransactionData,
   );
 
-  const [isEmpty, setIsEmpty] = useState<IsEmptyProps>(initialIsEmptyData);
+  const [isEmpty, setIsEmpty] = useState<IsModalEmptyProps>(initialIsEmptyData);
 
   const dispatch = useDispatch();
 
@@ -75,7 +69,7 @@ const IncomeModal: React.FC<IncomeModalProps> = ({ onClose }) => {
     let isModalValid: boolean = true;
 
     await setIsEmpty((prevIsEmpty) => {
-      const updatedIsEmpty: IsEmptyProps = {
+      const updatedIsEmpty: IsModalEmptyProps = {
         description: prevIsEmpty.description,
         category: prevIsEmpty.category,
         amount: prevIsEmpty.amount,
