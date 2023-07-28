@@ -1,18 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { TransactionData } from '@/interfaces/operation_interfaces';
-import { currentMonthName, currentYear } from '@/constants/date';
 
 interface BalanceSliceData {
-  month: string;
-  year: number;
   totalAmount: number;
   transactions: TransactionData[];
 }
 
 const initialBalanceSliceData: BalanceSliceData = {
-  month: currentMonthName,
-  year: currentYear,
   totalAmount: 0,
   transactions: [],
 };
@@ -29,9 +24,25 @@ const balanceSlice = createSlice({
       state.transactions = [...state.transactions, action.payload];
       state.totalAmount -= action.payload.amount;
     },
+    deleteTransaction(state, action: PayloadAction<{ id: string }>) {
+      const transactionToDelete = state.transactions.find(
+        (transaction) => transaction.id === action.payload.id,
+      );
+
+      if (transactionToDelete?.type === 'Incomes') {
+        state.totalAmount -= transactionToDelete.amount;
+      } else if (transactionToDelete?.type === 'Expenses') {
+        state.totalAmount += transactionToDelete.amount;
+      }
+
+      state.transactions = state.transactions.filter(
+        (transaction) => transaction.id !== action.payload.id,
+      );
+    },
   },
 });
 
-export const { addIncome, addExpense } = balanceSlice.actions;
+export const { addIncome, addExpense, deleteTransaction } =
+  balanceSlice.actions;
 
 export default balanceSlice.reducer;
