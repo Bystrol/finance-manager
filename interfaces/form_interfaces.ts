@@ -16,7 +16,7 @@ export interface FormData {
 }
 
 export interface RegisterUpdatedError {
-  [key: string]: boolean | undefined;
+  [key: string]: boolean;
   username: boolean;
   email: boolean;
   password: boolean;
