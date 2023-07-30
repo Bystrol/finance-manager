@@ -51,6 +51,14 @@ const balanceSlice = createSlice({
         (transaction) => transaction.id === action.payload.id,
       );
 
+      if (transactionToEdit?.type === 'Incomes') {
+        state.totalAmount =
+          state.totalAmount - transactionToEdit.amount + action.payload.amount;
+      } else if (transactionToEdit?.type === 'Expenses') {
+        state.totalAmount =
+          state.totalAmount + transactionToEdit.amount - action.payload.amount;
+      }
+
       state.transactions[transactionToEditIndex] = {
         ...transactionToEdit!,
         description: action.payload.description,
