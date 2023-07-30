@@ -55,6 +55,7 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
               amount={transaction.amount}
               type={transaction.type}
               dateText={transaction.dateText}
+              category={transaction.category}
               icon={transaction.icon}
             />
           );
