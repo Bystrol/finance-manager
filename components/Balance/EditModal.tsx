@@ -164,7 +164,7 @@ const EditModal: React.FC<EditModalProps> = ({
           }
         }}
       >
-        Add expense
+        Edit transaction
       </button>
     </ModalCart>
   );
