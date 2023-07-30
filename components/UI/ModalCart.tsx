@@ -5,7 +5,7 @@ interface ModalCartProps {
 
 const ModalCart: React.FC<ModalCartProps> = ({ children, onClick }) => {
   return (
-    <div className="fixed top-0 left-0 flex justify-center items-center w-full h-screen">
+    <div className="fixed top-0 left-0 flex justify-center items-center w-full h-screen z-10">
       <div
         className="fixed top-0 left-0 w-full h-screen bg-black/50"
         onClick={onClick}
