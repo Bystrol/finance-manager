@@ -47,6 +47,7 @@ export interface EditModalProps {
 
 export interface EditModalData {
   id: string;
+  type: string;
   description: string;
   category: string;
   amount: number;
