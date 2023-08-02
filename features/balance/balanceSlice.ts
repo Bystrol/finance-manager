@@ -30,21 +30,6 @@ const balanceSlice = createSlice({
         }
       });
     },
-    deleteTransaction(state, action: PayloadAction<{ id: string }>) {
-      const transactionToDelete = state.transactions.find(
-        (transaction) => transaction.id === action.payload.id,
-      );
-
-      if (transactionToDelete?.type === 'Incomes') {
-        state.totalAmount -= transactionToDelete.amount;
-      } else if (transactionToDelete?.type === 'Expenses') {
-        state.totalAmount += transactionToDelete.amount;
-      }
-
-      state.transactions = state.transactions.filter(
-        (transaction) => transaction.id !== action.payload.id,
-      );
-    },
     editTransaction(state, action: PayloadAction<EditModalData>) {
       let transactionToEdit = state.transactions.find(
         (transaction) => transaction.id === action.payload.id,
@@ -73,7 +58,6 @@ const balanceSlice = createSlice({
   },
 });
 
-export const { deleteTransaction, editTransaction, updateTransactions } =
-  balanceSlice.actions;
+export const { editTransaction, updateTransactions } = balanceSlice.actions;
 
 export default balanceSlice.reducer;
