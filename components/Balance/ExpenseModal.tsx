@@ -1,6 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
 import {
   TransactionData,
   TransactionModalProps,
@@ -11,12 +10,12 @@ import {
   initialTransactionData,
   initialIsEmptyData,
 } from '@/constants/transactions';
-import { IoFastFoodOutline } from 'react-icons/io5';
-import { GiClothes } from 'react-icons/gi';
-import { FaBusAlt } from 'react-icons/fa';
-import { BsQuestionSquare } from 'react-icons/bs';
-import { addExpense } from '@/features/balance/balanceSlice';
 import { validateModal } from '@/lib/balance/validateModal';
+import axios from 'axios';
+import { getTransactions } from '@/lib/balance/getTransactions';
+import { updateTransactions } from '@/features/balance/balanceSlice';
+import { toast } from 'react-hot-toast';
+import { setLoading } from '@/features/loading/loadingSlice';
 
 const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [transactionData, setTransactionData] = useState<TransactionData>(
@@ -26,33 +25,6 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [isEmpty, setIsEmpty] = useState<IsModalEmptyProps>(initialIsEmptyData);
 
   const dispatch = useDispatch();
-
-  const setCategory = useCallback(
-    (category: string) => {
-      let icon;
-
-      switch (category) {
-        case 'Food':
-          icon = IoFastFoodOutline;
-          break;
-        case 'Clothes':
-          icon = GiClothes;
-          break;
-        case 'Transportation':
-          icon = FaBusAlt;
-          break;
-        default:
-          icon = BsQuestionSquare;
-      }
-
-      setTransactionData({
-        ...transactionData,
-        category,
-        icon: icon,
-      });
-    },
-    [transactionData],
-  );
 
   return (
     <ModalCart onClick={onClose}>
@@ -67,7 +39,6 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           onChange={(e) => {
             setTransactionData({
               ...transactionData,
-              id: uuidv4(),
               description: e.target.value,
               type: 'Expenses',
               date: new Date(),
@@ -88,7 +59,10 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           name="category"
           id="category"
           onChange={(e) => {
-            setCategory(e.target.value);
+            setTransactionData({
+              ...transactionData,
+              category: e.target.value,
+            });
           }}
           className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
           defaultValue="- select -"
@@ -129,8 +103,21 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
         onClick={async () => {
           if (await validateModal(transactionData, setIsEmpty)) {
-            dispatch(addExpense(transactionData));
             onClose();
+            dispatch(setLoading(true));
+
+            try {
+              await axios
+                .post('/api/postTransaction', transactionData)
+                .then(async () => {
+                  const updatedResponse = await getTransactions();
+                  dispatch(updateTransactions(updatedResponse));
+                });
+            } catch (error) {
+              toast.error(Object(error).response.data);
+            } finally {
+              dispatch(setLoading(false));
+            }
           }
         }}
       >
