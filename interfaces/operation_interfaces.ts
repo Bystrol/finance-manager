@@ -38,7 +38,6 @@ export interface TransactionModalProps {
 export interface EditModalProps {
   id: string;
   type: string;
-  icon: IconType;
   description: string;
   category: string;
   amount: number;
@@ -51,7 +50,6 @@ export interface EditModalData {
   description: string;
   category: string;
   amount: number;
-  icon: IconType;
 }
 
 export interface IsModalEmptyProps {
