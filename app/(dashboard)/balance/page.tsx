@@ -1,8 +1,8 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BalanceData } from '@/interfaces/operation_interfaces';
 import { RootState } from '@/store/store';
 import OperationButton from '@/components/Balance/OperationButton';
@@ -11,6 +11,10 @@ import IncomeModal from '@/components/Balance/IncomeModal';
 import ExpenseModal from '@/components/Balance/ExpenseModal';
 import TransactionsList from '@/components/Balance/TransactionsList';
 import { currentMonthName, currentYear } from '@/constants/date';
+import { updateTransactions } from '@/features/balance/balanceSlice';
+import { setLoading } from '@/features/loading/loadingSlice';
+import { getTransactions } from '@/lib/balance/getTransactions';
+import { toast } from 'react-hot-toast';
 import { FiFilter } from 'react-icons/fi';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import { IconType } from 'react-icons';
@@ -40,6 +44,8 @@ const Balance: React.FC = () => {
   const totalAmount = useSelector((state: RootState) =>
     state.balance.totalAmount.toFixed(2),
   );
+
+  const dispatch = useDispatch();
 
   const operationsArray: Operation[] = [
     {
@@ -73,6 +79,22 @@ const Balance: React.FC = () => {
       },
     },
   ];
+
+  useEffect(() => {
+    const getData = async () => {
+      dispatch(setLoading(true));
+      try {
+        const updatedResponse = await getTransactions();
+        dispatch(updateTransactions(updatedResponse));
+      } catch (error) {
+        toast.error(Object(error).response.data);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+
+    getData();
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col items-center w-full gap-2 text-center">
