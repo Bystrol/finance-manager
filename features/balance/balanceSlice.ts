@@ -19,13 +19,16 @@ const balanceSlice = createSlice({
   name: 'balance',
   initialState: initialBalanceSliceData,
   reducers: {
-    addIncome(state, action: PayloadAction<TransactionData>) {
-      state.transactions = [...state.transactions, action.payload];
-      state.totalAmount += action.payload.amount;
-    },
-    addExpense(state, action: PayloadAction<TransactionData>) {
-      state.transactions = [...state.transactions, action.payload];
-      state.totalAmount -= action.payload.amount;
+    updateTransactions(state, action: PayloadAction<TransactionData[]>) {
+      state.totalAmount = 0;
+      state.transactions = action.payload;
+      state.transactions.forEach((transaction) => {
+        if (transaction.type === 'Incomes') {
+          state.totalAmount += transaction.amount;
+        } else {
+          state.totalAmount -= transaction.amount;
+        }
+      });
     },
     deleteTransaction(state, action: PayloadAction<{ id: string }>) {
       const transactionToDelete = state.transactions.find(
@@ -70,7 +73,7 @@ const balanceSlice = createSlice({
   },
 });
 
-export const { addIncome, addExpense, deleteTransaction, editTransaction } =
+export const { deleteTransaction, editTransaction, updateTransactions } =
   balanceSlice.actions;
 
 export default balanceSlice.reducer;
