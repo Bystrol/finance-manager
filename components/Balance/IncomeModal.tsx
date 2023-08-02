@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -25,6 +25,26 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   const [isEmpty, setIsEmpty] = useState<IsModalEmptyProps>(initialIsEmptyData);
 
   const dispatch = useDispatch();
+
+  const postTransaction = useCallback(async () => {
+    if (await validateModal(transactionData, setIsEmpty)) {
+      onClose();
+      dispatch(setLoading(true));
+
+      try {
+        await axios
+          .post('/api/postTransaction', transactionData)
+          .then(async () => {
+            const updatedResponse = await getTransactions();
+            dispatch(updateTransactions(updatedResponse));
+          });
+      } catch (error) {
+        toast.error(Object(error).response.data);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    }
+  }, [dispatch, onClose, transactionData]);
 
   return (
     <ModalCart onClick={onClose}>
@@ -100,25 +120,7 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
       </div>
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
-        onClick={async () => {
-          if (await validateModal(transactionData, setIsEmpty)) {
-            onClose();
-            dispatch(setLoading(true));
-
-            try {
-              await axios
-                .post('/api/postTransaction', transactionData)
-                .then(async () => {
-                  const updatedResponse = await getTransactions();
-                  dispatch(updateTransactions(updatedResponse));
-                });
-            } catch (error) {
-              toast.error(Object(error).response.data);
-            } finally {
-              dispatch(setLoading(false));
-            }
-          }
-        }}
+        onClick={postTransaction}
       >
         Add income
       </button>
