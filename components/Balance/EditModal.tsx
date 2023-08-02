@@ -7,19 +7,16 @@ import {
 } from '@/interfaces/operation_interfaces';
 import ModalCart from '@/components/UI/ModalCart';
 import { initialIsEmptyData } from '@/constants/transactions';
-import { IoFastFoodOutline } from 'react-icons/io5';
-import { GiClothes } from 'react-icons/gi';
-import { FaBusAlt } from 'react-icons/fa';
-import { BsQuestionSquare } from 'react-icons/bs';
-import { MdWorkOutline } from 'react-icons/md';
-import { BiTransfer } from 'react-icons/bi';
-import { editTransaction } from '@/features/balance/balanceSlice';
 import { validateModal } from '@/lib/balance/validateModal';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
+import { setLoading } from '@/features/loading/loadingSlice';
+import { getTransactions } from '@/lib/balance/getTransactions';
+import { updateTransactions } from '@/features/balance/balanceSlice';
 
 const EditModal: React.FC<EditModalProps> = ({
   id,
   type,
-  icon,
   description,
   category,
   amount,
@@ -28,7 +25,6 @@ const EditModal: React.FC<EditModalProps> = ({
   const initialTransactionData = {
     id,
     type,
-    icon,
     description,
     category,
     amount,
@@ -43,38 +39,25 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const dispatch = useDispatch();
 
-  const setCategory = useCallback(
-    (category: string) => {
-      let icon;
+  const editTransaction = useCallback(async () => {
+    if (await validateModal(transactionData, setIsEmpty)) {
+      onClose();
+      dispatch(setLoading(true));
 
-      switch (category) {
-        case 'Food':
-          icon = IoFastFoodOutline;
-          break;
-        case 'Clothes':
-          icon = GiClothes;
-          break;
-        case 'Transportation':
-          icon = FaBusAlt;
-          break;
-        case 'Salary':
-          icon = MdWorkOutline;
-          break;
-        case 'Transfer':
-          icon = BiTransfer;
-          break;
-        default:
-          icon = BsQuestionSquare;
+      try {
+        await axios
+          .patch('/api/editTransaction', transactionData)
+          .then(async () => {
+            const transactions = await getTransactions();
+            dispatch(updateTransactions(transactions));
+          });
+      } catch (error) {
+        toast.error(Object(error).response.data);
+      } finally {
+        dispatch(setLoading(false));
       }
-
-      setTransactionData({
-        ...transactionData,
-        category,
-        icon,
-      });
-    },
-    [transactionData],
-  );
+    }
+  }, [onClose, transactionData, dispatch]);
 
   return (
     <ModalCart onClick={onClose}>
@@ -109,7 +92,10 @@ const EditModal: React.FC<EditModalProps> = ({
           id="category"
           defaultValue={category}
           onChange={(e) => {
-            setCategory(e.target.value);
+            setTransactionData({
+              ...transactionData,
+              category: e.target.value,
+            });
           }}
           className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
         >
@@ -157,12 +143,7 @@ const EditModal: React.FC<EditModalProps> = ({
       </div>
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
-        onClick={async () => {
-          if (await validateModal(transactionData, setIsEmpty)) {
-            dispatch(editTransaction(transactionData));
-            onClose();
-          }
-        }}
+        onClick={editTransaction}
       >
         Edit transaction
       </button>

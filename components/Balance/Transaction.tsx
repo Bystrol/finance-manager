@@ -107,7 +107,6 @@ const Transaction: React.FC<TransactionProps> = ({
         <EditModal
           id={id}
           type={type}
-          icon={Icon}
           description={description}
           category={category}
           amount={amount}
