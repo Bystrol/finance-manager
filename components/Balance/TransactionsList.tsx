@@ -42,7 +42,7 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
   );
 
   return (
-    <section className="flex flex-col w-full items-start mt-4 gap-2">
+    <section className="flex flex-col w-full lg:w-1/3 items-start mt-4 gap-2">
       <h2 className="font-medium">Transaction History</h2>
       <hr className="w-full h-[2px] bg-zinc-100" />
       <div className="flex flex-col w-full gap-4">
