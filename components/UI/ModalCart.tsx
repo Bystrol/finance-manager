@@ -10,7 +10,7 @@ const ModalCart: React.FC<ModalCartProps> = ({ children, onClick }) => {
         className="fixed top-0 left-0 w-full h-screen bg-black/50"
         onClick={onClick}
       />
-      <div className="flex flex-col justify-center items-center w-3/4 py-6 gap-4 bg-white rounded-md shadow-md z-10">
+      <div className="flex flex-col justify-center items-center w-3/4 lg:w-1/4 py-6 gap-4 bg-white rounded-md shadow-md z-10">
         {children}
       </div>
     </div>
