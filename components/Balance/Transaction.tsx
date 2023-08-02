@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import EditModal from '@/components/Balance/EditModal';
-import { deleteTransaction } from '@/features/balance/balanceSlice';
+import { getTransactions } from '@/lib/balance/getTransactions';
+import { updateTransactions } from '@/features/balance/balanceSlice';
+import { setLoading } from '@/features/loading/loadingSlice';
 import { IconType } from 'react-icons';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 interface TransactionProps {
   id: string;
@@ -42,6 +46,21 @@ const Transaction: React.FC<TransactionProps> = ({
     setShowEditModal((prevState) => !prevState);
   };
 
+  const deleteTransaction = useCallback(async () => {
+    dispatch(setLoading(true));
+
+    try {
+      await axios.patch('/api/deleteTransaction', { id }).then(async () => {
+        const updatedResponse = await getTransactions();
+        dispatch(updateTransactions(updatedResponse));
+      });
+    } catch (error) {
+      toast.error(Object(error).response.data);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch, id]);
+
   return (
     <>
       <div
@@ -76,7 +95,7 @@ const Transaction: React.FC<TransactionProps> = ({
             </div>
             <div
               className="flex justify-center items-center gap-1 hover:scale-110 transition-all"
-              onClick={() => dispatch(deleteTransaction({ id }))}
+              onClick={deleteTransaction}
             >
               <RiDeleteBin6Line />
               <p className="cursor-pointer">DELETE</p>
