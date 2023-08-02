@@ -23,6 +23,20 @@ export async function POST(req: Request) {
 
     const session = await getServerSession(authOptions);
 
+    if (!session) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session?.user?.email || '',
+      },
+    });
+
+    if (!user) {
+      return new NextResponse('User not found', { status: 400 });
+    }
+
     const transactionData = {
       month,
       year,
@@ -32,7 +46,7 @@ export async function POST(req: Request) {
       category,
       description,
       amount,
-      user: { connect: { email: session?.user?.email || '' } },
+      user: { connect: { email: user.email || '' } },
     };
 
     const createdTransaction = await prisma.transaction.create({
@@ -41,7 +55,7 @@ export async function POST(req: Request) {
 
     await prisma.user.update({
       where: {
-        email: session?.user?.email || '',
+        email: user.email || '',
       },
       data: {
         transactions: {
