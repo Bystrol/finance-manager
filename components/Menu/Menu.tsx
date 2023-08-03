@@ -70,7 +70,6 @@ const Menu: React.FC<{ isVisible: boolean; closeMenu: () => void }> = ({
               href={item.href}
               icon={item.icon}
               text={item.text}
-              color={item.color}
               onClick={item.onClick}
             />
           ))}
