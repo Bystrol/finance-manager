@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return new NextResponse('Transaction added', { status: 200 });
+    return NextResponse.json(createdTransaction, { status: 200 });
   } catch {
     return new NextResponse('Bad request', { status: 400 });
   }

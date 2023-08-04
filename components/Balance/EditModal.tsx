@@ -1,5 +1,4 @@
-import { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { IsModalEmptyProps } from '@/interfaces/operation_interfaces';
 import {
   EditModalProps,
@@ -11,8 +10,8 @@ import { validateModal } from '@/lib/balance/validateModal';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { setLoading } from '@/features/loading/loadingSlice';
-import { getTransactions } from '@/lib/balance/getTransactions';
-import { updateTransactions } from '@/features/balance/balanceSlice';
+import { editTransaction } from '@/features/balance/balanceSlice';
+import { useDispatch } from 'react-redux';
 
 const EditModal: React.FC<EditModalProps> = ({
   id,
@@ -20,6 +19,7 @@ const EditModal: React.FC<EditModalProps> = ({
   description,
   category,
   amount,
+  icon,
   onClose,
 }) => {
   const initialTransactionData = {
@@ -28,7 +28,7 @@ const EditModal: React.FC<EditModalProps> = ({
     description,
     category,
     amount,
-    onClose,
+    icon,
   };
 
   const [transactionData, setTransactionData] = useState<EditModalData>(
@@ -39,25 +39,22 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const dispatch = useDispatch();
 
-  const editTransaction = useCallback(async () => {
+  const editTransactionHandler = async () => {
     if (await validateModal(transactionData, setIsEmpty)) {
       onClose();
       dispatch(setLoading(true));
 
       try {
-        await axios
-          .patch('/api/editTransaction', transactionData)
-          .then(async () => {
-            const transactions = await getTransactions();
-            dispatch(updateTransactions(transactions));
-          });
+        await axios.patch('/api/editTransaction', transactionData).then(() => {
+          dispatch(editTransaction(transactionData));
+        });
       } catch (error) {
         toast.error(Object(error).response.data);
       } finally {
         dispatch(setLoading(false));
       }
     }
-  }, [onClose, transactionData, dispatch]);
+  };
 
   return (
     <ModalCart onClick={onClose}>
@@ -97,7 +94,7 @@ const EditModal: React.FC<EditModalProps> = ({
               category: e.target.value,
             });
           }}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
         >
           <option disabled>- select -</option>
           {type === 'Incomes' ? (
@@ -143,7 +140,7 @@ const EditModal: React.FC<EditModalProps> = ({
       </div>
       <button
         className="w-1/2 h-10 bg-black text-white font-bold rounded-md hover:bg-zinc-700 mt-4"
-        onClick={editTransaction}
+        onClick={editTransactionHandler}
       >
         Edit transaction
       </button>

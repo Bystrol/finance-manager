@@ -41,6 +41,7 @@ export interface EditModalProps {
   description: string;
   category: string;
   amount: number;
+  icon: IconType;
   onClose: () => void;
 }
 
@@ -50,6 +51,7 @@ export interface EditModalData {
   description: string;
   category: string;
   amount: number;
+  icon: IconType;
 }
 
 export interface IsModalEmptyProps {
