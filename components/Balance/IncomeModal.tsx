@@ -13,8 +13,8 @@ import {
   initialIsEmptyData,
 } from '@/constants/transactions';
 import { validateModal } from '@/lib/balance/validateModal';
-import { getTransactions } from '@/lib/balance/getTransactions';
-import { updateTransactions } from '@/features/balance/balanceSlice';
+import { setCategory } from '@/lib/balance/setCategory';
+import { addIncome } from '@/features/balance/balanceSlice';
 import { setLoading } from '@/features/loading/loadingSlice';
 
 const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
@@ -34,9 +34,11 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
       try {
         await axios
           .post('/api/postTransaction', transactionData)
-          .then(async () => {
-            const updatedResponse = await getTransactions();
-            dispatch(updateTransactions(updatedResponse));
+          .then((res) => {
+            const response = res.data;
+            response.date = new Date(response.date);
+            response.icon = setCategory(response.category);
+            dispatch(addIncome(response));
           });
       } catch (error) {
         toast.error(Object(error).response.data);
@@ -84,7 +86,7 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
               category: e.target.value,
             });
           }}
-          className="w-3/5 h-10 border border-zinc-300 rounded-md px-1"
+          className="w-3/5 h-10 border border-zinc-300 rounded-md px-2"
           defaultValue="- select -"
         >
           <option disabled>- select -</option>
