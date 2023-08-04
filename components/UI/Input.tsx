@@ -24,9 +24,7 @@ const Input: React.FC<InputProps> = ({
       <input
         className={`
             w-full
-            h-10
             py-3
-            lg:py-2
             px-4
             border
             bg-white
@@ -36,6 +34,7 @@ const Input: React.FC<InputProps> = ({
                 : 'border-zinc-300 focus:border-zinc-300'
             }
             focus:outline-none
+            focus:ring-0
             rounded-lg
             peer
             `}
@@ -48,7 +47,7 @@ const Input: React.FC<InputProps> = ({
       <label
         className={`
         absolute
-        top-2.5
+        top-4
         left-4
         text-sm
         lg:text-sm
