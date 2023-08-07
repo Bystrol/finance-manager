@@ -132,7 +132,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 <option>All</option>
                 <option>Food</option>
                 <option>Clothes</option>
-                <option>Transportation</option>
+                <option>Transport</option>
               </>
             )}
           </select>

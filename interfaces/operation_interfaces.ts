@@ -59,3 +59,10 @@ export interface IsModalEmptyProps {
   category: boolean;
   amount: boolean;
 }
+
+export interface CategoryCartData {
+  icon: IconType;
+  category: string;
+  amount: number;
+  percentage: number;
+}
