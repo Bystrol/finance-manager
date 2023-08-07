@@ -106,7 +106,7 @@ const EditModal: React.FC<EditModalProps> = ({
             <>
               <option>Food</option>
               <option>Clothes</option>
-              <option>Transportation</option>
+              <option>Transport</option>
             </>
           )}
         </select>
