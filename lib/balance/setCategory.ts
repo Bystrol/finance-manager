@@ -15,7 +15,7 @@ export const setCategory = (category: string) => {
     case 'Clothes':
       icon = GiClothes;
       break;
-    case 'Transportation':
+    case 'Transport':
       icon = FaBusAlt;
       break;
     case 'Salary':
@@ -23,6 +23,9 @@ export const setCategory = (category: string) => {
       break;
     case 'Transfer':
       icon = BiTransfer;
+      break;
+    case 'Others':
+      icon = BsQuestionSquare;
       break;
     default:
       icon = BsQuestionSquare;

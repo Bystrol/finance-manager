@@ -92,7 +92,8 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           <option disabled>- select -</option>
           <option>Food</option>
           <option>Clothes</option>
-          <option>Transportation</option>
+          <option>Transport</option>
+          <option>Others</option>
         </select>
         {isEmpty.category && (
           <p className="w-full text-right text-xs text-red-700">
