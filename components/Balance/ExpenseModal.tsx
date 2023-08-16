@@ -5,13 +5,13 @@ import {
   TransactionModalProps,
   IsModalEmptyProps,
 } from '@/interfaces/operation_interfaces';
-import ModalCart from '@/components/UI/ModalCart';
+import ModalCard from '@/components/UI/ModalCard';
 import {
   initialTransactionData,
   initialIsEmptyData,
 } from '@/constants/transactions';
 import { validateModal } from '@/lib/balance/validateModal';
-import { setCategory } from '@/lib/balance/setCategory';
+import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
 import { addExpense } from '@/features/balance/balanceSlice';
 import { setLoading } from '@/features/loading/loadingSlice';
 import { toast } from 'react-hot-toast';
@@ -26,7 +26,7 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
 
   const dispatch = useDispatch();
 
-  const postTransaction = useCallback(async () => {
+  const postTransaction = async () => {
     if (await validateModal(transactionData, setIsEmpty)) {
       onClose();
       dispatch(setLoading(true));
@@ -37,7 +37,7 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           .then((res) => {
             const response = res.data;
             response.date = new Date(response.date);
-            response.icon = setCategory(response.category);
+            response.icon = getCategoryIcon(response.category);
             dispatch(addExpense(response));
           });
       } catch (error) {
@@ -46,10 +46,10 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
         dispatch(setLoading(false));
       }
     }
-  }, [dispatch, onClose, transactionData]);
+  }
 
   return (
-    <ModalCart onClick={onClose}>
+    <ModalCard onClick={onClose}>
       <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="description" className="font-bold">
           Description
@@ -128,7 +128,7 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
       >
         Add expense
       </button>
-    </ModalCart>
+    </ModalCard>
   );
 };
 
