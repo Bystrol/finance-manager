@@ -8,40 +8,12 @@ export interface FilterProps {
   isFilterModalVisible: boolean;
 }
 
-export interface TransactionData {
-  id: string;
-  month: string;
-  year: number;
-  date: Date;
-  dateText: string;
-  type: string;
-  category: string;
-  description: string;
-  amount: number;
-  icon: IconType;
-}
-
-export interface BalanceData {
-  month: string;
-  year: number;
-  type: string;
-  category: string;
-  isFilterModalVisible: boolean;
+export interface BalanceData extends FilterProps {
   isIncomeModalVisible: boolean;
   isExpenseModalVisible: boolean;
 }
 
 export interface TransactionModalProps {
-  onClose: () => void;
-}
-
-export interface EditModalProps {
-  id: string;
-  type: string;
-  description: string;
-  category: string;
-  amount: number;
-  icon: IconType;
   onClose: () => void;
 }
 
@@ -52,6 +24,18 @@ export interface EditModalData {
   category: string;
   amount: number;
   icon: IconType;
+}
+
+export interface EditModalProps extends EditModalData {
+  closeModal: () => void;
+}
+
+export interface TransactionData extends EditModalData {
+  [key: string]: string | number | Date | IconType
+  month: string;
+  year: number;
+  date: Date;
+  dateText: string;
 }
 
 export interface IsModalEmptyProps {
