@@ -4,7 +4,7 @@ import {
   EditModalProps,
   EditModalData,
 } from '@/interfaces/operation_interfaces';
-import ModalCart from '@/components/UI/ModalCart';
+import ModalCard from '@/components/UI/ModalCard';
 import { initialIsEmptyData } from '@/constants/transactions';
 import { validateModal } from '@/lib/balance/validateModal';
 import { toast } from 'react-hot-toast';
@@ -20,7 +20,7 @@ const EditModal: React.FC<EditModalProps> = ({
   category,
   amount,
   icon,
-  onClose,
+  closeModal,
 }) => {
   const initialTransactionData = {
     id,
@@ -41,7 +41,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const editTransactionHandler = async () => {
     if (await validateModal(transactionData, setIsEmpty)) {
-      onClose();
+      closeModal()
       dispatch(setLoading(true));
 
       try {
@@ -57,7 +57,7 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   return (
-    <ModalCart onClick={onClose}>
+    <ModalCard onClick={closeModal}>
       <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="description" className="font-bold">
           Description
@@ -144,7 +144,7 @@ const EditModal: React.FC<EditModalProps> = ({
       >
         Edit transaction
       </button>
-    </ModalCart>
+    </ModalCard>
   );
 };
 
