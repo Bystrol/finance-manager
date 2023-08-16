@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ModalCart from '@/components/UI/ModalCart';
+import ModalCard from '@/components/UI/ModalCard';
 import { monthsArray, yearsArray } from '@/constants/date';
-import { checkIfDisabled } from '@/lib/balance/checkIfDisabled';
+import { hasMonthOccured } from '@/lib/balance/checkIfDisabled';
 import { FilterProps } from '@/interfaces/operation_interfaces';
 import { BalanceData } from '@/interfaces/operation_interfaces';
 
@@ -27,7 +27,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [filterData, setFilterData] = useState<FilterProps>(initialFilterData);
 
   return (
-    <ModalCart onClick={onClick}>
+    <ModalCard onClick={onClick}>
       <div className="flex w-3/4 justify-between items-center">
         <label htmlFor="month" className="font-bold">
           Month
@@ -48,9 +48,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
             return (
               <option
                 key={month}
-                disabled={checkIfDisabled(month, filterData.year)}
+                disabled={hasMonthOccured(month, filterData.year)}
                 className={
-                  checkIfDisabled(month, filterData.year)
+                  hasMonthOccured(month, filterData.year)
                     ? 'bg-slate-600/10'
                     : ''
                 }
@@ -133,6 +133,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 <option>Food</option>
                 <option>Clothes</option>
                 <option>Transport</option>
+                <option>Others</option>
               </>
             )}
           </select>
@@ -154,7 +155,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
       >
         Filter
       </button>
-    </ModalCart>
+    </ModalCard>
   );
 };
 
