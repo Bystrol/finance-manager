@@ -4,6 +4,7 @@ import {
   TransactionData,
   EditModalData,
 } from '@/interfaces/operation_interfaces';
+import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
 
 interface BalanceSliceData {
   totalAmount: number;
@@ -63,7 +64,7 @@ const balanceSlice = createSlice({
         ...transactionToEdit!,
         description: action.payload.description,
         category: action.payload.category,
-        icon: action.payload.icon,
+        icon: getCategoryIcon(action.payload.category),
         amount: action.payload.amount,
       };
     },
