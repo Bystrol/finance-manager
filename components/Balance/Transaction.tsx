@@ -6,6 +6,7 @@ import { deleteTransaction } from '@/features/balance/balanceSlice';
 import { IconType } from 'react-icons';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import {PiDotsThreeVerticalBold} from 'react-icons/pi'
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
@@ -33,8 +34,8 @@ const Transaction: React.FC<TransactionProps> = ({
 
   const dispatch = useDispatch();
 
-  const toggleOptionsCart = () => {
-    setShowOptionsCart((prevState) => !prevState);
+  const openOptionsCart = () => {
+    setShowOptionsCart(true);
   };
 
   const closeOptionsCart = () => {
@@ -62,10 +63,7 @@ const Transaction: React.FC<TransactionProps> = ({
   return (
     <>
       <div
-        tabIndex={1}
         className="relative flex justify-between items-center bg-white rounded-lg p-3 shadow-md cursor-pointer"
-        onClick={toggleOptionsCart}
-        onBlur={closeOptionsCart}
       >
         <div className="flex items-center gap-3">
           <Icon size={30} />
@@ -74,6 +72,7 @@ const Transaction: React.FC<TransactionProps> = ({
             <p className="text-xs">{dateText}</p>
           </div>
         </div>
+        <div className='flex items-center gap-2'>
         <p
           className={`text-lg font-bold ${
             type === 'Incomes' ? 'text-emerald-500' : 'text-red-700'
@@ -82,6 +81,8 @@ const Transaction: React.FC<TransactionProps> = ({
           {type === 'Incomes' ? '+' : '-'}
           {amount} PLN
         </p>
+        <PiDotsThreeVerticalBold size={20} onClick={openOptionsCart}/>
+        </div>
         {showOptionsCart && (
           <div className="flex justify-center items-center gap-4 absolute top-0 left-0 w-full h-full bg-white rounded-lg text-sm font-bold">
             <div
@@ -98,6 +99,7 @@ const Transaction: React.FC<TransactionProps> = ({
               <RiDeleteBin6Line />
               <p className="cursor-pointer">DELETE</p>
             </div>
+            <PiDotsThreeVerticalBold size={20} onClick={closeOptionsCart} className='absolute right-3'/>
           </div>
         )}
       </div>
@@ -109,7 +111,7 @@ const Transaction: React.FC<TransactionProps> = ({
           category={category}
           amount={amount}
           icon={Icon}
-          onClose={() => setShowEditModal(false)}
+          closeModal={() => setShowEditModal(false)}
         />
       )}
     </>
