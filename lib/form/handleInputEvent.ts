@@ -16,7 +16,7 @@ export const handleInputEvent = (
 
     if (event.type === 'change') {
       updatedError[id] =
-        !validateInput(id, value) && prevFormData.inputTouched[id];
+        !validateInput(id, value) && prevFormData.inputTouched[id]!;
     } else if (event.type === 'blur') {
       updatedError[id] = !validateInput(id, value);
     }
