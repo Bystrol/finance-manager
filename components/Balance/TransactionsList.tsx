@@ -1,43 +1,13 @@
 import Transaction from '@/components/Balance/Transaction';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { BalanceData } from '@/interfaces/operation_interfaces';
+import useFilteredTransactions from '@/hooks/useFilteredTransactions';
 
 const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
   balanceData,
 }) => {
-  const transactions = useSelector(
-    (state: RootState) => state.balance.transactions,
-  );
+  const filteredTransactions = useFilteredTransactions(balanceData)
 
-  const filteredTransactions = () => {
-    let filteredTransactions;
-
-    if (balanceData.type === 'All') {
-      return (filteredTransactions = transactions.filter(
-        (transaction) =>
-          transaction.month === balanceData.month &&
-          transaction.year === balanceData.year,
-      ));
-    } else if (balanceData.category === 'All') {
-      return (filteredTransactions = transactions.filter(
-        (transaction) =>
-          transaction.month === balanceData.month &&
-          transaction.year === balanceData.year &&
-          transaction.type === balanceData.type,
-      ));
-    } else {
-      return (filteredTransactions = transactions.filter(
-        (transaction) =>
-          transaction.month === balanceData.month &&
-          transaction.year === balanceData.year &&
-          transaction.type === balanceData.type &&
-          transaction.category === balanceData.category,
-      ));
-    }
-  };
-
-  const sortedTransactions = filteredTransactions().sort(
+  const sortedTransactions = filteredTransactions.sort(
     (objA, objB) => Number(objB.date) - Number(objA.date),
   );
 
@@ -60,7 +30,7 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
             />
           );
         })}
-        {filteredTransactions().length === 0 && (
+        {filteredTransactions.length === 0 && (
           <p className="text-sm mt-2">No transactions available.</p>
         )}
       </div>

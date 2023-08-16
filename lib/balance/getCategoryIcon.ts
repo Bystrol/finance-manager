@@ -5,31 +5,23 @@ import { BsQuestionSquare } from 'react-icons/bs';
 import { MdWorkOutline } from 'react-icons/md';
 import { BiTransfer } from 'react-icons/bi';
 
-export const setCategory = (category: string) => {
-  let icon;
+export const getCategoryIcon = (category: string) => {
 
   switch (category) {
     case 'Food':
-      icon = IoFastFoodOutline;
-      break;
+      return IoFastFoodOutline;
     case 'Clothes':
-      icon = GiClothes;
-      break;
+      return GiClothes;
     case 'Transport':
-      icon = FaBusAlt;
-      break;
+      return FaBusAlt;
     case 'Salary':
-      icon = MdWorkOutline;
-      break;
+      return MdWorkOutline;
     case 'Transfer':
-      icon = BiTransfer;
-      break;
+      return BiTransfer;
     case 'Others':
-      icon = BsQuestionSquare;
-      break;
+      return BsQuestionSquare;
     default:
-      icon = BsQuestionSquare;
+      return BsQuestionSquare;
   }
 
-  return icon;
 };

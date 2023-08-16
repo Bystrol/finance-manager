@@ -8,7 +8,7 @@ import { updateTransactions } from '@/features/balance/balanceSlice';
 import { getTransactions } from '@/lib/balance/getTransactions';
 import { toast } from 'react-hot-toast';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
-import useTransactionType from '@/hooks/useTransactionType';
+import useFilteredAmount from '@/hooks/useFilteredAmount';
 import CategoryCart from '@/components/Home/CategoryCart';
 import useCategoriesData from '@/hooks/useCategoriesData';
 
@@ -19,8 +19,8 @@ const Home: React.FC = () => {
     state.balance.totalAmount.toFixed(2),
   );
 
-  const incomeAmount = useTransactionType('Incomes');
-  const expenseAmount = useTransactionType('Expenses');
+  const incomeAmount = useFilteredAmount('type', 'Incomes');
+  const expenseAmount = useFilteredAmount('type', 'Expenses');
 
   const categoriesArray = useCategoriesData();
 

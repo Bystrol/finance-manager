@@ -7,13 +7,13 @@ import {
   TransactionModalProps,
   IsModalEmptyProps,
 } from '@/interfaces/operation_interfaces';
-import ModalCart from '@/components/UI/ModalCart';
+import ModalCard from '@/components/UI/ModalCard';
 import {
   initialTransactionData,
   initialIsEmptyData,
 } from '@/constants/transactions';
 import { validateModal } from '@/lib/balance/validateModal';
-import { setCategory } from '@/lib/balance/setCategory';
+import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
 import { addIncome } from '@/features/balance/balanceSlice';
 import { setLoading } from '@/features/loading/loadingSlice';
 
@@ -37,7 +37,7 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
           .then((res) => {
             const response = res.data;
             response.date = new Date(response.date);
-            response.icon = setCategory(response.category);
+            response.icon = getCategoryIcon(response.category);
             dispatch(addIncome(response));
           });
       } catch (error) {
@@ -49,7 +49,7 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
   }, [dispatch, onClose, transactionData]);
 
   return (
-    <ModalCart onClick={onClose}>
+    <ModalCard onClick={onClose}>
       <div className="flex flex-wrap w-4/5 justify-between items-center">
         <label htmlFor="description" className="font-bold">
           Description
@@ -126,7 +126,7 @@ const IncomeModal: React.FC<TransactionModalProps> = ({ onClose }) => {
       >
         Add income
       </button>
-    </ModalCart>
+    </ModalCard>
   );
 };
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setCategory } from '@/lib/balance/setCategory';
+import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
 import { TransactionData } from '@/interfaces/operation_interfaces';
 import { toast } from 'react-hot-toast';
 
@@ -12,7 +12,7 @@ export const getTransactions = async () => {
 
     updatedResponse.forEach((transaction) => {
       transaction.date = new Date(transaction.date);
-      transaction.icon = setCategory(transaction.category);
+      transaction.icon = getCategoryIcon(transaction.category);
     });
   } catch (error) {
     toast.error(toast.error(Object(error).response.data));

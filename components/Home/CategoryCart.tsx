@@ -15,7 +15,7 @@ const CategoryCart: React.FC<CategoryCartData> = ({
       <div className="flex flex-col gap-2">
         <h2 className="text-md font-medium">{category}</h2>
         <p className="text-sm">{amount} PLN</p>
-        <Progress progress={percentage} color="green" size="sm" />
+        <Progress progress={Math.round(percentage)} color="green" size="sm" labelProgress progressLabelPosition='outside'/>
       </div>
     </div>
   );

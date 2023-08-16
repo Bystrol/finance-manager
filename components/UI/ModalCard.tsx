@@ -3,7 +3,7 @@ interface ModalCartProps {
   onClick: () => void;
 }
 
-const ModalCart: React.FC<ModalCartProps> = ({ children, onClick }) => {
+const ModalCard: React.FC<ModalCartProps> = ({ children, onClick }) => {
   return (
     <div className="fixed top-0 left-0 flex justify-center items-center w-full h-screen z-10">
       <div
@@ -17,4 +17,4 @@ const ModalCart: React.FC<ModalCartProps> = ({ children, onClick }) => {
   );
 };
 
-export default ModalCart;
+export default ModalCard;
