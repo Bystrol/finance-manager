@@ -13,7 +13,13 @@ const TransactionsList: React.FC<{ balanceData: BalanceData }> = ({
 
   return (
     <section className="flex flex-col w-full lg:w-1/3 items-start mt-4 gap-2">
-      <h2 className="font-medium">Transaction History</h2>
+      <h2 className="font-medium">Transaction history from {balanceData.month}{' '}
+        {balanceData.year}</h2>
+        <div className='flex w-full gap-2'>
+        <h2 className='font-medium'>Active filters:</h2>
+        <p>Type - {balanceData.type}</p>
+        {balanceData.type !== 'All' && <p>, Category - {balanceData.category}</p>}
+        </div>
       <hr className="w-full h-[2px] bg-zinc-100" />
       <div className="flex flex-col w-full gap-4">
         {sortedTransactions.map((transaction) => {
