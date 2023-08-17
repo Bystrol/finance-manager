@@ -4,12 +4,13 @@ import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
 import { BsQuestionSquare } from 'react-icons/bs';
 import useFilteredAmount from './useFilteredAmount';
+import { currentMonthName, currentYear } from '@/constants/date';
 
 const useCategoriesData = () => {
-  const foodTotalAmount = useFilteredAmount('category', 'Food');
-  const transportTotalAmount = useFilteredAmount('category', 'Transport');
-  const clothesTotalAmount = useFilteredAmount('category', 'Clothes');
-  const othersTotalAmount = useFilteredAmount('category', 'Others');
+  const foodTotalAmount = useFilteredAmount('Expenses', currentMonthName, currentYear, 'Food');
+  const transportTotalAmount = useFilteredAmount('Expenses', currentMonthName, currentYear, 'Transport');
+  const clothesTotalAmount = useFilteredAmount('Expenses', currentMonthName, currentYear, 'Clothes');
+  const othersTotalAmount = useFilteredAmount('Expenses', currentMonthName, currentYear, 'Others');
 
   const expensesTotalAmount =
     foodTotalAmount + transportTotalAmount + clothesTotalAmount + othersTotalAmount;
