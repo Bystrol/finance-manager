@@ -23,25 +23,25 @@ const useCategoriesData = () => {
       icon: IoFastFoodOutline,
       category: 'Food',
       amount: foodTotalAmount,
-      percentage: calculatePercentage(foodTotalAmount)
+      percentage: calculatePercentage(foodTotalAmount) | 0
     },
     {
       icon: FaBusAlt,
       category: 'Transport',
       amount: transportTotalAmount,
-      percentage: calculatePercentage(transportTotalAmount)
+      percentage: calculatePercentage(transportTotalAmount) | 0
     },
     {
       icon: GiClothes,
       category: 'Clothes',
       amount: clothesTotalAmount,
-      percentage: calculatePercentage(clothesTotalAmount)
+      percentage: calculatePercentage(clothesTotalAmount) | 0
     },
     {
       icon: BsQuestionSquare,
       category: 'Others',
       amount: othersTotalAmount,
-      percentage: calculatePercentage(othersTotalAmount)
+      percentage: calculatePercentage(othersTotalAmount) | 0
     },
   ];
 
