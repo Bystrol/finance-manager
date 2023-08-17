@@ -63,7 +63,7 @@ const Transaction: React.FC<TransactionProps> = ({
   return (
     <>
       <div
-        className="relative flex justify-between items-center bg-white rounded-lg p-3 shadow-md cursor-pointer"
+        className="relative flex justify-between items-center bg-white rounded-lg p-3 shadow-md"
       >
         <div className="flex items-center gap-3">
           <Icon size={30} />
@@ -81,7 +81,7 @@ const Transaction: React.FC<TransactionProps> = ({
           {type === 'Incomes' ? '+' : '-'}
           {amount} PLN
         </p>
-        <PiDotsThreeVerticalBold size={20} onClick={openOptionsCart}/>
+        <PiDotsThreeVerticalBold size={20} onClick={openOptionsCart} className='cursor-pointer'/>
         </div>
         {showOptionsCart && (
           <div className="flex justify-center items-center gap-4 absolute top-0 left-0 w-full h-full bg-white rounded-lg text-sm font-bold">
@@ -99,7 +99,7 @@ const Transaction: React.FC<TransactionProps> = ({
               <RiDeleteBin6Line />
               <p className="cursor-pointer">DELETE</p>
             </div>
-            <PiDotsThreeVerticalBold size={20} onClick={closeOptionsCart} className='absolute right-3'/>
+            <PiDotsThreeVerticalBold size={20} onClick={closeOptionsCart} className='absolute right-3 cursor-pointer'/>
           </div>
         )}
       </div>
