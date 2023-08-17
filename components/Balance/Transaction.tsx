@@ -34,12 +34,8 @@ const Transaction: React.FC<TransactionProps> = ({
 
   const dispatch = useDispatch();
 
-  const openOptionsCart = () => {
-    setShowOptionsCart(true);
-  };
-
-  const closeOptionsCart = () => {
-    setShowOptionsCart(false);
+  const toggleOptionsCart = () => {
+    setShowOptionsCart(prevState => !prevState);
   };
 
   const toggleModal = () => {
@@ -81,7 +77,7 @@ const Transaction: React.FC<TransactionProps> = ({
           {type === 'Incomes' ? '+' : '-'}
           {amount} PLN
         </p>
-        <PiDotsThreeVerticalBold size={20} onClick={openOptionsCart} className='cursor-pointer'/>
+        <PiDotsThreeVerticalBold size={20} onClick={toggleOptionsCart} className='cursor-pointer'/>
         </div>
         {showOptionsCart && (
           <div className="flex justify-center items-center gap-4 absolute top-0 left-0 w-full h-full bg-white rounded-lg text-sm font-bold">
@@ -99,7 +95,7 @@ const Transaction: React.FC<TransactionProps> = ({
               <RiDeleteBin6Line />
               <p className="cursor-pointer">DELETE</p>
             </div>
-            <PiDotsThreeVerticalBold size={20} onClick={closeOptionsCart} className='absolute right-3 cursor-pointer'/>
+            <PiDotsThreeVerticalBold size={20} onClick={toggleOptionsCart} className='absolute right-3 cursor-pointer'/>
           </div>
         )}
       </div>
