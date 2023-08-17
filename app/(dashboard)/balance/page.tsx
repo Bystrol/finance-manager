@@ -99,8 +99,7 @@ const Balance: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-full gap-2 text-center">
       <h1 className="text-xl font-medium">
-        {session?.user?.name}&apos;s balance in {balanceData.month}{' '}
-        {balanceData.year}
+        {session?.user?.name}&apos;s balance
       </h1>
       <hr className="w-full" />
       <h2 className="text-4xl font-bold my-4">{totalAmount} PLN</h2>
