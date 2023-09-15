@@ -29,7 +29,6 @@ const SignIn: React.FC = () => {
   );
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const validateForm: () => Promise<boolean> = useCallback(async () => {
     let isValid: boolean = true;
@@ -75,8 +74,6 @@ const SignIn: React.FC = () => {
           <section className="flex justify-center w-8/12 lg:w-1/2">
             <LoginPage
               validateForm={validateForm}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
               formData={formData}
               setFormData={setFormData}
             />
