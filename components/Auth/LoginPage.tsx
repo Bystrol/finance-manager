@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback } from 'react';
+import { SetStateAction, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
@@ -12,42 +12,71 @@ import { useRouter } from 'next/navigation';
 
 interface LoginProps {
   validateForm: () => Promise<boolean>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
   formData: FormData;
   setFormData: React.Dispatch<SetStateAction<FormData>>;
 }
 
 export const LoginPage: React.FC<LoginProps> = ({
   validateForm,
-  isLoading,
-  setIsLoading,
   formData,
   setFormData,
 }) => {
+  const [isLoading, setIsLoading] = useState<{
+    visitorButton: boolean;
+    mainButton: boolean;
+  }>({
+    visitorButton: false,
+    mainButton: false,
+  });
+
   const router = useRouter();
 
-  const handleLogin = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (await validateForm()) {
-        setIsLoading(true);
-        await signIn('credentials', {
-          email: formData.email,
-          password: formData.password,
-          redirect: false,
-        }).then((callback) => {
-          setIsLoading(false);
-          if (callback?.error) {
-            toast.error(callback.error);
-          } else if (callback?.ok && !callback.error) {
-            setTimeout(() => toast.success('Logged in successfully!'), 1000);
-          }
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (await validateForm()) {
+      setIsLoading({
+        ...isLoading,
+        mainButton: true,
+      });
+      await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      }).then((callback) => {
+        setIsLoading({
+          ...isLoading,
+          mainButton: false,
         });
+        if (callback?.error) {
+          toast.error(callback.error);
+        } else if (callback?.ok && !callback.error) {
+          setTimeout(() => toast.success('Logged in successfully!'), 1000);
+        }
+      });
+    }
+  };
+
+  const handleVisitorLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setIsLoading({
+      ...isLoading,
+      visitorButton: true,
+    });
+    await signIn('credentials', {
+      email: 'test@gmail.com',
+      password: 'Password1',
+      redirect: false,
+    }).then((callback) => {
+      setIsLoading({
+        ...isLoading,
+        visitorButton: false,
+      });
+      if (callback?.error) {
+        toast.error(callback.error);
+      } else if (callback?.ok && !callback.error) {
+        setTimeout(() => toast.success('Logged in successfully!'), 1000);
       }
-    },
-    [formData.email, formData.password, setIsLoading, validateForm],
-  );
+    });
+  };
 
   return (
     <form
@@ -88,9 +117,24 @@ export const LoginPage: React.FC<LoginProps> = ({
             : 'Please enter your password'
         }
       />
-
+      <button
+        type="button"
+        onClick={handleVisitorLogin}
+        className="flex justify-center items-center w-full py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:shadow-md"
+      >
+        {isLoading.visitorButton ? (
+          <ColorRing
+            width={50}
+            height={50}
+            wrapperClass="absolute"
+            colors={['#fff', '#fff', '#fff', '#fff', '#fff']}
+          />
+        ) : (
+          'Log in button for visitors'
+        )}
+      </button>
       <button className="flex justify-center items-center w-full py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-zinc-900 hover:bg-zinc-700">
-        {isLoading ? (
+        {isLoading.mainButton ? (
           <ColorRing
             width={50}
             height={50}
