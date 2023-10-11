@@ -1,7 +1,7 @@
-import { CategoryCartData } from '@/interfaces/operation_interfaces';
+import { CategoryCardData } from '@/interfaces/operation_interfaces';
 import { Progress } from 'flowbite-react';
 
-const CategoryCart: React.FC<CategoryCartData> = ({
+const CategoryCard: React.FC<CategoryCardData> = ({
   icon: Icon,
   category,
   amount,
@@ -30,4 +30,4 @@ const CategoryCart: React.FC<CategoryCartData> = ({
   );
 };
 
-export default CategoryCart;
+export default CategoryCard;
