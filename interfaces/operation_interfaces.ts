@@ -31,7 +31,7 @@ export interface EditModalProps extends EditModalData {
 }
 
 export interface TransactionData extends EditModalData {
-  [key: string]: string | number | Date | IconType
+  [key: string]: string | number | Date | IconType;
   month: string;
   year: number;
   date: Date;
@@ -44,7 +44,7 @@ export interface IsModalEmptyProps {
   amount: boolean;
 }
 
-export interface CategoryCartData {
+export interface CategoryCardData {
   icon: IconType;
   category: string;
   amount: number;

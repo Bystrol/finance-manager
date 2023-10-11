@@ -1,23 +1,30 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useDispatch } from 'react-redux';
 import { setLoading } from '@/features/loading/loadingSlice';
 import { updateTransactions } from '@/features/balance/balanceSlice';
 import { getTransactions } from '@/lib/balance/getTransactions';
 import { toast } from 'react-hot-toast';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import useFilteredAmount from '@/hooks/useFilteredAmount';
-import CategoryCart from '@/components/Home/CategoryCart';
+import CategoryCard from '@/components/Home/CategoryCard';
 import useCategoriesData from '@/hooks/useCategoriesData';
 import { currentMonthName, currentYear } from '@/constants/date';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
 
-  const incomeAmount = useFilteredAmount('Incomes', currentMonthName, currentYear);
-  const expenseAmount = useFilteredAmount('Expenses', currentMonthName, currentYear);
+  const incomeAmount = useFilteredAmount(
+    'Incomes',
+    currentMonthName,
+    currentYear,
+  );
+  const expenseAmount = useFilteredAmount(
+    'Expenses',
+    currentMonthName,
+    currentYear,
+  );
 
   const categoriesArray = useCategoriesData();
 
@@ -39,8 +46,10 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full gap-10">
-      <h1 className="text-xl font-medium">Your finances in {currentMonthName}{' '}{currentYear}</h1>
-      <div className="flex flex-wrap lg:flex-nowrap self-start justify-start w-full gap-4">
+      <h1 className="text-xl font-medium">
+        Your finances in {currentMonthName} {currentYear}
+      </h1>
+      <div className="flex flex-wrap lg:flex-nowrap self-start justify-center w-full gap-4">
         <section className="flex gap-4 w-full lg:w-auto mt-4 lg:mt-0 lg:flex-col">
           <div className="flex justify-center items-center gap-6 w-1/2 lg:w-48 bg-white rounded-xl shadow-md py-4">
             <div className="border-4 border-lime-300 p-2 rounded-full">
@@ -62,10 +71,10 @@ const Home: React.FC = () => {
           </div>
         </section>
         <hr className="w-full h-[2px] bg-zinc-100 lg:hidden" />
-        <section className="flex flex-wrap justify-between gap-4 w-full lg:w-auto">
+        <section className="flex justify-between gap-4 w-full lg:w-auto">
           {categoriesArray.map((category) => {
             return (
-              <CategoryCart
+              <CategoryCard
                 key={category.category}
                 icon={category.icon}
                 category={category.category}
