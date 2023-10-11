@@ -1,15 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useDispatch } from 'react-redux';
 import { setLoading } from '@/features/loading/loadingSlice';
 import { updateTransactions } from '@/features/balance/balanceSlice';
 import { getTransactions } from '@/lib/balance/getTransactions';
 import { toast } from 'react-hot-toast';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import useFilteredAmount from '@/hooks/useFilteredAmount';
-import CategoryCart from '@/components/Home/CategoryCart';
+import CategoryCard from '@/components/Home/CategoryCard';
 import useCategoriesData from '@/hooks/useCategoriesData';
 import { currentMonthName, currentYear } from '@/constants/date';
 
@@ -75,7 +74,7 @@ const Home: React.FC = () => {
         <section className="flex justify-between gap-4 w-full lg:w-auto">
           {categoriesArray.map((category) => {
             return (
-              <CategoryCart
+              <CategoryCard
                 key={category.category}
                 icon={category.icon}
                 category={category.category}
