@@ -13,7 +13,6 @@ import { setDataAttribute } from '@/lib/form/setDataAttribute';
 import { updateUserCredentials } from '@/lib/update/updateUserCredentials';
 import { updateUserPicture } from '@/lib/update/updateUserPicture';
 import styles from '@/styles/fileInput.module.css';
-import { RegisterUpdatedError } from '@/interfaces/form_interfaces';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/features/loading/loadingSlice';
 
@@ -42,6 +41,13 @@ const Profile: React.FC = () => {
     };
     isFormNotEmpty: boolean;
     [key: string]: string | boolean | { [key: string]: boolean };
+  }
+
+  interface UpdatedError {
+    [key: string]: boolean;
+    username: boolean;
+    email: boolean;
+    password: boolean;
   }
 
   const initialFormData = useMemo(
@@ -73,7 +79,7 @@ const Profile: React.FC = () => {
   const handleInputEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setFormData((prevFormData) => {
-      const updatedError: RegisterUpdatedError = {
+      const updatedError: UpdatedError = {
         username: prevFormData.isError.username,
         email: prevFormData.isError.email,
         password: prevFormData.isError.password,

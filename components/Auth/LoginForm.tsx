@@ -1,46 +1,47 @@
-import { SetStateAction, useState } from 'react';
+'use client';
+
+import { FormEvent, MouseEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { FormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import useFormData from '@/hooks/useFormData';
 
-interface LoginProps {
-  validateForm: () => Promise<boolean>;
-  formData: FormData;
-  setFormData: React.Dispatch<SetStateAction<FormData>>;
-}
-
-export const LoginPage: React.FC<LoginProps> = ({
-  validateForm,
-  formData,
-  setFormData,
-}) => {
+export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState<{
+    [key: string]: boolean;
     visitorButton: boolean;
     mainButton: boolean;
   }>({
     visitorButton: false,
     mainButton: false,
   });
-
   const router = useRouter();
+  const { loginFormData, setLoginFormData, validateLoginForm } = useFormData();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+    buttonType: string,
+    email: string,
+    password: string,
+  ) => {
     e.preventDefault();
-    if (await validateForm()) {
+    if (
+      (buttonType === 'mainButton' && (await validateLoginForm())) ||
+      buttonType === 'visitorButton'
+    ) {
       setIsLoading({
         ...isLoading,
-        mainButton: true,
+        [buttonType]: true,
       });
-      await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
+      signIn('credentials', {
+        email,
+        password,
         redirect: false,
       }).then((callback) => {
         setIsLoading({
@@ -56,31 +57,16 @@ export const LoginPage: React.FC<LoginProps> = ({
     }
   };
 
-  const handleVisitorLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsLoading({
-      ...isLoading,
-      visitorButton: true,
-    });
-    await signIn('credentials', {
-      email: 'test@gmail.com',
-      password: 'Password1',
-      redirect: false,
-    }).then((callback) => {
-      setIsLoading({
-        ...isLoading,
-        visitorButton: false,
-      });
-      if (callback?.error) {
-        toast.error(callback.error);
-      } else if (callback?.ok && !callback.error) {
-        setTimeout(() => toast.success('Logged in successfully!'), 1000);
-      }
-    });
-  };
-
   return (
     <form
-      onSubmit={handleLogin}
+      onSubmit={(e: FormEvent<HTMLFormElement>) =>
+        handleLogin(
+          e,
+          'mainButton',
+          loginFormData.email,
+          loginFormData.password,
+        )
+      }
       className="flex flex-col items-center justify-center w-full lg:w-8/12 h-full text-center gap-3 relative"
     >
       <h1 className="font-bold text-2xl md:text-4xl lg:text-xl">
@@ -93,12 +79,12 @@ export const LoginPage: React.FC<LoginProps> = ({
         id="email"
         type="text"
         label="Enter your email *"
-        value={formData.email}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.email}
+        value={loginFormData.email}
+        onChange={(event) => handleInputEvent(event, setLoginFormData)}
+        onBlur={(event) => handleInputEvent(event, setLoginFormData)}
+        isError={loginFormData.isError.email}
         errorMessage={
-          formData.email.length !== 0
+          loginFormData.email.length !== 0
             ? 'Invalid email format (e.g. email@example.com)'
             : 'Please enter your email'
         }
@@ -107,19 +93,21 @@ export const LoginPage: React.FC<LoginProps> = ({
         id="password"
         type="password"
         label="Enter your password *"
-        value={formData.password}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.password}
+        value={loginFormData.password}
+        onChange={(event) => handleInputEvent(event, setLoginFormData)}
+        onBlur={(event) => handleInputEvent(event, setLoginFormData)}
+        isError={loginFormData.isError.password}
         errorMessage={
-          formData.password.length !== 0
+          loginFormData.password.length !== 0
             ? 'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
             : 'Please enter your password'
         }
       />
       <button
         type="button"
-        onClick={handleVisitorLogin}
+        onClick={(e: MouseEvent<HTMLButtonElement>) =>
+          handleLogin(e, 'visitorButton', 'test@gmail.com', 'Password1')
+        }
         className="flex justify-center items-center w-full py-2 h-10 lg:h-11 md:h-14 rounded-lg text-sm md:text-xl lg:text-base font-bold text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:shadow-md"
       >
         {isLoading.visitorButton ? (
@@ -172,4 +160,4 @@ export const LoginPage: React.FC<LoginProps> = ({
   );
 };
 
-export default LoginPage;
+export default LoginForm;

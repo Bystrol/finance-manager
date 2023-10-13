@@ -15,28 +15,11 @@ export interface FormData {
   };
 }
 
-export interface RegisterUpdatedError {
-  [key: string]: boolean;
-  username: boolean;
+export interface UpdatedError {
+  [key: string]: boolean | undefined;
+  username?: boolean;
   email: boolean;
   password: boolean;
 }
 
-export interface LoginUpdatedError {
-  [key: string]: boolean;
-  email: boolean;
-  password: boolean;
-}
-
-export interface RegisterUpdatedTouched {
-  [key: string]: boolean;
-  username: boolean;
-  email: boolean;
-  password: boolean;
-}
-
-export interface LoginUpdatedTouched {
-  [key: string]: boolean;
-  email: boolean;
-  password: boolean;
-}
+export interface UpdatedTouched extends UpdatedError {}

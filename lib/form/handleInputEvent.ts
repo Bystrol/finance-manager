@@ -1,6 +1,6 @@
 import { validateInput } from './validateInput';
 import { setDataAttribute } from '@/lib/form/setDataAttribute';
-import { FormData, RegisterUpdatedError } from '@/interfaces/form_interfaces';
+import { FormData, UpdatedError } from '@/interfaces/form_interfaces';
 
 export const handleInputEvent = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -8,8 +8,8 @@ export const handleInputEvent = (
 ) => {
   const { id, value } = event.target;
   setFormData((prevFormData) => {
-    const updatedError: RegisterUpdatedError = {
-      username: prevFormData.isError.username!,
+    const updatedError: UpdatedError = {
+      username: prevFormData.isError.username,
       email: prevFormData.isError.email,
       password: prevFormData.isError.password,
     };
