@@ -1,66 +1,47 @@
-import { SetStateAction, useCallback } from 'react';
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { FormData } from '../../interfaces/form_interfaces';
 import { handleInputEvent } from '@/lib/form/handleInputEvent';
 import { ColorRing } from 'react-loader-spinner';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import useFormData from '@/hooks/useFormData';
 
-interface RegisterProps {
-  validateForm: () => Promise<boolean>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-  formData: FormData;
-  setFormData: React.Dispatch<SetStateAction<FormData>>;
-}
-
-export const RegisterPage: React.FC<RegisterProps> = ({
-  validateForm,
-  isLoading,
-  setIsLoading,
-  formData,
-  setFormData,
-}) => {
+export const RegisterPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { registerFormData, setRegisterFormData, validateRegisterForm } =
+    useFormData();
 
-  const handleRegister = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-      if (await validateForm()) {
-        setIsLoading(true);
-        try {
-          await axios
-            .post('/api/register', {
-              email: formData.email,
-              username: formData.username,
-              password: formData.password,
-            })
-            .then(() => {
-              setIsLoading(false);
-              toast.success('User has been registered!');
-              router.push('/auth/sign-in');
-            });
-        } catch (error) {
-          setIsLoading(false);
-          toast.error(Object(error).response.data);
-        }
+    if (await validateRegisterForm()) {
+      setIsLoading(true);
+      try {
+        await axios
+          .post('/api/register', {
+            email: registerFormData.email,
+            username: registerFormData.username,
+            password: registerFormData.password,
+          })
+          .then(() => {
+            setIsLoading(false);
+            toast.success('User has been registered!');
+            router.push('/auth/sign-in');
+          });
+      } catch (error) {
+        setIsLoading(false);
+        toast.error(Object(error).response.data);
       }
-    },
-    [
-      formData.email,
-      formData.username,
-      formData.password,
-      validateForm,
-      setIsLoading,
-      router,
-    ],
-  );
+    }
+  };
 
   return (
     <form
@@ -77,12 +58,12 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         id="username"
         type="text"
         label="Enter your username *"
-        value={formData.username!}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.username}
+        value={registerFormData.username!}
+        onChange={(event) => handleInputEvent(event, setRegisterFormData)}
+        onBlur={(event) => handleInputEvent(event, setRegisterFormData)}
+        isError={registerFormData.isError.username}
         errorMessage={
-          formData.username!.length !== 0
+          registerFormData.username!.length !== 0
             ? 'Username must consist of minimum 3 characters'
             : 'Please enter your username'
         }
@@ -91,12 +72,12 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         id="email"
         type="text"
         label="Enter your email *"
-        value={formData.email}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.email}
+        value={registerFormData.email}
+        onChange={(event) => handleInputEvent(event, setRegisterFormData)}
+        onBlur={(event) => handleInputEvent(event, setRegisterFormData)}
+        isError={registerFormData.isError.email}
         errorMessage={
-          formData.email.length !== 0
+          registerFormData.email.length !== 0
             ? 'Invalid email format (e.g. email@example.com)'
             : 'Please enter your email'
         }
@@ -105,12 +86,12 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         id="password"
         type="password"
         label="Enter your password *"
-        value={formData.password}
-        onChange={(event) => handleInputEvent(event, setFormData)}
-        onBlur={(event) => handleInputEvent(event, setFormData)}
-        isError={formData.isError.password}
+        value={registerFormData.password}
+        onChange={(event) => handleInputEvent(event, setRegisterFormData)}
+        onBlur={(event) => handleInputEvent(event, setRegisterFormData)}
+        isError={registerFormData.isError.password}
         errorMessage={
-          formData.password.length !== 0
+          registerFormData.password.length !== 0
             ? 'Password must consist of minimum 8 characters, at least one uppercase letter, one lowercase letter and one number'
             : 'Please enter your password'
         }
