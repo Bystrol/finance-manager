@@ -2,7 +2,7 @@ import {
   IsModalEmptyProps,
   TransactionData,
   EditModalData,
-} from '@/interfaces/operation_interfaces';
+} from '@/types/operation_interfaces';
 
 export const validateModal = async (
   transactionData: TransactionData | EditModalData,

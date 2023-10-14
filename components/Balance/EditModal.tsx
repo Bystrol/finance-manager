@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { IsModalEmptyProps } from '@/interfaces/operation_interfaces';
-import {
-  EditModalProps,
-  EditModalData,
-} from '@/interfaces/operation_interfaces';
+import { IsModalEmptyProps } from '@/types/operation_interfaces';
+import { EditModalProps, EditModalData } from '@/types/operation_interfaces';
 import ModalCard from '@/components/UI/ModalCard';
 import { initialIsEmptyData } from '@/constants/transactions';
 import { validateModal } from '@/lib/balance/validateModal';
@@ -41,7 +38,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const editTransactionHandler = async () => {
     if (await validateModal(transactionData, setIsEmpty)) {
-      closeModal()
+      closeModal();
       dispatch(setLoading(true));
 
       try {

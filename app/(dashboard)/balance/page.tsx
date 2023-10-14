@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BalanceData } from '@/interfaces/operation_interfaces';
+import { BalanceData } from '@/types/operation_interfaces';
 import { RootState } from '@/store/store';
 import OperationButton from '@/components/Balance/OperationButton';
 import FilterModal from '@/components/Balance/FilterModal';

@@ -3,7 +3,7 @@ import {
   FormData,
   UpdatedError,
   UpdatedTouched,
-} from '@/interfaces/form_interfaces';
+} from '@/types/form_interfaces';
 import { isValidEmail } from '@/lib/form/isValidEmail';
 import { isValidPassword } from '@/lib/form/isValidPassword';
 

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import ModalCard from '@/components/UI/ModalCard';
 import { monthsArray, yearsArray } from '@/constants/date';
 import { hasMonthOccured } from '@/lib/balance/checkIfDisabled';
-import { FilterProps } from '@/interfaces/operation_interfaces';
-import { BalanceData } from '@/interfaces/operation_interfaces';
+import { FilterProps } from '@/types/operation_interfaces';
+import { BalanceData } from '@/types/operation_interfaces';
 
 interface FilterModalProps {
   balanceData: BalanceData;

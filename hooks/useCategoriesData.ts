@@ -1,4 +1,4 @@
-import { CategoryCardData } from '@/interfaces/operation_interfaces';
+import { CategoryCardData } from '@/types/operation_interfaces';
 import { FaBusAlt } from 'react-icons/fa';
 import { IoFastFoodOutline } from 'react-icons/io5';
 import { GiClothes } from 'react-icons/gi';
