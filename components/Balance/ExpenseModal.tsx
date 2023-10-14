@@ -4,7 +4,7 @@ import {
   TransactionData,
   TransactionModalProps,
   IsModalEmptyProps,
-} from '@/interfaces/operation_interfaces';
+} from '@/types/operation_interfaces';
 import ModalCard from '@/components/UI/ModalCard';
 import {
   initialTransactionData,
@@ -46,7 +46,7 @@ const ExpenseModal: React.FC<TransactionModalProps> = ({ onClose }) => {
         dispatch(setLoading(false));
       }
     }
-  }
+  };
 
   return (
     <ModalCard onClick={onClose}>

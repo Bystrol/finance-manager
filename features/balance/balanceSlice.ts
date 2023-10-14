@@ -1,9 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import {
-  TransactionData,
-  EditModalData,
-} from '@/interfaces/operation_interfaces';
+import { TransactionData, EditModalData } from '@/types/operation_interfaces';
 import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
 
 interface BalanceSliceData {

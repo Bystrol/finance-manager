@@ -1,4 +1,4 @@
-import { CategoryCardData } from '@/interfaces/operation_interfaces';
+import { CategoryCardData } from '@/types/operation_interfaces';
 import { Progress } from 'flowbite-react';
 
 const CategoryCard: React.FC<CategoryCardData> = ({

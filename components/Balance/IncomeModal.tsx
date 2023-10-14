@@ -6,7 +6,7 @@ import {
   TransactionData,
   TransactionModalProps,
   IsModalEmptyProps,
-} from '@/interfaces/operation_interfaces';
+} from '@/types/operation_interfaces';
 import ModalCard from '@/components/UI/ModalCard';
 import {
   initialTransactionData,
