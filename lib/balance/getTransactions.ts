@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getCategoryIcon } from '@/lib/balance/getCategoryIcon';
-import { TransactionData } from '@/interfaces/operation_interfaces';
+import { TransactionData } from '@/types/operation_interfaces';
 import { toast } from 'react-hot-toast';
 
 export const getTransactions = async () => {
@@ -15,7 +15,7 @@ export const getTransactions = async () => {
       transaction.icon = getCategoryIcon(transaction.category);
     });
   } catch (error) {
-    toast.error(toast.error(Object(error).response.data));
+    toast.error(Object(error).response.data);
   }
 
   return updatedResponse;
