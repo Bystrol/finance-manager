@@ -19,7 +19,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30">
+      <div className="fixed top-0 left-0 flex justify-between items-center w-full px-3 h-12 bg-white border-b border-black/30">
         <div className="flex justify-start items-center h-full w-1/2">
           <Link href="/" className="flex items-center gap-x-2">
             <RiMoneyDollarCircleFill size={35} />

@@ -8,11 +8,6 @@ import { Provider as StoreProvider } from 'react-redux';
 import { store } from '@/store/store';
 import Loading from '@/features/loading/Loading';
 
-const metadata = {
-  title: 'FINEances',
-  description: 'Application for managing your personal finances.',
-};
-
 export default function RootLayout({
   children,
 }: {
