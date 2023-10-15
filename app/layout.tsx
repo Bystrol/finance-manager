@@ -8,7 +8,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { store } from '@/store/store';
 import Loading from '@/features/loading/Loading';
 
-const metadata = {
+export const metadata = {
   title: 'FINEances',
   description: 'Application for managing your personal finances.',
 };
