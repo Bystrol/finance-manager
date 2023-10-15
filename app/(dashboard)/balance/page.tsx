@@ -115,7 +115,11 @@ const Balance: React.FC = () => {
           );
         })}
       </div>
-      <TransactionsList balanceData={balanceData} />
+      <TransactionsList
+        balanceData={balanceData}
+        setBalanceData={setBalanceData}
+        initialBalanceData={initialBalanceData}
+      />
       {balanceData.isFilterModalVisible && (
         <FilterModal
           balanceData={balanceData}
