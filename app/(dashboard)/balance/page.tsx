@@ -80,6 +80,28 @@ const Balance: React.FC = () => {
     },
   ];
 
+  const modals = [
+    {
+      type: 'isFilterModalVisible',
+      component: FilterModal,
+    },
+    {
+      type: 'isIncomeModalVisible',
+      component: IncomeModal,
+    },
+    {
+      type: 'isExpenseModalVisible',
+      component: ExpenseModal,
+    },
+  ];
+
+  const closeModal = (modalType: string) => {
+    setBalanceData({
+      ...balanceData,
+      [modalType]: false,
+    });
+  };
+
   useEffect(() => {
     const getData = async () => {
       dispatch(setLoading(true));
@@ -120,38 +142,20 @@ const Balance: React.FC = () => {
         setBalanceData={setBalanceData}
         initialBalanceData={initialBalanceData}
       />
-      {balanceData.isFilterModalVisible && (
-        <FilterModal
-          balanceData={balanceData}
-          setBalanceData={setBalanceData}
-          onClick={() => {
-            setBalanceData({
-              ...balanceData,
-              isFilterModalVisible: false,
-            });
-          }}
-        />
-      )}
-      {balanceData.isIncomeModalVisible && (
-        <IncomeModal
-          onClose={() => {
-            setBalanceData({
-              ...balanceData,
-              isIncomeModalVisible: false,
-            });
-          }}
-        />
-      )}
-      {balanceData.isExpenseModalVisible && (
-        <ExpenseModal
-          onClose={() => {
-            setBalanceData({
-              ...balanceData,
-              isExpenseModalVisible: false,
-            });
-          }}
-        />
-      )}
+      {modals.map((modal, index) => {
+        const { type, component: ModalComponent } = modal;
+        const isOpen = balanceData[type];
+        return (
+          isOpen && (
+            <ModalComponent
+              key={index}
+              balanceData={balanceData}
+              setBalanceData={setBalanceData}
+              onClose={() => closeModal(type)}
+            />
+          )
+        );
+      })}
     </div>
   );
 };

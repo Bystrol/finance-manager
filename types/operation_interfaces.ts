@@ -9,6 +9,7 @@ export interface FilterProps {
 }
 
 export interface BalanceData extends FilterProps {
+  [key: string]: boolean | string | number;
   isIncomeModalVisible: boolean;
   isExpenseModalVisible: boolean;
 }
