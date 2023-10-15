@@ -19,12 +19,6 @@ import { FiFilter } from 'react-icons/fi';
 import { HiArrowUpRight, HiArrowDownRight } from 'react-icons/hi2';
 import { IconType } from 'react-icons';
 
-interface Operation {
-  icon: IconType;
-  text: string;
-  onClick: () => void;
-}
-
 const initialBalanceData = {
   month: currentMonthName,
   year: currentYear,
@@ -35,7 +29,7 @@ const initialBalanceData = {
   isExpenseModalVisible: false,
 };
 
-const Balance: React.FC = () => {
+const Balance = () => {
   const { data: session } = useSession();
 
   const [balanceData, setBalanceData] =
@@ -47,36 +41,21 @@ const Balance: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const operationsArray: Operation[] = [
+  const operationButtons: { icon: IconType; text: string; type: string }[] = [
     {
       icon: FiFilter,
       text: 'Filter',
-      onClick: () => {
-        setBalanceData({
-          ...balanceData,
-          isFilterModalVisible: true,
-        });
-      },
+      type: 'isFilterModalVisible',
     },
     {
       icon: HiArrowUpRight,
       text: 'Income',
-      onClick: () => {
-        setBalanceData({
-          ...balanceData,
-          isIncomeModalVisible: true,
-        });
-      },
+      type: 'isIncomeModalVisible',
     },
     {
       icon: HiArrowDownRight,
       text: 'Expense',
-      onClick: () => {
-        setBalanceData({
-          ...balanceData,
-          isExpenseModalVisible: true,
-        });
-      },
+      type: 'isExpenseModalVisible',
     },
   ];
 
@@ -95,10 +74,10 @@ const Balance: React.FC = () => {
     },
   ];
 
-  const closeModal = (modalType: string) => {
+  const handleModal = (modalType: string, isVisible: boolean) => {
     setBalanceData({
       ...balanceData,
-      [modalType]: false,
+      [modalType]: isVisible,
     });
   };
 
@@ -126,13 +105,13 @@ const Balance: React.FC = () => {
       <hr className="w-full" />
       <h2 className="text-4xl font-bold my-4">{totalAmount} PLN</h2>
       <div className="flex justify-center gap-4">
-        {operationsArray.map((operation) => {
+        {operationButtons.map((operation, index) => {
           return (
             <OperationButton
-              key={operation.text}
+              key={index}
               icon={operation.icon}
               text={operation.text}
-              onClick={operation.onClick}
+              onClick={() => handleModal(operation.type, true)}
             />
           );
         })}
@@ -151,7 +130,7 @@ const Balance: React.FC = () => {
               key={index}
               balanceData={balanceData}
               setBalanceData={setBalanceData}
-              onClose={() => closeModal(type)}
+              onClose={() => handleModal(type, false)}
             />
           )
         );
