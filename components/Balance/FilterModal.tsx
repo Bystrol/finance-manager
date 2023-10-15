@@ -8,13 +8,13 @@ import { BalanceData } from '@/types/operation_interfaces';
 interface FilterModalProps {
   balanceData: BalanceData;
   setBalanceData: React.Dispatch<React.SetStateAction<BalanceData>>;
-  onClick: () => void;
+  onClose: () => void;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
   balanceData,
   setBalanceData,
-  onClick,
+  onClose,
 }) => {
   const initialFilterData = {
     month: balanceData.month,
@@ -27,7 +27,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [filterData, setFilterData] = useState<FilterProps>(initialFilterData);
 
   return (
-    <ModalCard onClick={onClick}>
+    <ModalCard onClick={onClose}>
       <div className="flex w-3/4 justify-between items-center">
         <label htmlFor="month" className="font-bold">
           Month
